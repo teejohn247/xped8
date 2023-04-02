@@ -1,0 +1,57 @@
+::ng-deep {
+
+    .mat-table {
+        background-color: transparent !important;
+    }
+}
+
+.dataTable {
+    background-color: transparent;
+    color: var(--darkest);
+
+    .mat-header-cell {
+        font-size: 0.7rem;
+        border: none;
+        letter-spacing: 0.06rem !important;
+        text-transform: uppercase !important;
+        color: var(--darkest);
+    }
+
+    .mat-sort-header-button {
+        font-size: 0.675rem;
+        letter-spacing: 0.02rem;
+        color: var(--darkest);
+        text-transform: uppercase;
+    }
+
+    .mat-cell {
+        font-size: 0.755rem;
+        letter-spacing: 0.03rem;
+        border: none;
+        color: var(--darkest);
+    }
+
+    .mat-checkbox-frame {
+        border-color: var(--black-tint-md); 
+    }
+
+    thead {
+        background-color: var(--black-tint-sm);
+    }
+
+    tbody {
+
+        tr {
+            overflow: hidden;
+
+            &:nth-child(2n) {
+                background-color: var(--black-tint-sm);
+            }
+
+            &.mat-row {
+                height: 60px;
+            }
+        }
+    }
+}
+
