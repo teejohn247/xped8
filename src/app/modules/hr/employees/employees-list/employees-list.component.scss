@@ -1,0 +1,109 @@
+.dataTable {
+    
+    .table-img {
+        display: inline-block;
+        background-position: top;
+        border-radius: 50%;
+        width: 2rem;
+        height: 2rem;
+    }
+}
+
+.table-wrap {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-black-lightest);
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;    
+    //box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.18);
+
+    .table-icon {
+        font-size: 0.75rem;
+        cursor: pointer;
+
+        &.edit {
+            color: var(--black-tint);
+        }
+
+        &.delete {
+            color: red;
+        }
+    }
+
+    .inner-row {
+
+        &:first-child {
+            padding: 1rem 2.5%;
+        }
+
+        .search-bar {
+            position: relative;
+            border-radius: var(--radius-xs);
+    
+            .icon {
+                position: absolute;
+                color: rgba(0, 0, 0, 0.54);
+                transform: translateY(-50%);
+                left: 1rem;
+                top: 50%
+            }
+    
+            input {
+                width: 30vw;
+                //border: none;
+                border: 1px solid var(--border-black-lightest);
+                padding: 0.35rem 1rem 0.35rem 3rem;
+                border-radius: var(--radius-md);
+                //background-color: rgba(0, 0, 0, 0.07);
+    
+                &::placeholder {
+                    font-size: 0.845rem;
+                    letter-spacing: 0.03rem;
+                }
+    
+                &:focus {
+                    outline: none;
+                    border: 1px solid var(--border-black-lightest);
+                }
+            }
+        }
+
+        .filter-options {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.75rem;
+            letter-spacing: 0.03rem;
+            margin-left: 1rem;
+            padding: 0.32rem 1.2rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-black-lightest);
+
+            i {
+                font-size: 0.85rem;
+                margin-right: 0.4rem;
+            }
+        }
+
+        .bulk-actions {
+            margin-left: auto;
+
+            .dropdown-trigger {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 0.75rem;
+                letter-spacing: 0.03rem;
+                padding: 0.2rem 0.7rem;
+                border-radius: var(--radius-xs);
+                transition: var(--transition-norm);
+                border: 1px solid var(--border-black-lightest);
+                cursor: pointer;
+
+                i {
+                    margin-left: 0.6rem;
+                }
+            }
+        }
+        
+    }
+}
