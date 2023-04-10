@@ -6,6 +6,13 @@
     cursor: pointer;
     align-items: center;
 
+    &.xs {
+        font-size: 0.655rem;
+        letter-spacing: 0.04rem;
+        padding: 0.1rem 0.6rem;
+        border-radius: var(--radius-xs);
+    }
+
     &.sm {
         font-size: 0.755rem;
         letter-spacing: 0.05rem;
@@ -41,6 +48,18 @@
 
         &:hover {
             opacity: 0.9;
+        }
+    }
+
+    &.primary-light-bkg {
+        border: 1px solid var(--black-tint-md);
+        background-color: var(--primary-light);
+        color: var(--darkest);
+
+        &:hover {
+            border: 1px solid var(--primary);
+            background-color: var(--primary);
+            color: var(--white);
         }
     }
 

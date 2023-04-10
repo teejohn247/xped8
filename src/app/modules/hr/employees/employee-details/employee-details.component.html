@@ -110,21 +110,131 @@
                             <span>+9</span>
                         </div>
                     </div>
-                    <div class="search-card"></div>
+                    <div class="skill-card">
+                        <div class="skill">Amazon Web Services</div>
+                        <div class="skill">Azure</div>
+                        <div class="skill">Product Design</div>
+                        <div class="skill">Business Development</div>
+                        <div class="skill">Software Development</div>
+                        <div class="skill">UX Research</div>
+                        <div class="skill">Product Marketers</div>
+                    </div>
                 </div>
             </div>
             <div class="row-card card-xmd card-ymd">
-                <div class="cont"></div>
+                <div class="cont">
+                    <div class="card-title">Payment Information</div>
+                    <div class="listed-items mt-lg-3">
+                        <div class="item">
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Bank Name:</div>
+                                </div>
+                                <div class="det">
+                                    <div class="minor">Barclays Bank</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="item">
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Account Name:</div>
+                                </div>
+                                <div class="det">
+                                    <div class="minor">Olivia Emmanuel</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Account Number:</div>
+                                </div>
+                                <div class="det">
+                                    <div class="minor">011233445</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Bank Address:</div>
+                                </div>
+                                <div class="det">
+                                    <div class="minor">4 Skerriel Lane, Bromford City</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Sort Code:</div>
+                                </div>
+                                <div class="det">
+                                    <div class="minor">03412-3334-2333</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Tax Identification No:</div>
+                                </div>
+                                <div class="det">
+                                    <div class="minor">434455678</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="row-card card-xmd card-ymd">
                 <div class="cont">
-                    <canvas baseChart
-                        [labels]="doughnutChartLabels"
-                        [datasets]="doughnutChartDatasets"
-                        [options]="doughnutChartOptions"
-                        [legend]="true"
-                        [type]="'doughnut'">
-                    </canvas>
+                    <!-- <div class="card-title">Leave Requests</div> -->
+                    <div class="donut-chart">
+                        <!-- <canvas #doughnutCanvas></canvas> -->
+                        <div class="chart-title">
+                            <span>14</span>
+                            <span>Leave Balance <br> (Days)</span>
+                        </div>
+                        <highcharts-chart
+                            [Highcharts]="Highcharts"
+                            [options]="chartOptions"
+                            style="width: auto; max-width: 100%; height: 170px; display: flex; align-items: center; justify-content: center;"
+                        >
+                        </highcharts-chart>
+                    </div>
+
+                    <div class="leave-wrap mt-lg-3">
+                        
+                        <div class="leave-hld annual">
+                            <div class="icon"><i class="bi bi-calendar-check"></i></div>
+                            <div class="title">Annual</div>
+                            <div class="count"><span>9</span>/21 days</div>
+                        </div>
+                        <div class="leave-hld paid">
+                            <div class="icon"><i class="bi bi-cash"></i></div>
+                            <div class="title">Paid Leave</div>
+                            <div class="count"><span>5</span>/14 days</div>
+                        </div>
+                        <div class="leave-hld unpaid">
+                            <div class="icon"><i class="bi bi-exclamation-diamond"></i></div>
+                            <div class="title">Unpaid </div>
+                            <div class="count"><span>1</span>/2 days</div>
+                        </div>
+                        <div class="leave-hld sick">
+                            <div class="icon"><i class="bi bi-bandaid"></i></div>
+                            <div class="title">Sick Leave</div>
+                            <div class="count"><span>2</span>/5 days</div>
+                        </div>
+                        
+                    </div>
+                    
                 </div>
             </div>
             <div class="row-card card-xsm card-ymd">

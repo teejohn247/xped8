@@ -41,7 +41,7 @@ const SHARED_COMP = [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    NgChartsModule
+    NgChartsModule,
   ],
   providers : [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }

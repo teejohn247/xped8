@@ -6,6 +6,18 @@
             padding: 1.6rem 2rem;
         }
 
+        .select-period {
+            font-size: 0.65rem;
+            padding: 1rem 5% 0.5rem;
+            border-radius: var(--radius-md);
+            background-color: var(--darker);
+            box-shadow: var(--card-shadow);
+
+            mat-form-field-wrapper {
+                padding: 0 !important;
+            }
+        }
+
         .details {
             display: flex;
             align-items: center;

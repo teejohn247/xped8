@@ -5,6 +5,118 @@
     }
 }
 
+.table-wrap {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-black-lightest);
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+
+    .inner-row {
+
+        &.hdr {
+            padding: 0.85rem 2%;
+
+            .card-title {
+                font-size: 0.95rem;
+                letter-spacing: 0.03rem;
+                font-weight: 600;
+                color: var(--darkest);
+            }
+        }
+
+        .table-icon {
+            font-size: 0.75rem;
+            cursor: pointer;
+    
+            &.edit {
+                color: var(--black-tint);
+            }
+    
+            &.delete {
+                color: red;
+            }
+        }
+    }
+
+    .inner-row {
+
+        &:first-child {
+            padding: 1rem 2.5%;
+        }
+
+        .search-bar {
+            position: relative;
+            border-radius: var(--radius-xs);
+    
+            .icon {
+                position: absolute;
+                color: rgba(0, 0, 0, 0.54);
+                transform: translateY(-50%);
+                left: 1rem;
+                top: 50%
+            }
+    
+            input {
+                width: 30vw;
+                //border: none;
+                border: 1px solid var(--border-black-lightest);
+                padding: 0.35rem 1rem 0.35rem 3rem;
+                border-radius: var(--radius-md);
+                //background-color: rgba(0, 0, 0, 0.07);
+    
+                &::placeholder {
+                    font-size: 0.845rem;
+                    letter-spacing: 0.03rem;
+                }
+    
+                &:focus {
+                    outline: none;
+                    border: 1px solid var(--border-black-lightest);
+                }
+            }
+        }
+
+        .filter-options {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.75rem;
+            letter-spacing: 0.03rem;
+            margin-left: 1rem;
+            padding: 0.32rem 1.2rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-black-lightest);
+
+            i {
+                font-size: 0.85rem;
+                margin-right: 0.4rem;
+            }
+        }
+
+        .bulk-actions {
+            margin-left: auto;
+
+            .dropdown-trigger {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 0.75rem;
+                letter-spacing: 0.03rem;
+                padding: 0.2rem 0.7rem;
+                border-radius: var(--radius-xs);
+                transition: var(--transition-norm);
+                border: 1px solid var(--border-black-lightest);
+                cursor: pointer;
+
+                i {
+                    margin-left: 0.6rem;
+                }
+            }
+        }
+        
+    }
+}
+
 .dataTable {
     background-color: transparent;
     color: var(--darkest);
@@ -12,7 +124,7 @@
     .mat-header-cell {
         font-size: 0.7rem;
         border: none;
-        letter-spacing: 0.06rem !important;
+        letter-spacing: 0.03rem !important;
         text-transform: uppercase !important;
         color: var(--darkest);
     }
@@ -29,6 +141,20 @@
         letter-spacing: 0.03rem;
         border: none;
         color: var(--darkest);
+
+        .status {
+            padding: 0.2rem 0.6rem;
+        }
+
+        .icon {
+            display: inline-flex;
+            align-items: center;
+
+            i {
+                margin-right: 0.9rem;
+                font-size: 1rem;
+            }
+        }
     }
 
     .mat-checkbox-frame {
@@ -36,7 +162,23 @@
     }
 
     thead {
-        background-color: var(--black-tint-sm);
+        background-color: var(--primary-lightest);
+    }
+
+    &.lg {
+
+        tbody {
+
+            tr {
+                &.mat-row {
+                    height: 60px;
+                }
+
+                &.mat-header-row {
+                    height: 56px;
+                }
+            }
+        }
     }
 
     tbody {
@@ -48,8 +190,9 @@
                 background-color: var(--black-tint-sm);
             }
 
-            &.mat-row {
-                height: 60px;
+            &.mat-row ,
+            &.mat-header-row {
+                height: 47px;
             }
         }
     }

@@ -9,7 +9,7 @@ const routes: Routes = [
     component: LayoutComponent, 
     children: [
       {
-        path: 'human-resources/employees',
+        path: 'human-resources',
         loadChildren: () => import('../hr/hr.module').then(m => m.HrModule) 
       }
     ]    
