@@ -32,7 +32,7 @@ export const navbarData = [
             {
                 routeLink: 'human-resources/document-management',
                 icon: 'bi bi-file-earmark-text-fill',
-                label: 'Document Management'
+                label: 'Attendance'
             },
             {
                 routeLink: 'human-resources/performance-appraisal',
@@ -43,6 +43,11 @@ export const navbarData = [
                 routeLink: 'human-resources/leave-management',
                 icon: 'bi bi-calendar2-x-fill',
                 label: 'Leave Management'
+            },
+            {
+                routeLink: 'human-resources/visitors-log',
+                icon: 'bi bi-stickies-fill',
+                label: 'Visitors Log'
             }
         ]
     },

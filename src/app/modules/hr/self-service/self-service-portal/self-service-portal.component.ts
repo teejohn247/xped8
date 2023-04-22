@@ -25,8 +25,13 @@ export class SelfServicePortalComponent implements OnInit {
       label: 'Reimbursement',
     },
     {
-      routeLink: 'calendar',
-      label: 'Calendar',
+      routeLink: 'appraisals',
+      label: 'Appraisals',
+    },
+
+    {
+      routeLink: 'visitor',
+      label: "Visitor's Log",
     },
     {
       routeLink: 'induction',
