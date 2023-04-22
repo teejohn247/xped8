@@ -142,6 +142,12 @@
         border: none;
         color: var(--darkest);
 
+        .minor {
+            font-size: 0.6rem;
+            line-height: 1;
+            color: var(--black-tint);
+        }
+
         .status {
             padding: 0.2rem 0.6rem;
         }
@@ -149,6 +155,14 @@
         .icon {
             display: inline-flex;
             align-items: center;
+
+            &.adobe {
+                
+                i {
+                    margin-right: 0.4rem;
+                    color: red;
+                }
+            }
 
             i {
                 margin-right: 0.9rem;

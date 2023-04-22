@@ -27,6 +27,10 @@ export class SelfServicePortalComponent implements OnInit {
     {
       routeLink: 'calendar',
       label: 'Calendar',
+    },
+    {
+      routeLink: 'induction',
+      label: 'Induction',
     }
 
   ]

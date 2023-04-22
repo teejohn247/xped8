@@ -12,6 +12,11 @@ import { SelfServicePayrollComponent } from './self-service/self-service-payroll
 import { SelfServiceReimbursementComponent } from './self-service/self-service-reimbursement/self-service-reimbursement.component';
 import { SelfServiceOverviewComponent } from './self-service/self-service-overview/self-service-overview.component';
 import { PayrollSummaryComponent } from './payroll/payroll-summary/payroll-summary.component';
+import { RecruitmentOverviewComponent } from './recruitment/recruitment-overview/recruitment-overview.component';
+import { RecruitmentJobBoardComponent } from './recruitment/recruitment-job-board/recruitment-job-board.component';
+import { RecruitmentPortalComponent } from './recruitment/recruitment-portal/recruitment-portal.component';
+import { RecruitmentScreeningComponent } from './recruitment/recruitment-screening/recruitment-screening.component';
+import { RecruitmentOnboardingComponent } from './recruitment/recruitment-onboarding/recruitment-onboarding.component';
 
 
 @NgModule({
@@ -21,7 +26,7 @@ import { PayrollSummaryComponent } from './payroll/payroll-summary/payroll-summa
     SelfServicePortalComponent, 
     SelfServiceLeaveRequestsComponent, 
     SelfServicePayrollComponent, 
-    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent
+    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent
   ],
   imports: [
     CommonModule,
