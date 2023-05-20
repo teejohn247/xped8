@@ -1,5 +1,6 @@
 export interface LeaveRequestTable {
     id: number;
+    "Image"?: string;
     "Employee ID"?: string;
     "First Name"?: string;
     "Last Name"?: string;

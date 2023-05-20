@@ -35,7 +35,7 @@ export const navbarData = [
                 label: 'Attendance'
             },
             {
-                routeLink: 'human-resources/performance-appraisal',
+                routeLink: 'human-resources/appraisals',
                 icon: 'bi bi-award-fill',
                 label: 'Performance Appraisal'
             },
@@ -67,9 +67,9 @@ export const navbarData = [
         label: 'CRM'
     },
     {
-        routeLink: 'risk-compliance',
-        icon: 'bi bi-shield-fill-exclamation',
-        label: 'Risk & Compliance'
+        routeLink: 'supply-chain',
+        icon: 'bi bi-ubuntu',
+        label: 'Supply Chain'
     },
     {
         routeLink: 'settings',

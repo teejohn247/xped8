@@ -17,6 +17,9 @@ import { RecruitmentJobBoardComponent } from './recruitment/recruitment-job-boar
 import { RecruitmentPortalComponent } from './recruitment/recruitment-portal/recruitment-portal.component';
 import { RecruitmentScreeningComponent } from './recruitment/recruitment-screening/recruitment-screening.component';
 import { RecruitmentOnboardingComponent } from './recruitment/recruitment-onboarding/recruitment-onboarding.component';
+import { VisitorsLogComponent } from './visitors-log/visitors-log/visitors-log.component';
+import { GeneralAppraisalComponent } from './appraisals/general-appraisal/general-appraisal.component';
+import { LeaveManagementOverviewComponent } from './leave-management/leave-management-overview/leave-management-overview.component';
 
 
 @NgModule({
@@ -26,7 +29,7 @@ import { RecruitmentOnboardingComponent } from './recruitment/recruitment-onboar
     SelfServicePortalComponent, 
     SelfServiceLeaveRequestsComponent, 
     SelfServicePayrollComponent, 
-    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent
+    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent
   ],
   imports: [
     CommonModule,

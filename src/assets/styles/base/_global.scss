@@ -475,10 +475,34 @@ a {
         letter-spacing: 0.03rem;
     }
 
+    &.lg {
+
+        .stack {
+
+            span {
+                width: 2.5rem;
+                height: 2.5rem;
+                &:nth-child(n+2) {
+                    margin-left: 0.5rem;
+                }
+            }
+        }
+    }
+
     .stack {
         display: flex;
         align-items: center;
         margin-top: 0.3rem;
+
+        &.fill {
+            flex-wrap: wrap;
+
+            span {
+                width: 2.5rem;
+                height: 2.5rem;
+                margin: 0.2rem 0.2rem;
+            }
+        }
 
         span {
             width: 2rem;
@@ -589,6 +613,24 @@ a {
     }
 }
 
+
+// Active Pulse
+.active-status {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--approved);
+    display: inline-block;
+    transform: scale(1);
+    animation: live-pulse 1.5s infinite;
+    box-shadow: 0 0 0 0 var(--approved);
+
+    &.closed {
+        background-color: var(--warning);
+        box-shadow: unset;
+        animation: unset;
+    }
+}
 
 
 //KEYFRAMES

@@ -1,0 +1,142 @@
+<div class="content-wrap">
+    <div class="row-section d-flex justify-content-between align-items-center">
+        <div class="page-header">Performance Management</div>
+        <div class="main-actions d-flex justify-content-start align-items-center">
+            <div class="cta trans-bkg filter-trigger"><i class="bi bi-filter"></i> Filter</div>
+            <!-- <div class="cta primary-bkg icon md"><i class="bi bi-signpost-2-fill"></i>New Job Post</div> -->
+        </div>
+    </div>
+
+    <div class="legend d-flex justify-content-start align-items-center mt-lg-4">
+        <span class="desc">Department :</span>
+        <div class="status-hld">
+            <span class="status approved light">Technology</span>
+            <span class="status started light">Human Resources</span>
+            <span class="status started light">Marketing</span>
+            <span class="status started light">Operations</span>
+        </div>
+        
+    </div>
+
+    <div class="row-section mt-lg-4">
+        <div class="appraisal-container card-yxl">
+            <div class="col-card card-ylg d-flex justify-content-between align-items-start">
+                <div class="row-card card-xxl matrix-container d-flex justify-content-end">
+                    <div class="arrow vertical">
+                        <div class="line"><span>Potential</span></div>
+                        <div class="point"></div>
+                    </div>
+                    <div class="arrow horizontal">
+                        <div class="line"><span>Performance</span></div>
+                        <div class="point"></div>
+                    </div>
+                    <div class="rating horizontal">
+                        <div class="name">Low</div>
+                        <div class="name">Moderate</div>
+                        <div class="name">High</div>
+                    </div>
+                    <div class="rating vertical">
+                        <div class="name">Low</div>
+                        <div class="name">Moderate</div>
+                        <div class="name">High</div>
+                    </div>
+                    <div class="matrix-wrap">
+                        <div *ngFor="let item of matrixItems" class="cont matrix-hld">
+                            <div class="stacked-items lg">
+                                <div class="stack fill">
+                                    <span *ngFor="let staff of item.staff" style="background-image: url('../../../../../assets/images/illustrations/{{staff.image}}');"></span>
+                                    <!-- <span style="background-image: url('../../../../../assets/images/illustrations/staff1.jpg');"></span>
+                                    <span style="background-image: url('../../../../../assets/images/illustrations/staff3.jpg');"></span>
+                                    <span style="background-image: url('../../../../../assets/images/illustrations/staff2.jpg');"></span>
+                                    <span style="background-image: url('../../../../../assets/images/illustrations/profile-img.jpg');"></span>
+                                    <span style="background-image: url('../../../../../assets/images/illustrations/staff1.jpg');"></span>
+                                    <span style="background-image: url('../../../../../assets/images/illustrations/staff3.jpg');"></span> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row-card card-xmmd card-yxl ms-lg-4">
+                    <div class="cont">
+                        <div class="card-title clr">Key Performance Indicators</div>
+                        <div class="listed-items mt-lg-3">
+                            <div class="item">
+                                <div class="content">
+                                    <div class="det">
+                                        <div class="major bd">Software Development</div>
+                                        <div class="minor">8 KPIs</div>
+                                    </div>
+                                    <div class="det right">
+                                        <div class="major"><i class="bi bi-chevron-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="item">
+                                <div class="content">
+                                    <div class="det">
+                                        <div class="major bd">Marketing Managers</div>
+                                        <div class="minor">8 KPIs</div>
+                                    </div>
+                                    <div class="det right">
+                                        <div class="major"><i class="bi bi-chevron-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="item">
+                                <div class="content">
+                                    <div class="det">
+                                        <div class="major bd">Finance Analysis</div>
+                                        <div class="minor">5 KPIs</div>
+                                    </div>
+                                    <div class="det right">
+                                        <div class="major"><i class="bi bi-chevron-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="item">
+                                <div class="content">
+                                    <div class="det">
+                                        <div class="major bd">Technology Sales</div>
+                                        <div class="minor">9 KPIs</div>
+                                    </div>
+                                    <div class="det right">
+                                        <div class="major"><i class="bi bi-chevron-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="item">
+                                <div class="content">
+                                    <div class="det">
+                                        <div class="major bd">Marketing Advertising</div>
+                                        <div class="minor">6 KPIs</div>
+                                    </div>
+                                    <div class="det right">
+                                        <div class="major"><i class="bi bi-chevron-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="content">
+                                    <div class="det">
+                                        <div class="major bd">Humman Resources</div>
+                                        <div class="minor">8 KPIs</div>
+                                    </div>
+                                    <div class="det right">
+                                        <div class="major"><i class="bi bi-chevron-down"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

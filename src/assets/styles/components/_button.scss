@@ -86,5 +86,23 @@
         }
     }
 
+    &.warning-bkg {
+        background-color: var(--warning);
+        color: var(--white);
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
+    &.approved-bkg {
+        background-color: var(--approved);
+        color: var(--white);
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
 
 }
