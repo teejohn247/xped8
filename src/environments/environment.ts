@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  baseUrl: "https://erp-bk.herokuapp.com/api/v1",
+  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzRjZGRmYjJiOWMxNTNhNGVkNWY0ZSIsImlzQWRtaW4iOiJ0ZWVqYXlAZ21haWwuY29tIiwiaWF0IjoxNjg1Mzc2NDk5LCJleHAiOjE2ODYyNDA0OTl9.RU3OjHfr3ZZjNKfnVW0jHim8riTc3hyb5JLGJexnris",
+  
 };
 
 /*

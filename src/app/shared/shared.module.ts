@@ -15,6 +15,7 @@ import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { DeleteConfirmationComponent } from './components/delete-confirmation/delete-confirmation.component';
 import { CreateSingleInfoComponent } from './components/create-single-info/create-single-info.component';
 import { RegisterGuestComponent } from './components/register-guest/register-guest.component';
+import { LoginComponent } from './components/login/login.component';
 
 const SHARED_COMP = [
   MatIconModule,
@@ -30,7 +31,7 @@ const SHARED_COMP = [
 ];
 
 @NgModule({
-  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent],
+  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent],
 
   exports: [
     ...SHARED_COMP,

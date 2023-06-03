@@ -6,6 +6,8 @@ import { LayoutComponent } from './shared/layout/layout.component';
 import { MenuComponent } from './shared/components/menu/menu.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -19,6 +21,10 @@ import { SharedModule } from './shared/shared.module';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
+    ToastrModule.forRoot({
+      positionClass :'toast-top-right'
+    }),
     SharedModule
   ],
   providers: [],

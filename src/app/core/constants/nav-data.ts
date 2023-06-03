@@ -74,7 +74,39 @@ export const navbarData = [
     {
         routeLink: 'settings',
         icon: 'bi bi-gear-fill',
-        label: 'Settings'
+        label: 'Settings',
+        subMenu: [
+            {
+                routeLink: 'settings/general',
+                icon: 'bi bi-box-fill',
+                label: 'General',
+            },
+            {
+                routeLink: 'settings/human-resources',
+                icon: 'bi bi-people-fill',
+                label: 'Human Resources',
+            },
+            {
+                routeLink: 'settings/accounting',
+                icon: 'bi bi-calculator-fill',
+                label: 'Accounting'
+            },
+            {
+                routeLink: 'settings/project-management',
+                icon: 'bi bi-folder-fill',
+                label: 'Projects'
+            },
+            {
+                routeLink: 'settings/customer-relationship-management',
+                icon: 'bi bi-microsoft-teams',
+                label: 'CRM'
+            },
+            {
+                routeLink: 'settings/supply-chain',
+                icon: 'bi bi-ubuntu',
+                label: 'Supply Chain'
+            },
+        ]
     }
 
 ]
