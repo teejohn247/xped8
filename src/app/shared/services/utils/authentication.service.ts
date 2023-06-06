@@ -12,8 +12,12 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) { }
 
+  public signup(signupDetails: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/signup`, signupDetails);
+  }
+
   public login(loginDetails: any): Observable<any> {
     //console.log(loginDetails);
-    return this.http.post<any>(`${this.path}/auth`, loginDetails);
+    return this.http.post<any>(`${this.path}/signin`, loginDetails);
   }
 }

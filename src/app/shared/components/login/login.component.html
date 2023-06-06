@@ -27,12 +27,12 @@
                 <img src="../../../../assets/images/brand/silo-logo.svg" alt="silo-logo">
             </div>
 
-            <div class="intro">
+            <!-- <div class="intro">
                 <div class="heading">
                     <span>Welcome to Silo ERP <img src="https://silo-inc.com/wp-content/themes/wp-silo/dist/img/waving_hand.gif" alt=""></span>
                 </div>
                 <div class="preamble">Please input your details to gain access.</div>
-            </div>
+            </div> -->
 
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
                 <div class="form-hld">
@@ -87,8 +87,9 @@
                     <p class="forgot"><span>Forgot Password?</span></p>                
     
                     <div class="btn-hld">
-                        <button type="submit" class="cta primary-bkg icon lg"><i class="bi bi-person-bounding-box"></i>Sign In</button>
-                        <p class="mt-lg-1">Don't have an account? <a href="">Create Account</a></p>
+                        <button type="submit" class="cta primary-bkg icon lg"><i class="bi bi-person-bounding-box"></i>{{existingUser ? 'Login' : 'Create Account'}}</button>
+                        <p *ngIf="existingUser" class="accountcheck mt-lg-2">Don't have an account? <span (click)="existingUser = !existingUser">Create Account</span></p>
+                        <p *ngIf="!existingUser" class="accountcheck mt-lg-2">Have an account? <span (click)="existingUser = !existingUser">Login</span></p>
                     </div>
     
                     <div class="disclaimer"><i class="bi bi-check-circle-fill"></i> By creating an account and signing in, it means you agree to our <a href="#">Terms and Condition</a> and <a href="#">Privacy Policy</a></div>

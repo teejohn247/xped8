@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { DeleteConfirmationComponent } from './components/delete-confirmation/delete-confirmation.component';
 import { CreateSingleInfoComponent } from './components/create-single-info/create-single-info.component';
 import { RegisterGuestComponent } from './components/register-guest/register-guest.component';
@@ -27,7 +28,8 @@ const SHARED_COMP = [
   MatInputModule,
   MatSelectModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatExpansionModule
 ];
 
 @NgModule({

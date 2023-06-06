@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit {
 
   showPassword = false;
   submitted = false;
+  existingUser = true;
 
   selectedIndex = 0;
   slideInterval = 5000;
@@ -111,11 +112,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     console.log(this.loginForm.value);
-    if (this.loginForm.invalid) {
-      this.notify.showError("Please enter your Sign in details");
-      return;
-    }
-    else {
+    if(this.existingUser) {
       this.auth.login(this.loginForm.value).subscribe(res => {
         console.log(res);
         if(res.status == 200) {
@@ -124,9 +121,19 @@ export class LoginComponent implements OnInit {
         else {
           this.notify.showError("res.message");
         }
-        
       })
-      
+    }
+
+    else {
+      this.auth.signup(this.loginForm.value).subscribe(res => {
+        console.log(res);
+        if(res.status == 200) {
+          this.route.navigate(['/app']);
+        }
+        else {
+          this.notify.showError("res.message");
+        }
+      })      
     }
     
   }

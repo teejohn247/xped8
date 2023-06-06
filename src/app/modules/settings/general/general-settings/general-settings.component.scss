@@ -1,56 +1,129 @@
 
-.accordion-wrap {
-    margin-top: 0.5rem;
+// .accordion-wrap {
+//     margin-top: 0.5rem;
 
-    .accordion-item {
-        background-color: transparent;
+//     .accordion-item {
+//         background-color: transparent;
 
-        &:nth-child(n+2) {
+//         &:nth-child(n+2) {
 
-            .accordion {
-                border-top: 1px solid var(--border-grey);
-            }
-        }
+//             .accordion {
+//                 border-top: 1px solid var(--border-grey);
+//             }
+//         }
 
-        .accordion {
-            width: 100%;
-            display: flex;
-            outline: none;
-            border: none;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.03rem;
-            padding: 0.8rem 0.2rem;
-            background-color: transparent;
-            justify-content: space-between;
-            color: var(--darker);
+//         .accordion {
+//             width: 100%;
+//             display: flex;
+//             outline: none;
+//             border: none;
+//             font-size: 0.8rem;
+//             font-weight: 600;
+//             letter-spacing: 0.03rem;
+//             padding: 0.8rem 0.2rem;
+//             background-color: transparent;
+//             justify-content: space-between;
+//             color: var(--black-tint);
 
-        }
+//         }
 
-        .accordion-header {
+//         .accordion-header {
             
-            .accordion-button {
-                font-size: 0.85rem;
-                letter-spacing: 0.03rem;
-                background-color: transparent;
-                padding: 1rem 1rem;
+//             .accordion-button {
+//                 font-size: 0.85rem;
+//                 letter-spacing: 0.03rem;
+//                 background-color: transparent;
+//                 padding: 1rem 1rem;
 
-                &::after {
-                    background-size: 70%;
+//                 &::after {
+//                     background-size: 70%;
+//                 }
+
+//                 &:focus {
+//                     outline: none;
+//                     box-shadow: none;
+//                 }
+//             }
+//         }
+
+//         .accordion-body {
+//             font-size: 0.8rem;
+//             letter-spacing: 0.02rem;
+//             padding: 0 1rem 1rem;
+//             background-color: transparent;
+//         }
+//     }
+// }
+
+.settings-form {
+
+    .form-wrap {
+        flex-wrap: wrap;
+
+        .sec-hld {
+
+            label {
+                letter-spacing: 0.03rem;
+                color: var(--black-tint);
+            }
+    
+            input {
+                font-size: 0.9rem;
+                //font-weight: 600;
+                letter-spacing: 0.03rem;
+    
+                &::placeholder {
+                    color: var(--black-tint-md);
                 }
 
-                &:focus {
-                    outline: none;
-                    box-shadow: none;
+                &.muted {
+                    color: var(--black-tint-md);
                 }
             }
-        }
-
-        .accordion-body {
-            font-size: 0.8rem;
-            letter-spacing: 0.02rem;
-            padding: 0 1rem 1rem;
-            background-color: transparent;
         }
     }
+}
+
+.mat-expansion-panel {
+    background-color: white;
+    border-radius: 0;
+    color: var(--darker);
+
+    &:nth-child(n+2) {
+        border-top: 1px solid var(--border-grey);
+    }
+
+    .mat-expansion-panel-header {
+        padding: 0 2%;
+
+        &.mat-expanded {
+            height: 60px !important;
+        }
+    }
+
+    .mat-expansion-panel-header-title {
+        color: var(--black-tint);
+        letter-spacing: 0.03rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+}
+
+::ng-deep {
+
+    .mat-expansion-indicator::after {
+        color: var(--black-tint);
+    }
+
+    .mat-expansion-panel-body {
+        padding: 0 2% !important;
+    }
+} 
+
+.mat-expansion-panel-spacing {
+    margin: 0;
+}
+
+.admin-selection {
+    
 }
