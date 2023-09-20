@@ -112,30 +112,37 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     console.log(this.loginForm.value);
-    if(this.existingUser) {
-      this.auth.login(this.loginForm.value).subscribe(res => {
-        console.log(res);
-        if(res.status == 200) {
-          this.route.navigate(['/app']);
-        }
-        else {
-          this.notify.showError("res.message");
-        }
-      })
-    }
+    console.log(this.loginForm.valid);
+    if(this.loginForm.valid) {
+      if(this.existingUser) {
+        this.auth.login(this.loginForm.value).subscribe({
+          next: res => {
+            console.log(res);
+            if(res.status == 200) {
+              this.route.navigate(['/app']);
+            }
+          },
+          error: err => {
+            console.log(err)
+            //this.notify.showError("res.message");
+          }          
+        })
+      }
 
-    else {
-      this.auth.signup(this.loginForm.value).subscribe(res => {
-        console.log(res);
-        if(res.status == 200) {
-          this.route.navigate(['/app']);
-        }
-        else {
-          this.notify.showError("res.message");
-        }
-      })      
-    }
-    
+      else {
+        this.auth.signup(this.loginForm.value).subscribe({
+          next: res => {
+            console.log(res);
+            if(res.status == 200) {
+              this.route.navigate(['/app']);
+            }
+          },
+          error: err => {
+            console.log(err)
+          }
+        })      
+      }
+    }    
   }
 
   get f() {

@@ -1,5 +1,5 @@
 <div class="login-wrap">
-    <div class="col-wrap">
+    <!-- <div class="col-wrap">
         <div class="media-wrap">
             <div class="overlay"></div>
             <div 
@@ -20,8 +20,9 @@
             </div>
             
         </div>
-    </div>
-    <div class="col-wrap">
+    </div> -->
+    <div class="col-wrap" style="background-image: url('https://silo-inc.com/wp-content/uploads/2023/01/shubham-dhage-MIvbZPmY9Ds-unsplash-1-scaled.jpg');">
+        <div class="overlay"></div>
         <div class="login-container">
             <div class="logo">
                 <img src="../../../../assets/images/brand/silo-logo.svg" alt="silo-logo">
@@ -74,6 +75,7 @@
                                 <span [ngClass]="{ 'text-success': requiresSpecialCharsValid, 'text-danger': !requiresSpecialCharsValid }"> Special character</span>
                             </div>
                         </div>
+                        
                         <span class="eyePass">
                             <i alt="show" class="bi bi-eye-fill" 
                             (click)="showPassword = !showPassword"

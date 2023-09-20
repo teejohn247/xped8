@@ -97,7 +97,7 @@
         padding: 0 2%;
 
         &.mat-expanded {
-            height: 60px !important;
+            height: 50px !important;
         }
     }
 
@@ -118,12 +118,38 @@
     .mat-expansion-panel-body {
         padding: 0 2% !important;
     }
+
+    .mat-expansion-panel-spacing {
+        margin: 0;
+    }
 } 
 
-.mat-expansion-panel-spacing {
-    margin: 0;
-}
+
 
 .admin-selection {
-    
+    display: flex;
+    justify-content: space-between;
+
+    .user-list {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 0.2rem;
+        flex: 1;
+
+        li {
+            font-size: 0.7rem;
+            letter-spacing: 0.03rem;
+            padding: 0.1rem 0.6rem;
+            display: inline-flex;
+            border-radius: var(--radius-lg);
+            background-color: var(--primary-light);
+        }
+    }
+
+    .edit {
+        width: 5%;
+        font-size: 0.8rem;
+        color: var(--primary);
+        cursor: pointer;
+    }
 }

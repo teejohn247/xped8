@@ -77,12 +77,12 @@ export const navbarData = [
         label: 'Settings',
         subMenu: [
             {
-                routeLink: 'settings/general',
+                routeLink: 'settings/general-settings',
                 icon: 'bi bi-box-fill',
                 label: 'General',
             },
             {
-                routeLink: 'settings/human-resources',
+                routeLink: 'settings/human-resources-settings',
                 icon: 'bi bi-people-fill',
                 label: 'Human Resources',
             },

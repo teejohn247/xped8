@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms'
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 
 @Component({
@@ -9,9 +9,6 @@ import { HumanResourcesService } from 'src/app/shared/services/hr/human-resource
 })
 export class GeneralSettingsComponent implements OnInit {
 
-  departmentList: any[] = [];
-  companyRoles: any[] = [];
-  designationList: any[] = [];
   systemRoles: any[] = [];
   accordionItems: any[] = [];
 
@@ -29,37 +26,73 @@ export class GeneralSettingsComponent implements OnInit {
   constructor(private hrService: HumanResourcesService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this.getDepartments();
-    this.getCompanyRoles();
+    //this.getDepartments();
+    //this.getCompanyRoles();
 
     this.accordionItems = [
       {
         label: "Super Admin",
-        key: "superAdmin"
+        key: "superAdmin",
+        users: [
+          {
+            email: "dev@silo-inc.com"
+          }
+        ]
       },
       {
         label: "HR Module Admin",
-        key: "hrAdmin"
+        key: "hrAdmin",
+        users: [
+          {
+            email: "matthew@silo-inc.com"
+          },
+          {
+            email: "ray@silo-inc.com"
+          }
+        ]
       },
       {
         label: "Accounts Module Admin",
-        key: "accountsAdmin"
+        key: "accountsAdmin",
+        users: [
+          {
+            email: "ray@silo-inc.com"
+          }
+        ]
       },
       {
         label: "Projects Management Module Admin",
-        key: "pmAdmin"
+        key: "pmAdmin",
+        users: [
+          {
+            email: "matthew@silo-inc.com"
+          },
+        ]
       },
       {
         label: "CRM Module Admin",
-        key: "crmAdmin"
+        key: "crmAdmin",
+        users: [
+          {
+            email: "matthew@silo-inc.com"
+          },
+          {
+            email: "ray@silo-inc.com"
+          }
+        ]
       },
       {
         label: "Supply Chain Module Admin",
-        key: "scmAdmin"
+        key: "scmAdmin",
+        users: [
+          {
+            email: "ray@silo-inc.com"
+          }
+        ]
       }
     ]
 
-    console.log(this.accordionItems);
+    //console.log(this.accordionItems);
 
     this.systemRolesForm = this.fb.group({})
     this.accordionItems.forEach(field => {
@@ -69,38 +102,22 @@ export class GeneralSettingsComponent implements OnInit {
   }
 
 
-  getDepartments() {
-    this.hrService.getDepartments().subscribe(res => {
-      if(res.status == 200) {
-        this.departmentList = res.data;
-      }
-      console.log(this.departmentList);
-    })
-  }
+  // getDepartments() {
+  //   this.hrService.getDepartments().subscribe(res => {
+  //     if(res.status == 200) {
+  //       this.departmentList = res.data;
+  //     }
+  //     console.log(this.departmentList);
+  //   })
+  // }
 
-  getCompanyRoles() {
-    this.hrService.getCompanyRoles().subscribe(res => {
-      if(res.status == 200) {
-        this.companyRoles = res.data;
-      }
-      //console.log(this.companyRoles);
-    })
-  }
-
-  toggleAccordion(event, index) {
-    const element = event.target;
-    element.classList.toggle("active");
-    if (this.accordionItems[index].isActive) {
-      this.accordionItems[index].isActive = false;
-    } else {
-      this.accordionItems[index].isActive = true;
-    }
-    const panel = element.nextElementSibling;
-    if (panel.style.maxHeight) {
-      panel.style.maxHeight = null;
-    } else {
-      panel.style.maxHeight = panel.scrollHeight + "px";
-    }
-  }
+  // getCompanyRoles() {
+  //   this.hrService.getCompanyRoles().subscribe(res => {
+  //     if(res.status == 200) {
+  //       this.companyRoles = res.data;
+  //     }
+  //     //console.log(this.companyRoles);
+  //   })
+  // }
 
 }
