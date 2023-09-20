@@ -3,13 +3,14 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTr
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthenticationService } from './authentication.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserAuthGuard implements CanActivate {
 
-  constructor(private authService: AuthenticationService, private router: Router) {}
+  constructor(private authService: AuthenticationService, private notifyService: NotificationService, private router: Router) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -17,6 +18,7 @@ export class UserAuthGuard implements CanActivate {
     return this.authService.isLoggedIn.pipe(
       tap(loggedIn => {
         if(!loggedIn) {
+          this.notifyService.showWarning('You are not logged in at the moment. Login and try again')
           this.router.navigate(['login']);
         }
       })
