@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AbstractControl, ValidationErrors, ValidatorFn, FormControl, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, ValidationErrors, ValidatorFn, FormControl, FormGroup, Validators, FormBuilder } from "@angular/forms";
 import { PasswordValidators } from '../../services/utils/password-validators';
+import { CustomValidators } from '../../services/utils/password-validators';
 import { AuthenticationService } from '../../services/utils/authentication.service';
 import { NotificationService } from '../../services/utils/notification.service';
 
@@ -42,9 +43,11 @@ export class LoginComponent implements OnInit {
   // loginEmail: string;
   // loginPassword: string;
 
-  showPassword = false;
-  submitted = false;
-  existingUser = true;
+  showPassword: boolean = false;
+  submitted: boolean = false;
+  existingUser: boolean = true;
+  loggingIn: boolean = false;
+  forgotPass: boolean = false;
 
   selectedIndex = 0;
   slideInterval = 5000;
@@ -69,14 +72,53 @@ export class LoginComponent implements OnInit {
           requiresSpecialChars: true
         })
       ])
-    )
+    ),
   })
 
-  constructor(private auth: AuthenticationService, private route: Router, private notify: NotificationService) {
+  setPasswordForm = this.fb.group({
+    email: [null, [Validators.email, Validators.required]],
+    password: [
+      null,
+      Validators.compose([
+        Validators.required,
+        Validators.minLength(8),
+        PasswordValidators.patternValidator(new RegExp("(?=.*[0-9])"), {
+          requiresDigit: true
+        }),
+        PasswordValidators.patternValidator(new RegExp("(?=.*[A-Z])"), {
+          requiresUppercase: true
+        }),
+        PasswordValidators.patternValidator(new RegExp("(?=.*[a-z])"), {
+          requiresLowercase: true
+        }),
+        PasswordValidators.patternValidator(new RegExp("(?=.*[$@^!%*?&:])"), {
+          requiresSpecialChars: true
+        })
+      ])
+    ],
+    confirmPassword: [null, Validators.required]
+  }, { validator: CustomValidators.MatchingPasswords })
+
+  constructor(
+    private auth: AuthenticationService, 
+    private route: Router, 
+    private notify: NotificationService,
+    private fb: FormBuilder) {
     this.autoSlideImages();
   }
 
   ngOnInit(): void {
+    let urlsplit = this.route.url?.split("/");
+    // console.log(urlsplit);
+    if (urlsplit[1] == 'login') this.loggingIn = true;
+    else if (urlsplit[1] == 'set-password') this.loggingIn = false
+    else {
+      console.log(urlsplit);
+      this.forgotPass = true;
+    }
+  }
+
+  ngAfterViewInit() {
     
   }
 
@@ -111,20 +153,19 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.loginForm.value);
-    console.log(this.loginForm.valid);
     if(this.loginForm.valid) {
       if(this.existingUser) {
         this.auth.login(this.loginForm.value).subscribe({
           next: res => {
-            console.log(res);
+            // console.log(res);
             if(res.status == 200) {
-              this.route.navigate(['/app']);
+              if(!res.data.activeStatus) this.route.navigate(['app/settings']);
+              else this.route.navigate(['/app']);
             }
           },
           error: err => {
             console.log(err)
-            //this.notify.showError("res.message");
+            this.notify.showError("err.message");
           }          
         })
       }
@@ -134,51 +175,112 @@ export class LoginComponent implements OnInit {
           next: res => {
             console.log(res);
             if(res.status == 200) {
-              this.route.navigate(['/app']);
+              this.notify.showSuccess(res.message);
+              // this.route.navigate(['/app']);
             }
           },
           error: err => {
             console.log(err)
+            this.notify.showError("err.message");
           }
         })      
       }
     }    
   }
 
+  routeToforgotPassword() {
+    this.route.navigate(['forgot-password']);
+  }
+
+  forgotPassword() {
+    if(this.setPasswordForm.value.email.isValid) {
+      let info = {
+        email: this.setPasswordForm.value.email
+      }
+      this.auth.forgotPassword(info).subscribe({
+        next: res => {
+          // console.log(res);
+          if(res.status == 200) {
+            this.notify.showSuccess('A verification link has been sent to your email');
+          }
+        },
+        error: err => {
+          console.log(err)
+          this.notify.showError("err.message");
+        }          
+      })
+    }
+  }
+
   get f() {
     return this.loginForm.controls;
+  }
+
+  get fp() {
+    return this.setPasswordForm.controls;
   }
 
   get passwordValid() {
     return this.loginForm.controls["password"].errors === null;
   }
+  get confirmPasswordValid() {
+    return this.setPasswordForm.controls["password"].errors === null;
+  }
 
   get requiredValid() {
     return !this.loginForm.controls["password"].hasError("required");
+  }
+  get setPasswordRequired() {
+    return !this.setPasswordForm.controls["password"].hasError("required");
+  }
+  get requiredConfirmationValid() {
+    return !this.setPasswordForm.controls["confirmPassword"].hasError("required");
   }
 
   get minLengthValid() {
     return !this.loginForm.controls["password"].hasError("minlength");
   }
+  get setPasswordMinLengthValid() {
+    return !this.setPasswordForm.controls["password"].hasError("minlength");
+  }
 
   get requiresDigitValid() {
     return !this.loginForm.controls["password"].hasError("requiresDigit");
+  }
+  get setPasswordRequiresDigitValid() {
+    return !this.setPasswordForm.controls["password"].hasError("requiresDigit");
   }
 
   get requiresUppercaseValid() {
     return !this.loginForm.controls["password"].hasError("requiresUppercase");
   }
+  get setPasswordRequiresUppercaseValid() {
+    return !this.setPasswordForm.controls["password"].hasError("requiresUppercase");
+  }
 
   get requiresLowercaseValid() {
     return !this.loginForm.controls["password"].hasError("requiresLowercase");
+  }
+  get setPasswordRequiresLowercaseValid() {
+    return !this.setPasswordForm.controls["password"].hasError("requiresLowercase");
   }
 
   get requiresSpecialCharsValid() {
     return !this.loginForm.controls["password"].hasError("requiresSpecialChars");
   }
+  get setPasswordRequiresSpecialCharsValid() {
+    return !this.setPasswordForm.controls["password"].hasError("requiresSpecialChars");
+  }
 
+  get matchValid() {
+    return !this.setPasswordForm.controls["confirmPassword"].hasError("not_matching");
+  }
 
+  checkPasswords: ValidatorFn = (group: AbstractControl):  ValidationErrors | null => { 
+    let pass = group.get('password').value;
+    let confirmPass = group.get('confirmPassword').value
+    return pass === confirmPass ? null : { notSame: true }
+  }
 
-  
 
 }

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { SettingsService } from 'src/app/shared/services/settings/settings.service';
 
 @Component({
   selector: 'app-general-settings',
@@ -9,21 +12,35 @@ import { HumanResourcesService } from 'src/app/shared/services/hr/human-resource
 })
 export class GeneralSettingsComponent implements OnInit {
 
+  loggedInUser: any;
   systemRoles: any[] = [];
   accordionItems: any[] = [];
+  overlayActive: boolean = true;
+  companyName: string;
+  generalInfoForm: any;
 
   panelOpenState = false;
 
   systemRolesForm: FormGroup;
 
-  generalInfoForm = this.fb.group({
-    companyName: [''],
-    companyAddress: [''],
-    superAdminEmail: ['dev@silo-inc.com'],
-    superAdminPassword: [''],
-  })
+  constructor(
+    private notify: NotificationService,
+    private hrService: HumanResourcesService,
+    private settingsService: SettingsService,
+    private authService: AuthenticationService, 
+    private fb: FormBuilder
+  ) {
 
-  constructor(private hrService: HumanResourcesService, private fb: FormBuilder) {}
+    this.loggedInUser = this.authService.loggedInUser;
+    console.log(this.loggedInUser);
+
+    this.generalInfoForm = this.fb.group({
+      companyName: [''],
+      companyAddress: [''],
+      superAdminEmail: [this.loggedInUser?.data.adminEmail],
+      superAdminPassword: [''],
+    })
+  }
 
   ngOnInit(): void {
     //this.getDepartments();
@@ -100,6 +117,27 @@ export class GeneralSettingsComponent implements OnInit {
       this.systemRolesForm.addControl(field.key, formControl)
     })
   }
+
+  createCompany() {
+    let info = {
+      companyName: this.companyName
+    }
+    this.settingsService.createCompany(info).subscribe({
+      next: res => {
+        console.log(res);
+        if(res.status == 200) {
+          this.notify.showSuccess('Company name has been created and saved successfully');
+          this.generalInfoForm.controls['companyName'].setValue(this.companyName);
+        }
+      },
+      error: err => {
+        console.log(err)
+        this.notify.showError(err.message);
+      }          
+    })
+  }
+
+  
 
 
   // getDepartments() {

@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthenticationService {
 
   private path = `${environment.baseUrl}`;
@@ -16,12 +17,18 @@ export class AuthenticationService {
   user: any;
 
   get token() {
-    return localStorage.getItem(this.TOKEN_NAME);
+    return sessionStorage.getItem(this.TOKEN_NAME);
+  }
+
+  get loggedInUser() {
+    if (sessionStorage.getItem('loggedInUser')) {
+      return  JSON.parse(sessionStorage.getItem('loggedInUser'));
+    }
+    return null;
   }
 
   constructor(private http: HttpClient) {
     //Checking for login status in local storage
-    //const token = localStorage.getItem('user_auth');
     this._isLoggedin$.next(!!this.token);
   }
 
@@ -34,16 +41,23 @@ export class AuthenticationService {
     return this.http.post<any>(`${this.path}/signin`, loginDetails).pipe(
       tap((res: any) => {
         this._isLoggedin$.next(true);
-        localStorage.setItem(this.TOKEN_NAME, res.token);
-        console.log(res.token);
-        this.user = this.getUser(res.token);
-        console.log(this.user);
+        sessionStorage.setItem(this.TOKEN_NAME, res.token);
+        sessionStorage.setItem('loggedInUser', JSON.stringify(res));
+        //this.user = this.getUser(res.token);
       })
     );
   }
 
   private getUser(token: string) {
     return JSON.parse(atob(token.split('.')[1]))
+  }
+
+  public verifyEmail(token: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/verifyEmail`, token);
+  }
+
+  public forgotPassword(userEmail: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/forgotPassword`, userEmail);
   }
 
 }

@@ -37,6 +37,7 @@ const SHARED_COMP = [
 
   exports: [
     ...SHARED_COMP,
+    FormsModule,
     ReactiveFormsModule,
   ],
 

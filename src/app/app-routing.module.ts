@@ -15,9 +15,30 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
+    path: 'set-password',
+    component: LoginComponent
+  },
+  {
+    path: 'forgot-password',
+    component: LoginComponent
+  },
+  {
+    path: 'forgot-password/:token',
+    component: LoginComponent
+  },
+  {
     path: 'app',
     loadChildren: () => import('./modules/features/features.module').then(m => m.FeaturesModule),
-    canActivate: [UserAuthGuard]
+    //canActivate: [UserAuthGuard]
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./modules/features/features.module').then(m => m.FeaturesModule),
+    // canActivate: [UserAuthGuard]
+  },
+  {
+    path: 'dashboard/:userToken',
+    loadChildren: () => import('./modules/features/features.module').then(m => m.FeaturesModule),
   }
 ];
 

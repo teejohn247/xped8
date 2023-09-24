@@ -104,3 +104,36 @@
     </div>
 
 </div>
+
+
+<div [ngClass]="{'active': !loggedInUser.data.activeStatus}" class="page-overlay">
+    <div class="outer"></div>
+    <div class="content">
+        <div class="top-card">
+            <div class="inner-wrap">
+                <div class="hdr-details">
+                    <div class="inner-wrap">
+                        <div class="create-icon">
+                            <img src="../../../../assets/images/illustrations/entity.png" />
+                        </div>
+                        <div class="create-details">
+                            <div class="create-name">Enter Company Name</div>
+                            <!-- <p>The first step is to complete your business information.</p> -->
+                        </div>
+                    </div>
+                    <div class="hdr-overlay"></div>
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="bottom-card">
+            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'100%'" appearance="fill">
+                <mat-label>Company Name</mat-label>
+                <input matInput required [(ngModel)]="companyName">
+            </mat-form-field>
+
+            <div (click)="createCompany()" class="cta primary-bkg w-100 icon lg"><i class="bi bi-people-fill"></i>SUBMIT</div>
+        </div>
+    </div>
+</div>
