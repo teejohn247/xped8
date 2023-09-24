@@ -35,7 +35,7 @@ export class GeneralSettingsComponent implements OnInit {
     console.log(this.loggedInUser);
 
     this.generalInfoForm = this.fb.group({
-      companyName: [''],
+      companyName: [this.loggedInUser?.data?.companyName],
       companyAddress: [''],
       superAdminEmail: [this.loggedInUser?.data.adminEmail],
       superAdminPassword: [''],

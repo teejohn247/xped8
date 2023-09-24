@@ -23,18 +23,18 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'forgot-password/:token',
+    path: 'set-password/:token',
     component: LoginComponent
   },
   {
     path: 'app',
     loadChildren: () => import('./modules/features/features.module').then(m => m.FeaturesModule),
-    //canActivate: [UserAuthGuard]
+    canActivate: [UserAuthGuard]
   },
   {
     path: 'dashboard',
     loadChildren: () => import('./modules/features/features.module').then(m => m.FeaturesModule),
-    // canActivate: [UserAuthGuard]
+    canActivate: [UserAuthGuard]
   },
   {
     path: 'dashboard/:userToken',
