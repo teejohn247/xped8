@@ -18,6 +18,7 @@ export class GeneralSettingsComponent implements OnInit {
   overlayActive: boolean = true;
   companyName: string;
   generalInfoForm: any;
+  companyCreated: boolean;
 
   panelOpenState = false;
 
@@ -33,11 +34,12 @@ export class GeneralSettingsComponent implements OnInit {
 
     this.loggedInUser = this.authService.loggedInUser;
     console.log(this.loggedInUser);
+    this.companyCreated = this.loggedInUser.data.activeStatus;
 
     this.generalInfoForm = this.fb.group({
       companyName: [this.loggedInUser?.data?.companyName],
       companyAddress: [''],
-      superAdminEmail: [this.loggedInUser?.data.adminEmail],
+      superAdminEmail: [this.loggedInUser?.data.userEmail],
       superAdminPassword: [''],
     })
   }
@@ -128,6 +130,7 @@ export class GeneralSettingsComponent implements OnInit {
         if(res.status == 200) {
           this.notify.showSuccess('Company name has been created and saved successfully');
           this.generalInfoForm.controls['companyName'].setValue(this.companyName);
+          this.companyCreated = res.data.activeStatus;
         }
       },
       error: err => {
