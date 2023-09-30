@@ -37,6 +37,14 @@
                             </div>
                             <div class="cta"><i class="bi bi-plus"></i></div>
                         </div>
+
+                        <div class="sec-hld d-flex align-items-end mt-lg-3 mb-lg-2" style="width: 48%">
+                            <div class="form-hld" style="flex: 1;">
+                                <label class="mb-lg-2">Create New Leave Type</label>
+                                <input type="text" formControlName="leaveType" class="form-control form-control-md" id="leaveType" placeholder="Enter leave type">    
+                            </div>
+                            <div (click)="createLeaveType()" class="cta"><i class="bi bi-plus"></i></div>
+                        </div>
                     </div>
 
                 </form>
@@ -54,11 +62,20 @@
                                 <div class="list-scroll">
                                     <div *ngFor="let entity of item.list; let j = index" class="list-hld">
                                         <div *ngIf="item.label == 'Departments' " class="name">{{entity.departmentName}}</div>
-                                        <div *ngIf="item.label == 'Company Roles' " class="name">{{entity.roleName}}</div>
+                                        <!-- <div *ngIf="designationList.length > 0 && item.label == 'Company Roles' " class="name">{{entity.roleName}}</div> -->
                                         <div *ngIf="item.label == 'Designations' " class="name">{{entity.designationName}}</div>
-                                        <div class="actions">
+                                        <div *ngIf="item.label == 'Leave Types' " class="name">{{entity.leaveName}} Leave</div>
+                                        <div *ngIf="item.label == 'Departments'" class="actions">
                                             <i class="bi bi-pen-fill"></i>
-                                            <i class="bi bi-trash3-fill"></i>
+                                            <i (click)="deleteDept(entity)" class="bi bi-trash3-fill"></i>
+                                        </div>
+                                        <div *ngIf="item.label == 'Leave Types'" class="actions">
+                                            <i class="bi bi-pen-fill"></i>
+                                            <i (click)="deleteLeaveType(entity)" class="bi bi-trash3-fill"></i>
+                                        </div>
+                                        <div *ngIf="item.label == 'Designations'" class="actions">
+                                            <i class="bi bi-pen-fill"></i>
+                                            <i (click)="deleteDesignation(entity)" class="bi bi-trash3-fill"></i>
                                         </div>
                                     </div>
                                 </div>
