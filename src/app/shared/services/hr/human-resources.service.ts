@@ -21,6 +21,22 @@ export class HumanResourcesService {
 
   constructor(private http: HttpClient, private authService: AuthenticationService) { }
 
+  /*************** EMPLOYEE RELATED ACTIONS ***************/
+
+  //Create a new employee
+  public createEmployee(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/addEmployee`, info, this.requestOptions);
+  }
+
+  //Get the list of all Departments
+  public getEmployees(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchEmployees?page=1&limit=100`, this.requestOptions);
+  }
+
+  //Delete department
+  public deleteEmployee(employeeId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteDepartment/${employeeId}`, this.requestOptions);
+  }
 
   /*************** DEPARTMENT RELATED ACTIONS ***************/
 
@@ -31,11 +47,13 @@ export class HumanResourcesService {
 
   //Get the list of all Departments
   public getDepartments(): Observable<any> {
-    console.log(this.authService.token)
-    console.log(this.requestOptions);
     return this.http.get<any>(`${this.path}/fetchDepartments`, this.requestOptions);
   }
 
+  //Delete department
+  public deleteDepartment(deptId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteDepartment/${deptId}`, this.requestOptions);
+  }
 
   /*************** COMPANY ROLES RELATED ACTIONS ***************/
 
@@ -61,4 +79,32 @@ export class HumanResourcesService {
   public getDesignations(): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchDesignations`, this.requestOptions);
   }
+
+  //Delete designation
+  public updateDesignation(data: any, designationId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateDesignation/${designationId}`, data, this.requestOptions);
+  }
+
+  //Delete designation
+  public deleteDesignation(designationId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteDesignation/${designationId}`, this.requestOptions);
+  }
+
+  /*************** LEAVE TYPES RELATED ACTIONS ***************/
+
+  //Create a new leave type
+  public createLeaveType(leaveTypeName: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createLeave`, leaveTypeName, this.requestOptions);
+  }
+
+  //Get the list of all Leave Types
+  public getLeaveTypes(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchLeave`, this.requestOptions);
+  }
+
+  //Delete department
+  public deleteLeaveType(leaveId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteLeave/${leaveId}`, this.requestOptions);
+  }
+
 }

@@ -1,7 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { EmployeeFormData } from '../../models/employee-data';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 
 @Component({
   selector: 'app-create-single-info',
@@ -15,12 +18,33 @@ export class CreateSingleInfoComponent implements OnInit {
   type: 'text' | 'select';
   @Input() control:string;
 
+  departmentList: any[] = [];
+  designationList: any[] = [];
+
   constructor(
+    @Inject(MAT_DIALOG_DATA) public dialogData: any,
+    private datePipe: DatePipe,
     public dialogRef: MatDialogRef<CreateSingleInfoComponent>,
+    private hrService: HumanResourcesService,     
+    private notifyService: NotificationService,
     private fb: FormBuilder
-  ) { }
+  ) {
+    this.employeeForm = this.fb.group({})
+    this.setUpForm();
+  }
 
   ngOnInit(): void {
+    
+  }
+
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  setUpForm = async () => {
+    this.departmentList = this.dialogData.departmentList;
+    this.designationList = this.dialogData.designationList;
+
     this.employeeFieldData = [
       {
         controlName: 'firstName',
@@ -74,20 +98,20 @@ export class CreateSingleInfoComponent implements OnInit {
         controlWidth: '48%',
         initialValue: '',
         selectOptions: {
-          Male: 'male',
-          Female: 'female'
+          Male: 'Male',
+          Female: 'Female'
         },
         validators: [Validators.required],
         order: 6
       },
       {
-        controlName: 'personalEmail',
-        controlType: 'text',
-        controlLabel: 'Personal Email Address',
+        controlName: 'employmentStartDate',
+        controlType: 'date',
+        controlLabel: 'Employment Start Date',
         controlWidth: '48%',
         initialValue: null,
-        validators: [Validators.required, Validators.email],
-        order: 7
+        validators: [Validators.required],
+        order: 9
       },
       {
         controlName: 'employmentType',
@@ -96,11 +120,21 @@ export class CreateSingleInfoComponent implements OnInit {
         controlWidth: '48%',
         initialValue: '',
         selectOptions: {
-          Contract: 'contract',
-          Permanent: 'permanent'
+          Contract: 'Contract',
+          Permanent: 'Permanent'
         },
         validators: [Validators.required],
-        order: 8
+        order: 10
+      },
+      {
+        controlName: 'designation',
+        controlType: 'select',
+        controlLabel: 'Designation',
+        controlWidth: '48%',
+        initialValue: '',
+        selectOptions: this.arrayToObject(this.designationList, 'designationName'),
+        validators: [Validators.required],
+        order: 11
       },
       {
         controlName: 'department',
@@ -108,12 +142,9 @@ export class CreateSingleInfoComponent implements OnInit {
         controlLabel: 'Department',
         controlWidth: '48%',
         initialValue: '',
-        selectOptions: {
-          Sales: 'sales',
-          Marketing: 'marketing'
-        },
+        selectOptions: this.arrayToObject(this.departmentList, 'departmentName'),
         validators: [Validators.required],
-        order: 9
+        order: 7
       },
       {
         controlName: 'role',
@@ -122,23 +153,60 @@ export class CreateSingleInfoComponent implements OnInit {
         controlWidth: '48%',
         initialValue: null,
         validators: [Validators.required],
-        order: 10
+        order: 8
       },
     ]
 
     this.employeeFieldData.sort((a,b) => (a.order - b.order));
-    this.employeeForm = this.fb.group({})
 
     this.employeeFieldData.forEach(field => {
       const formControl = this.fb.control(field.initialValue, field.validators)
       this.employeeForm.addControl(field.controlName, formControl)
+    });
+  }
+
+  //Converts an array to an Object of key value pairs
+  arrayToObject(arrayVar, key:string) {
+    let reqObj = {}
+    reqObj = arrayVar.reduce((agg, item, index) => {
+      agg[item['_id']] = item[key];
+      return agg;
+    }, {})
+    console.log(reqObj);
+    return reqObj;
+  }
+
+  createEmployee() {
+    let info = {
+      firstName: this.employeeForm.value.firstName,
+      lastName: this.employeeForm.value.lastName,
+      email: this.employeeForm.value.officialEmail,
+      phoneNumber: this.employeeForm.value.phoneNo,
+      dateOfBirth: this.datePipe.transform(this.employeeForm.value.dateOfBirth, 'dd-M-yyyy'),
+      gender: this.employeeForm.value.gender,
+      departmentId: this.employeeForm.value.department,
+      companyRole: this.employeeForm.value.role,
+      designationId: this.employeeForm.value.designation,
+      employmentStartDate: this.datePipe.transform(this.employeeForm.value.employmentStartDate, 'dd-M-yyyy'),
+      employmentType: this.employeeForm.value.employmentType
+    }
+    console.log(info);
+
+    this.hrService.createEmployee(info).subscribe({
+      next: res => {
+        // console.log(res);
+        if(res.status == 200) {
+          this.notifyService.showSuccess('This employee has been created successfully');
+          this.closeDialog();
+        }
+        // this.getPageData();
+      },
+      error: err => {
+        console.log(err)
+        this.notifyService.showError(err.error.error);
+      } 
     })
   }
-
-  closeDialog() {
-    this.dialogRef.close();
-  }
-
   // get f() {
   //   return this.employeeForm.controls;
   // }

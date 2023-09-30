@@ -6,6 +6,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { DeleteConfirmationComponent } from 'src/app/shared/components/delete-confirmation/delete-confirmation.component';
 import { CreateSingleInfoComponent } from 'src/app/shared/components/create-single-info/create-single-info.component';
 
@@ -20,10 +22,13 @@ export class EmployeesListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-
   displayedColumns: any[];
   dataSource: MatTableDataSource<EmployeeData>;
   selection = new SelectionModel<EmployeeData>(true, []);
+
+  employeeList: any[] = [];
+  departmentList: any[] = [];
+  designationList: any[] = [];
 
   //Employee Table Column Names
   tableColumns: EmployeeTable[] = [
@@ -31,7 +36,7 @@ export class EmployeesListComponent implements OnInit {
       key: "select",
       label: "Select",
       order: 1,
-      columnWidth: "2%",
+      columnWidth: "3%",
       cellStyle: "width: 100%",
       sortable: false
     },
@@ -44,10 +49,10 @@ export class EmployeesListComponent implements OnInit {
       sortable: false
     },
     {
-      key: "employeeId",
+      key: "employeeCode",
       label: "Employee ID",
       order: 3,
-      columnWidth: "12%",
+      columnWidth: "10%",
       cellStyle: "width: 100%",
       sortable: true
     },
@@ -68,15 +73,15 @@ export class EmployeesListComponent implements OnInit {
       sortable: true
     },
     {
-      key: "officialEmail",
+      key: "email",
       label: "Email Address",
       order: 6,
-      columnWidth: "12%",
+      columnWidth: "16%",
       cellStyle: "width: 100%",
       sortable: true
     },
     {
-      key: "phoneNo",
+      key: "phoneNumber",
       label: "Phone Number",
       order: 7,
       columnWidth: "12%",
@@ -100,10 +105,10 @@ export class EmployeesListComponent implements OnInit {
       sortable: true
     },
     {
-      key: "role",
+      key: "companyRole",
       label: "Role",
       order: 9,
-      columnWidth: "12%",
+      columnWidth: "8%",
       cellStyle: "width: 100%",
       sortable: true
     },
@@ -118,66 +123,70 @@ export class EmployeesListComponent implements OnInit {
 
   ]
 
-  employeeData : EmployeeData[] = [
-    {
-      id: 1,
-      "Employee ID": "EMP-2021-MB45",
-      "Image": "staff1.jpg",
-      "First Name": "Mellie",
-      "Last Name": "Gabbott",
-      "Email Address": "mellie.gabbott@silo.com",
-      "Phone Number": "+234 845 2345 566",
-      "Department": "Marketing",
-      "Role": "Marketing Manager"
-    },
-    {
-      id: 2,
-      "Employee ID": "EMP-2021-YA65",
-      "Image": "staff2.jpg",
-      "First Name": "Yehudi",
-      "Last Name": "Ainsby",
-      "Email Address": "yehudi.ainsby@silo.com",
-      "Phone Number": "+234 355 2445 586",
-      "Department": "Technical",
-      "Role": "Support Analyst"
-    },
-    {
-      id: 3,
-      "Employee ID": "EMP-2020-NP50",
-      "Image": "profile-img.jpg",
-      "First Name": "Noellyn",
-      "Last Name": "Primett",
-      "Email Address": "noellyn.primett@silo.com",
-      "Phone Number": "+234 355 2445 586",
-      "Department": "Sales",
-      "Role": "Business Analyst"
-    },
-    {
-      id: 4,
-      "Employee ID": "EMP-2020-YS30",
-      "Image": "staff3.jpg",
-      "First Name": "Yurenin",
-      "Last Name": "Stefanieg",
-      "Email Address": "yurenin.staefanieg@silo.com",
-      "Phone Number": "+234 355 2445 586",
-      "Department": "Technical",
-      "Role": "Senior Officer"
-    },
+  employeeData : any = [
+    // {
+    //   id: 1,
+    //   "Employee ID": "EMP-2021-MB45",
+    //   "Image": "staff1.jpg",
+    //   "First Name": "Mellie",
+    //   "Last Name": "Gabbott",
+    //   "Email Address": "mellie.gabbott@silo.com",
+    //   "Phone Number": "+234 845 2345 566",
+    //   "Department": "Marketing",
+    //   "Role": "Marketing Manager"
+    // },
+    // {
+    //   id: 2,
+    //   "Employee ID": "EMP-2021-YA65",
+    //   "Image": "staff2.jpg",
+    //   "First Name": "Yehudi",
+    //   "Last Name": "Ainsby",
+    //   "Email Address": "yehudi.ainsby@silo.com",
+    //   "Phone Number": "+234 355 2445 586",
+    //   "Department": "Technical",
+    //   "Role": "Support Analyst"
+    // },
+    // {
+    //   id: 3,
+    //   "Employee ID": "EMP-2020-NP50",
+    //   "Image": "profile-img.jpg",
+    //   "First Name": "Noellyn",
+    //   "Last Name": "Primett",
+    //   "Email Address": "noellyn.primett@silo.com",
+    //   "Phone Number": "+234 355 2445 586",
+    //   "Department": "Sales",
+    //   "Role": "Business Analyst"
+    // },
+    // {
+    //   id: 4,
+    //   "Employee ID": "EMP-2020-YS30",
+    //   "Image": "staff3.jpg",
+    //   "First Name": "Yurenin",
+    //   "Last Name": "Stefanieg",
+    //   "Email Address": "yurenin.staefanieg@silo.com",
+    //   "Phone Number": "+234 355 2445 586",
+    //   "Department": "Technical",
+    //   "Role": "Senior Officer"
+    // },
   ]
 
   constructor(
     public dialog: MatDialog,
     private router: Router,
+    private hrService: HumanResourcesService,     
+    private notifyService: NotificationService,
   ) {
+    this.getPageData();
   }
 
   ngOnInit(): void {
+    console.log(this.employeeList);
     this.displayedColumns = this.tableColumns.map(column => column.label);
-    this.dataSource = new MatTableDataSource(this.employeeData);
+    console.log(this.employeeList);
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+    
   }
 
 
@@ -197,28 +206,70 @@ export class EmployeesListComponent implements OnInit {
     const dialogRef = this.dialog.open(CreateSingleInfoComponent, {
       width: '35%',
       height: 'auto',
-      //data: { isUpdate: false },
+      data: {
+        departmentList: this.departmentList['data'],
+        designationList: this.designationList['data'],
+        isExisting: false
+      },
     });
-    // dialogRef.afterClosed().subscribe(() => {
-    //   this.getCustomers();
-    //   this.dataSource = new MatTableDataSource<CustomerList>(this.customers);
-    // }); 
+    dialogRef.afterClosed().subscribe(() => {
+      this.getPageData();
+    }); 
   }
 
-  deleteEmployee() {
-    const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
-      width: '40%',
-      height: 'auto',
+  //Delete an employee
+  deleteEmployee(info: any) {
+    console.log(info);
+    this.notifyService.confirmAction({
+      title: 'Remove Employee',
+      message: 'Are you sure you want to remove this employee?',
+      confirmText: 'Remove Employee',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteEmployee(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('The employee has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
     });
-    // dialogRef.componentInstance.studentId = studentId;
-    // dialogRef.afterClosed().subscribe(() => {
-    //   this.getStudents();
-    //   this.dataSource = new MatTableDataSource<Students>(this.students);
-    // });
   }
+
+  // deleteEmployee() {
+  //   const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
+  //     width: '40%',
+  //     height: 'auto',
+  //   });
+  //   // dialogRef.componentInstance.studentId = studentId;
+  //   // dialogRef.afterClosed().subscribe(() => {
+  //   //   this.getStudents();
+  //   //   this.dataSource = new MatTableDataSource<Students>(this.students);
+  //   // });
+  // }
 
   viewEmployee() {
     this.router.navigateByUrl('app/human-resources/employees/employee-details');
   }
+
+  getPageData = async () => {
+    this.employeeList = await this.hrService.getEmployees().toPromise();
+    this.departmentList = await this.hrService.getDepartments().toPromise();
+    this.designationList = await this.hrService.getDesignations().toPromise();
+
+    console.log(this.employeeList);
+    this.dataSource = new MatTableDataSource(this.employeeList['data']);
+    this.dataSource.sort = this.sort;
+  }
+
+
 
 }

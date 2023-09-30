@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 import { MatIconModule } from '@angular/material/icon';
@@ -17,6 +17,7 @@ import { DeleteConfirmationComponent } from './components/delete-confirmation/de
 import { CreateSingleInfoComponent } from './components/create-single-info/create-single-info.component';
 import { RegisterGuestComponent } from './components/register-guest/register-guest.component';
 import { LoginComponent } from './components/login/login.component';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 
 const SHARED_COMP = [
   MatIconModule,
@@ -33,7 +34,7 @@ const SHARED_COMP = [
 ];
 
 @NgModule({
-  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent],
+  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent],
 
   exports: [
     ...SHARED_COMP,
@@ -49,7 +50,8 @@ const SHARED_COMP = [
     NgChartsModule,
   ],
   providers : [
-    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    DatePipe
   ]
 })
 export class SharedModule {

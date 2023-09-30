@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { ConfirmationDialogData } from '../../models/confirmation-dialog-data';
+import { ConfirmationDialogComponent } from '../../components/confirmation-dialog/confirmation-dialog.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  constructor(private _toastr: ToastrService) { }
+  constructor(private _toastr: ToastrService, private dialog: MatDialog) { }
 
   showSuccess(message: string = "Successful") {
     this._toastr.success(message, "Success")
@@ -43,6 +47,17 @@ export class NotificationService {
     } else {
       this.showWarning(message);
     }
+  }
 
+  confirmAction(data: ConfirmationDialogData): Observable<boolean> {
+    return this.dialog.open(
+      ConfirmationDialogComponent, 
+      {
+        data,
+        width: '40%',
+        height: 'auto',
+        disableClose: true,
+      }
+    ).afterClosed();
   }
 }
