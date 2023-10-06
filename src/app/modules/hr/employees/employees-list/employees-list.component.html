@@ -4,8 +4,8 @@
     <div class="row-section d-flex justify-content-between align-items-center">
         <div class="page-header">Employees</div>
         <div class="main-actions d-flex justify-content-start align-items-center">
-            <div class="cta primary-bkg icon md" (click)="addNewEmployee()"><i class="bi bi-person-fill-add"></i>Add Employee</div>
-            <div class="cta trans-bkg icon md ms-lg-3"><i class="bi bi-box-arrow-down"></i> Import</div>
+            <div (click)="addNewEmployee()" class="cta primary-bkg icon md"><i class="bi bi-person-fill-add"></i>Add Employee</div>
+            <div (click)="addBulkEmployees()" class="cta trans-bkg icon md ms-lg-3"><i class="bi bi-box-arrow-down"></i> Import</div>
             <div class="cta trans-bkg icon md ms-lg-3"><i class="bi bi-box-arrow-up"></i> Export</div>
         </div>
     </div>
@@ -60,7 +60,8 @@
                             </th>
                             <td style="width:1%; white-space: nowrap;" mat-cell 
                                 *matCellDef="let row">
-                                <span class="table-img bkg-standard" style="background-image: url('../../../../assets/images/illustrations/human-icon-clr.png');"></span>
+                                <span *ngIf="!row.image" class="initials">{{row.firstName[0] + row.lastName[0]}}</span>
+                                <span *ngIf="row.image" class="table-img bkg-standard" style="background-image: url('../../../../assets/images/illustrations/human-icon-clr.png');"></span>
                             </td>
                         </ng-container>
 
@@ -70,6 +71,22 @@
                             <td style="width:1%; white-space: nowrap;" mat-cell *matCellDef="let element">
                                 <span (click)="viewEmployee()" class="table-icon edit"><i class="bi bi-pen-fill"></i></span>
                                 <span (click)="deleteEmployee(element)" class="table-icon delete ms-lg-3"><i class="bi bi-trash3-fill"></i></span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container *ngIf="column.key == 'name'">
+                            <th style="width:8%" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+                            <td style="white-space: nowrap;" mat-cell *matCellDef="let row">
+                                <span>{{ row['firstName'] }} {{ row['lastName'] }}</span> <br/>
+                                <span>{{ row['employeeCode'] }}</span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container *ngIf="column.key == 'activeStatus'">
+                            <th style="width:8%" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+                            <td style="white-space: nowrap;" mat-cell *matCellDef="let row">
+                                <span class="status approved" *ngIf="row[column.key] == true">Active</span>
+                                <span class="status pending" *ngIf="row[column.key] == false">Pending</span>
                             </td>
                         </ng-container>
 

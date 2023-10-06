@@ -10,6 +10,7 @@ import { HumanResourcesService } from 'src/app/shared/services/hr/human-resource
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { DeleteConfirmationComponent } from 'src/app/shared/components/delete-confirmation/delete-confirmation.component';
 import { CreateSingleInfoComponent } from 'src/app/shared/components/create-single-info/create-single-info.component';
+import { BulkUploadComponent } from '../bulk-upload/bulk-upload.component';
 
 
 @Component({
@@ -49,25 +50,9 @@ export class EmployeesListComponent implements OnInit {
       sortable: false
     },
     {
-      key: "employeeCode",
-      label: "Employee ID",
-      order: 3,
-      columnWidth: "10%",
-      cellStyle: "width: 100%",
-      sortable: true
-    },
-    {
-      key: "firstName",
-      label: "First Name",
+      key: "name",
+      label: "Name",
       order: 4,
-      columnWidth: "8%",
-      cellStyle: "width: 100%",
-      sortable: true
-    },
-    {
-      key: "lastName",
-      label: "Last Name",
-      order: 5,
       columnWidth: "8%",
       cellStyle: "width: 100%",
       sortable: true
@@ -80,14 +65,14 @@ export class EmployeesListComponent implements OnInit {
       cellStyle: "width: 100%",
       sortable: true
     },
-    {
-      key: "phoneNumber",
-      label: "Phone Number",
-      order: 7,
-      columnWidth: "12%",
-      cellStyle: "width: 100%",
-      sortable: true
-    },
+    // {
+    //   key: "phoneNumber",
+    //   label: "Phone Number",
+    //   order: 7,
+    //   columnWidth: "12%",
+    //   cellStyle: "width: 100%",
+    //   sortable: true
+    // },
     // {
     //   key: "dateOfBirth",
     //   label: "Date of Birth",
@@ -108,6 +93,14 @@ export class EmployeesListComponent implements OnInit {
       key: "companyRole",
       label: "Role",
       order: 9,
+      columnWidth: "15%",
+      cellStyle: "width: 100%",
+      sortable: true
+    },
+    {
+      key: "activeStatus",
+      label: "Status",
+      order: 10,
       columnWidth: "8%",
       cellStyle: "width: 100%",
       sortable: true
@@ -115,7 +108,7 @@ export class EmployeesListComponent implements OnInit {
     {
       key: "actions",
       label: "Actions",
-      order: 10,
+      order: 11,
       columnWidth: "10%",
       cellStyle: "width: 100%",
       sortable: true
@@ -203,7 +196,22 @@ export class EmployeesListComponent implements OnInit {
   }
 
   addNewEmployee() {
-    const dialogRef = this.dialog.open(CreateSingleInfoComponent, {
+    let dialogRef = this.dialog.open(CreateSingleInfoComponent, {
+      width: '35%',
+      height: 'auto',
+      data: {
+        departmentList: this.departmentList['data'],
+        designationList: this.designationList['data'],
+        isExisting: false
+      },
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.getPageData();
+    }); 
+  }
+
+  addBulkEmployees() {
+    let dialogRef = this.dialog.open(BulkUploadComponent, {
       width: '35%',
       height: 'auto',
       data: {
