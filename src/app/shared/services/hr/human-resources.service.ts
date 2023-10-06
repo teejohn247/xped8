@@ -28,14 +28,19 @@ export class HumanResourcesService {
     return this.http.post<any>(`${this.path}/addEmployee`, info, this.requestOptions);
   }
 
+  //Bulk employee upload
+  public bulkEmployeeUpload(file: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/uploadBulkEmployees`, file, this.requestOptions);
+  }
+
   //Get the list of all Departments
   public getEmployees(): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchEmployees?page=1&limit=100`, this.requestOptions);
   }
 
-  //Delete department
+  //Delete employee
   public deleteEmployee(employeeId: any): Observable<any> {
-    return this.http.delete<any>(`${this.path}/deleteDepartment/${employeeId}`, this.requestOptions);
+    return this.http.delete<any>(`${this.path}/deleteEmployee/${employeeId}`, this.requestOptions);
   }
 
   /*************** DEPARTMENT RELATED ACTIONS ***************/
@@ -48,6 +53,11 @@ export class HumanResourcesService {
   //Get the list of all Departments
   public getDepartments(): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchDepartments`, this.requestOptions);
+  }
+
+  //Update Department
+  public updateDepartment(data: any, departmentId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateDepartment/${departmentId}`, data, this.requestOptions);
   }
 
   //Delete department
@@ -80,7 +90,7 @@ export class HumanResourcesService {
     return this.http.get<any>(`${this.path}/fetchDesignations`, this.requestOptions);
   }
 
-  //Delete designation
+  //Update designation
   public updateDesignation(data: any, designationId: any): Observable<any> {
     return this.http.patch<any>(`${this.path}/updateDesignation/${designationId}`, data, this.requestOptions);
   }
@@ -100,6 +110,11 @@ export class HumanResourcesService {
   //Get the list of all Leave Types
   public getLeaveTypes(): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchLeave`, this.requestOptions);
+  }
+
+  //Update Leave Type
+  public updateLeaveType(data: any, leaveTypeId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateLeave/${leaveTypeId}`, data, this.requestOptions);
   }
 
   //Delete department

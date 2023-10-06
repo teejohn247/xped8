@@ -48,6 +48,9 @@ export class LoginComponent implements OnInit {
   existingUser: boolean = true;
   loggingIn: boolean = false;
   forgotPass: boolean = false;
+  setPass: boolean = false;
+  userToken: string;
+  authDetails: any;
 
   selectedIndex = 0;
   slideInterval = 5000;
@@ -111,7 +114,13 @@ export class LoginComponent implements OnInit {
     let urlsplit = this.route.url?.split("/");
     // console.log(urlsplit);
     if (urlsplit[1] == 'login') this.loggingIn = true;
-    else if (urlsplit[1] == 'set-password') this.loggingIn = false
+    else if (urlsplit[1] == 'set-password') {
+      this.loggingIn = false;
+      this.setPass = true;
+      this.userToken = urlsplit[2];
+      this.authDetails = this.auth.getUser(this.userToken);
+      this.setPasswordForm.controls['email'].setValue(this.authDetails.email);
+    } 
     else {
       console.log(urlsplit);
       this.forgotPass = true;
@@ -157,10 +166,15 @@ export class LoginComponent implements OnInit {
       if(this.existingUser) {
         this.auth.login(this.loginForm.value).subscribe({
           next: res => {
-            // console.log(res);
+            console.log(res);
             if(res.status == 200) {
-              if(!res.data.activeStatus) this.route.navigate(['app/settings']);
-              else this.route.navigate(['/app']);
+              if(res.data.isSuperAdmin) {
+                if(!res.data.activeStatus) this.route.navigate(['app/settings']);
+                else this.route.navigate(['/app']);
+              }
+              else {
+                this.route.navigate(['/app']);
+              }
             }
           },
           error: err => {
@@ -181,7 +195,7 @@ export class LoginComponent implements OnInit {
           },
           error: err => {
             console.log(err)
-            this.notify.showError("err.message");
+            this.notify.showError(err.error.error);
           }
         })      
       }
@@ -206,10 +220,45 @@ export class LoginComponent implements OnInit {
         },
         error: err => {
           console.log(err)
-          this.notify.showError("err.message");
+          this.notify.showError(err.error.error);
         }          
       })
     }
+  }
+
+  setPassword() {
+    let info = {
+      token: this.userToken,
+      password: this.setPasswordForm.value.password
+    }
+    this.auth.setPassword(info).subscribe({
+      next: res => {
+        console.log(res);
+        if(res.status == 200) {
+          this.notify.showSuccess("Your password has been set successfully");
+          let authInfo = {
+            email: res.data.email,
+            password: this.setPasswordForm.value.password
+          }
+          this.auth.login(authInfo).subscribe({
+            next: res => {
+              console.log(res);
+              if(res.status == 200) {
+                this.route.navigate(['app']);
+              }
+            },
+            error: err => {
+              console.log(err)
+              this.notify.showError(err.error.error);
+            }          
+          })
+        }
+      },
+      error: err => {
+        console.log(err)
+        //this.notify.showError("res.message");
+      }          
+    })
   }
 
   get f() {

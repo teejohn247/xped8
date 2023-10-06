@@ -6,6 +6,7 @@ import { NotificationService } from 'src/app/shared/services/utils/notification.
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { DesignationInfoComponent } from '../designation-info/designation-info.component';
 import { LeaveTypeInfoComponent } from '../leave-type-info/leave-type-info.component';
+import { DepartmentInfoComponent } from '../department-info/department-info.component';
 
 @Component({
   selector: 'app-human-resources-settings',
@@ -72,26 +73,70 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
     console.log(this.departmentList);
     console.log(this.designationList);
+    console.log(this.leaveTypeList);
   }
+
+  /*************** DEPARTMENT RELATED ACTIONS ***************/
   
   //Create a new department
   createDepartment() {
     let data = {
-      "departmentName": this.hrSettingsForm.value.department
+      departmentName: this.hrSettingsForm.value.department ? this.hrSettingsForm.value.department : ""
     }
-    this.hrService.createDepartment(data).subscribe({
-      next: res => {
-        // console.log(res);
-        if(res.status == 200) {
-          this.notifyService.showSuccess('The department has been created successfully');
-        }
+    if(this.hrSettingsForm.value.department) {
+      this.hrService.createDepartment(data).subscribe({
+        next: res => {
+          // console.log(res);
+          if(res.status == 200) {
+            this.dialog.open(DepartmentInfoComponent, {
+              width: '30%',
+              height: 'auto',
+              data: {
+                name: data.departmentName,
+                id: res.data._id,
+                isExisting: false
+              },
+            }).afterClosed().subscribe(() => {
+              this.hrSettingsForm.reset();
+              this.getPageData();
+            });
+            // this.notifyService.showSuccess('This designation has been created successfully');
+          }
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+    else {
+      this.dialog.open(DepartmentInfoComponent, {
+        width: '30%',
+        height: 'auto',
+        data: {
+          name: data.departmentName,
+          isExisting: false
+        },
+      }).afterClosed().subscribe(() => {
         this.getPageData();
+      });
+    }
+  }
+
+  //Edit a department
+  editDepartment(details: any) {
+    this.dialog.open(DepartmentInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: details.departmentName,
+        id: details._id,
+        isExisting: true,
+        modalInfo: details
       },
-      error: err => {
-        console.log(err)
-        this.notifyService.showError(err.error.error);
-      } 
-    })
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });;
   }
 
   //Delete a department
@@ -120,6 +165,8 @@ export class HumanResourcesSettingsComponent implements OnInit {
     });
   }
 
+  /*************** DESIGNATION RELATED ACTIONS ***************/
+
   //Create a new designation
   createDesignation() {
     let data = {
@@ -131,13 +178,17 @@ export class HumanResourcesSettingsComponent implements OnInit {
           console.log(res);
           if(res.status == 200) {
             this.dialog.open(DesignationInfoComponent, {
-              width: '30%',
+              width: '32%',
               height: 'auto',
               data: {
                 name: data.designationName,
                 id: res.data._id,
+                leaveTypes: this.leaveTypeList['data'],
                 isExisting: false
               },
+            }).afterClosed().subscribe(() => {
+              this.hrSettingsForm.reset();
+              this.getPageData();
             });
             // this.notifyService.showSuccess('This designation has been created successfully');
           }
@@ -150,12 +201,15 @@ export class HumanResourcesSettingsComponent implements OnInit {
     }
     else {
       this.dialog.open(DesignationInfoComponent, {
-        width: '30%',
+        width: '32%',
         height: 'auto',
         data: {
           name: data.designationName,
+          leaveTypes: this.leaveTypeList['data'],
           isExisting: false
         },
+      }).afterClosed().subscribe(() => {
+        this.getPageData();
       });
     }
     
@@ -165,6 +219,23 @@ export class HumanResourcesSettingsComponent implements OnInit {
     //     location.reload();
     //   }
     // })
+  }
+
+  //Edit a designation
+  editDesignation(details: any) {
+    this.dialog.open(DesignationInfoComponent, {
+      width: '32%',
+      height: 'auto',
+      data: {
+        name: details.designationName,
+        id: details._id,
+        leaveTypes: this.leaveTypeList['data'],
+        isExisting: true,
+        modalInfo: details
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });;
   }
 
   //Delete a designation
@@ -193,6 +264,8 @@ export class HumanResourcesSettingsComponent implements OnInit {
     });
   }
 
+  /*************** LEAVE TYPES RELATED ACTIONS ***************/
+
   //Create a new leave type
   createLeaveType() {
     let data = {
@@ -212,6 +285,8 @@ export class HumanResourcesSettingsComponent implements OnInit {
                 name: data.leaveName,
                 isExisting: false
               },
+            }).afterClosed().subscribe(() => {
+              this.getPageData();
             });
           }
         },
@@ -229,6 +304,8 @@ export class HumanResourcesSettingsComponent implements OnInit {
           name: data.leaveName,
           isExisting: false
         },
+      }).afterClosed().subscribe(() => {
+        this.getPageData();
       });
     }
     
@@ -238,6 +315,22 @@ export class HumanResourcesSettingsComponent implements OnInit {
     //     location.reload();
     //   }
     // })
+  }
+
+  //Edit a leave type
+  editLeaveType(details: any) {
+    this.dialog.open(LeaveTypeInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: details.leaveName,
+        id: details._id,
+        isExisting: true,
+        modalInfo: details
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });;
   }
 
   //Delete a leave type

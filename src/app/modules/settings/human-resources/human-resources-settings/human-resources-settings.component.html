@@ -66,15 +66,15 @@
                                         <div *ngIf="item.label == 'Designations' " class="name">{{entity.designationName}}</div>
                                         <div *ngIf="item.label == 'Leave Types' " class="name">{{entity.leaveName}} Leave</div>
                                         <div *ngIf="item.label == 'Departments'" class="actions">
-                                            <i class="bi bi-pen-fill"></i>
+                                            <i (click)="editDepartment(entity)" class="bi bi-pen-fill"></i>
                                             <i (click)="deleteDept(entity)" class="bi bi-trash3-fill"></i>
                                         </div>
                                         <div *ngIf="item.label == 'Leave Types'" class="actions">
-                                            <i class="bi bi-pen-fill"></i>
+                                            <i (click)="editLeaveType(entity)" class="bi bi-pen-fill"></i>
                                             <i (click)="deleteLeaveType(entity)" class="bi bi-trash3-fill"></i>
                                         </div>
                                         <div *ngIf="item.label == 'Designations'" class="actions">
-                                            <i class="bi bi-pen-fill"></i>
+                                            <i (click)="editDesignation(entity)" class="bi bi-pen-fill"></i>
                                             <i (click)="deleteDesignation(entity)" class="bi bi-trash3-fill"></i>
                                         </div>
                                     </div>

@@ -20,6 +20,7 @@ import { RecruitmentOnboardingComponent } from './recruitment/recruitment-onboar
 import { VisitorsLogComponent } from './visitors-log/visitors-log/visitors-log.component';
 import { GeneralAppraisalComponent } from './appraisals/general-appraisal/general-appraisal.component';
 import { LeaveManagementOverviewComponent } from './leave-management/leave-management-overview/leave-management-overview.component';
+import { BulkUploadComponent } from './employees/bulk-upload/bulk-upload.component';
 
 
 @NgModule({
@@ -29,7 +30,7 @@ import { LeaveManagementOverviewComponent } from './leave-management/leave-manag
     SelfServicePortalComponent, 
     SelfServiceLeaveRequestsComponent, 
     SelfServicePayrollComponent, 
-    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent
+    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent
   ],
   imports: [
     CommonModule,

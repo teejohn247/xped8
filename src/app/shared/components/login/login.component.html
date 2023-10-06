@@ -21,11 +21,11 @@
             
         </div>
     </div> -->
-    <div class="col-wrap" style="background-image: url('https://silo-inc.com/wp-content/uploads/2023/01/shubham-dhage-MIvbZPmY9Ds-unsplash-1-scaled.jpg');">
+    <div class="col-wrap" style="background-image: url('../../../../assets/images/illustrations/erp-bkg.jpeg');">
         <div class="overlay"></div>
         <div class="login-container">
             <div class="logo">
-                <img src="../../../../assets/images/brand/silo-logo.svg" alt="silo-logo">
+                <img src="https://silo-inc.com/wp-content/uploads/2023/01/White-logo-no-background-Recovered.svg" alt="silo-logo">
             </div>
 
             <div *ngIf="!loggingIn" class="intro">
@@ -101,7 +101,7 @@
                 </div>
             </form>
 
-            <form *ngIf="!loggingIn" [formGroup]="setPasswordForm" class="w-100" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+            <form *ngIf="!loggingIn" [formGroup]="setPasswordForm" class="w-100" novalidate autocomplete="off">
                 <div class="form-hld">
 
                     <div class="input-hld mb-4">
@@ -110,7 +110,8 @@
                             formControlName="email" 
                             autofocus 
                             class="form-control form-control-lg" 
-                            id="email" 
+                            id="email"
+                            readonly = "{{setPass}}" 
                             placeholder="Enter your email"
                             [ngClass]="{ 'is-valid': (fp.email.dirty || submitted) && !fp.email.errors, 'is-invalid': (fp.email.dirty || submitted) && fp.email.errors }"
                         >
@@ -182,7 +183,7 @@
                     </div>               
     
                     <div *ngIf="!forgotPass" class="btn-hld">
-                        <button type="submit" class="cta primary-bkg icon lg"><i class="bi bi-person-bounding-box"></i>Save & Login</button>
+                        <button (click)="setPassword()" class="cta primary-bkg icon lg"><i class="bi bi-person-bounding-box"></i>Save & Login</button>
                     </div>
 
                     <div *ngIf="forgotPass" class="btn-hld">

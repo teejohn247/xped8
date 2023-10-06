@@ -30,7 +30,7 @@ export class LeaveTypeInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Name',
         controlWidth: '100%',
-        initialValue: this.data.name,
+        initialValue: this.data.isExisting ? this.data.modalInfo.leaveName : this.data.name,
         validators: [Validators.required],
         order: 1
       },
@@ -39,7 +39,7 @@ export class LeaveTypeInfoComponent implements OnInit {
         controlType: 'textarea',
         controlLabel: 'Description',
         controlWidth: '100%',
-        initialValue: null,
+        initialValue: this.data.isExisting ? this.data.modalInfo.description : null,
         validators: null,
         order: 2
       }
@@ -53,6 +53,50 @@ export class LeaveTypeInfoComponent implements OnInit {
 
   ngOnInit(): void {
     
+  }
+
+  onSubmit() {
+    if(this.leaveTypeForm.valid) {
+      let data = {
+        leaveName: this.leaveTypeForm.value.name,
+        description: this.leaveTypeForm.value.description
+      }
+      console.log(this.data);
+      if(this.data.modalInfo?.leaveName) {
+        this.hrService.updateLeaveType(data, this.data.id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              if(this.data.isExisting) this.notifyService.showSuccess('This leave type has been updated successfully');
+              else this.notifyService.showSuccess('This leave type has been created successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+  
+      }
+      else {
+        this.hrService.createLeaveType(data).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showSuccess('This leave type has been created successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    }
   }
 
 }

@@ -48,12 +48,16 @@ export class AuthenticationService {
     );
   }
 
-  private getUser(token: string) {
+  public getUser(token: string) {
     return JSON.parse(atob(token.split('.')[1]))
   }
 
   public verifyEmail(token: any): Observable<any> {
     return this.http.post<any>(`${this.path}/verifyEmail`, token);
+  }
+
+  public setPassword(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/setPassword`, info);
   }
 
   public forgotPassword(userEmail: any): Observable<any> {

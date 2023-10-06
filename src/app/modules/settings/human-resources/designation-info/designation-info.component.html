@@ -44,7 +44,7 @@
                             </mat-form-field>
 
                             <mat-form-field *ngSwitchCase="'number'" color="accent" class="mb-lg-2" [style.width]="field.controlWidth" appearance="fill">
-                                <mat-label class="text-capitalize">{{field.controlLabel}} Leave (Days)</mat-label>
+                                <mat-label class="text-capitalize">{{field.controlLabel}}</mat-label>
                                 <input matInput min="0" type="number" [formControlName]="field.controlName">
                                 <!-- <mat-error *ngIf="designationForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error> -->
                             </mat-form-field>
@@ -53,12 +53,22 @@
                                 <mat-label>{{field.controlLabel}}</mat-label>
                                 <textarea type="field.controlType" rows="1" matInput [formControlName]="field.controlName"></textarea>
                             </mat-form-field>
+
+                            <mat-form-field *ngSwitchCase="'date'" color="accent" class="mb-lg-2" [style.width]="field.controlWidth" appearance="fill">
+                                <mat-label>{{field.controlLabel}}</mat-label>
+                                <input matInput [matDatepicker]="picker" readonly [formControlName]="field.controlName">
+                                <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker color="accent" disabled="false"></mat-datepicker>
+                                <mat-error *ngIf="designationForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
+                                <mat-error *ngIf="designationForm.get(field.controlName)?.hasError('date')">{{field.controlLabel}} is invalid</mat-error>
+                            </mat-form-field>
     
                         </ng-container>
                     </ng-container>
 
                     <div class="btn-hld d-flex justify-content-end mt-lg-3" style="width: 100%">
-                        <div (click)="createDesignation()" class="cta primary-bkg mmd text-uppercase" style="min-width: 30%" type="submit">Submit</div>
+                        <div (click)="onSubmit()" class="cta primary-bkg mmd text-uppercase" style="min-width: 30%" type="submit">Submit</div>
                     </div>
 
                 </form>
