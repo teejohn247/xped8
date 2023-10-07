@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { TableColumn } from 'src/app/shared/models/table-columns';
 import { MatTableDataSource } from '@angular/material/table';
 import { LeaveRequestTable } from 'src/app/shared/models/leave-requests';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator } from '@angular/material/paginator';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 
 @Component({
   selector: 'app-leave-management-overview',
@@ -13,6 +16,7 @@ import { MatPaginator } from '@angular/material/paginator';
 export class LeaveManagementOverviewComponent implements OnInit {
 
   displayedColumns: any[];
+  requestedApprovals: any[] = [];
   dataSource: MatTableDataSource<LeaveRequestTable>;
   selection = new SelectionModel<LeaveRequestTable>(true, []);
 
@@ -305,7 +309,14 @@ export class LeaveManagementOverviewComponent implements OnInit {
     },
   ]
 
-  constructor() { }
+  constructor(
+    private hrService: HumanResourcesService,
+    private notifyService: NotificationService,     
+    private datePipe: DatePipe,
+
+  ) {
+    this.getPageData();
+  }
 
   ngOnInit(): void {
     this.tableColumns.sort((a,b) => (a.order - b.order));
@@ -324,6 +335,12 @@ export class LeaveManagementOverviewComponent implements OnInit {
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  getPageData = async () => {
+    this.requestedApprovals = await this.hrService.getRequestedLeaveApprovals().toPromise();
+    this.dataSource = new MatTableDataSource(this.requestedApprovals['data']);
+    console.log(this.requestedApprovals);
   }
 
 }

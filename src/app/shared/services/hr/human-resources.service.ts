@@ -33,9 +33,14 @@ export class HumanResourcesService {
     return this.http.post<any>(`${this.path}/uploadBulkEmployees`, file, this.requestOptions);
   }
 
-  //Get the list of all Departments
+  //Get the list of all employees
   public getEmployees(): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchEmployees?page=1&limit=100`, this.requestOptions);
+  }
+
+  //Get an employee details
+   public getEmployeeDetails(employeeId: string): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchEmployee/${employeeId}`, this.requestOptions);
   }
 
   //Delete employee
@@ -120,6 +125,23 @@ export class HumanResourcesService {
   //Delete department
   public deleteLeaveType(leaveId: any): Observable<any> {
     return this.http.delete<any>(`${this.path}/deleteLeave/${leaveId}`, this.requestOptions);
+  }
+
+  /*************** LEAVE APPLICATIONS RELATED ACTIONS ***************/
+
+  //Create a new leave request
+  public createLeaveRequest(leaveDetails: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/leaveApplication`, leaveDetails, this.requestOptions);
+  }
+
+  //Get the list of all leave applications
+  public getLeaveRequests(): Observable<any> {
+    return this.http.get<any>(`${this.path}/getLeaveRecords`, this.requestOptions);
+  }
+
+  //Get the list of all requested leave applications
+  public getRequestedLeaveApprovals(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchRequestedLeaves`, this.requestOptions);
   }
 
 }

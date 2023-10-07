@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -7,9 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
+  @Input() userDetails:any;
+  userName:string;
+  userRole:string;
+
   constructor() { }
 
   ngOnInit(): void {
+    if(this.userDetails.data.isSuperAdmin) {
+      this.userName = this.userDetails.data.companyName + ' Company';
+      this.userRole = 'Super Admin';
+    }
+    else {
+      this.userName = this.userDetails.data.fullName;
+      this.userRole = this.userDetails.data.companyRole;
+    }
   }
-
 }

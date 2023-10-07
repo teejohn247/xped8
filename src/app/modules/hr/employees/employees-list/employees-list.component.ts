@@ -53,7 +53,7 @@ export class EmployeesListComponent implements OnInit {
       key: "name",
       label: "Name",
       order: 4,
-      columnWidth: "8%",
+      columnWidth: "12%",
       cellStyle: "width: 100%",
       sortable: true
     },
@@ -61,7 +61,7 @@ export class EmployeesListComponent implements OnInit {
       key: "email",
       label: "Email Address",
       order: 6,
-      columnWidth: "16%",
+      columnWidth: "14%",
       cellStyle: "width: 100%",
       sortable: true
     },
@@ -109,7 +109,7 @@ export class EmployeesListComponent implements OnInit {
       key: "actions",
       label: "Actions",
       order: 11,
-      columnWidth: "10%",
+      columnWidth: "5%",
       cellStyle: "width: 100%",
       sortable: true
     }
@@ -264,8 +264,8 @@ export class EmployeesListComponent implements OnInit {
   //   // });
   // }
 
-  viewEmployee() {
-    this.router.navigateByUrl('app/human-resources/employees/employee-details');
+  viewEmployee(info: any) {
+    this.router.navigateByUrl(`app/human-resources/employees/${info._id}`);
   }
 
   getPageData = async () => {

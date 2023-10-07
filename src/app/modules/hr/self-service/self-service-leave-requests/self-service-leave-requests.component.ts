@@ -5,9 +5,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { Chart, Options } from 'highcharts';
 import * as Highcharts from 'highcharts';
+import { DatePipe } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { LeaveRequestTable } from 'src/app/shared/models/leave-requests';
 import { FormFields } from '../../../../shared/models/form-fields';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 
 @Component({
   selector: 'app-self-service-leave-requests',
@@ -16,36 +19,32 @@ import { FormFields } from '../../../../shared/models/form-fields';
 })
 export class SelfServiceLeaveRequestsComponent implements OnInit {
 
+  userDetails: any;
+  userId: string;
+  totalLeaveDays: number;
+  leaveDaysUsed: number;
+  leaveRecords: any[] = [];
   displayedColumns: any[];
   dataSource: MatTableDataSource<LeaveRequestTable>;
+  chartOptions: Options;
 
+  leaveSummary: any[] = [];
   leaveRequestFields: FormFields[];
   leaveForm!: FormGroup
 
-  leaveBreakdown: any[] = [
+  leaveBreakdown: any[] = [];
+  leaveAttr: any[] = [
     {
-      id: 1,
-      daysLeft: 5,
-      totalDays: 14,
-      name: "Paid Leave",
       colorDark: "rgba(66, 133, 244, 1)",
       colorLight: "rgba(66, 133, 244, 0.2)",
       icon: "bi bi-cash"
     },
     {
-      id: 2,
-      daysLeft: 1,
-      totalDays: 2,
-      name: "Unpaid Leave",
       colorDark: "rgb(235, 87, 87)",
       colorLight: "rgba(235, 87, 87, 0.2)",
       icon: "bi bi-exclamation-diamond"
     },
     {
-      id: 3,
-      daysLeft: 1,
-      totalDays: 3,
-      name: "Sick Leave",
       colorDark: "rgb(191,148,60)",
       colorLight: "rgba(191,148,60, 0.2)",
       icon: "bi bi-bandaid"
@@ -55,7 +54,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
   //Leave Request Table Column Names
   tableColumns: TableColumn[] = [
     {
-      key: "leaveType",
+      key: "leaveTypeName",
       label: "Leave Type",
       order: 1,
       columnWidth: "12%",
@@ -63,7 +62,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
       sortable: false
     },
     {
-      key: "dateSubmitted",
+      key: "requestDate",
       label: "Date Submitted",
       order: 8,
       columnWidth: "12%",
@@ -71,7 +70,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
       sortable: true
     },
     {
-      key: "startDate",
+      key: "leaveStartDate",
       label: "Start Date",
       order: 4,
       columnWidth: "12%",
@@ -79,7 +78,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
       sortable: true
     },
     {
-      key: "endDate",
+      key: "leaveEndDate",
       label: "End Date",
       order: 5,
       columnWidth: "12%",
@@ -87,7 +86,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
       sortable: true
     },
     {
-      key: "approver",
+      key: "leaveApprovalName",
       label: "Approver",
       order: 6,
       columnWidth: "12%",
@@ -172,57 +171,42 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
     },
   ]
 
-  Highcharts: typeof Highcharts = Highcharts;
-  chartOptions: Options = {
-    chart: {
-      type: 'pie',
-      plotShadow: false
-    },
-    credits: {
-      enabled: false
-    },
-    plotOptions: {
-      pie: {
-        innerSize: '99%',
-        borderWidth: 20,
-        borderColor: null,
-        slicedOffset: 5,
-        dataLabels: {
-          connectorWidth: 0,
-          enabled: false
-        }
-      }
-    },
-    tooltip: {
-      headerFormat: '<span style="font-size:11px; letter-spacing: 0.03rem; font-family: Roboto">{series.name}</span><br>',
-      pointFormat: '<span style="font-size:11px; letter-spacing: 0.03rem; font-family: Roboto; color:{point.color}">{point.name}</span>: <b>{point.value}days</b> <br/>'
-    },
-    title: {
-      verticalAlign: 'middle',
-      floating: false,
-      text: ''
-    },
-    legend: {
-      enabled: false
-    },
-    series: [
-      {
-        type: 'pie',
-        name: 'Leave Days',
-        data: [
-          {name: 'Days Used', y: 60, value: 21, color: '#f08585'},
-          {name: 'Days Left', y: 40, value: 14, color: '#4dc781'},
-        ]
-      }
-    ]
+  Highcharts: typeof Highcharts;
+
+  constructor(    
+    private hrService: HumanResourcesService,
+    private notifyService: NotificationService,     
+    private fb: FormBuilder,
+    private datePipe: DatePipe,
+  ) {
+    this.getPageData();  
   }
 
-  constructor(private fb: FormBuilder) { }
-
   ngOnInit(): void {
+    this.userDetails = JSON.parse(sessionStorage.getItem("loggedInUser"))['data'];
+    console.log(this.userDetails);
+    this.userId = this.userDetails._id;
+
+    this.leaveSummary = this.userDetails.leaveAssignment;
+    this.totalLeaveDays = this.leaveSummary.reduce((n, {noOfLeaveDays}) => n + noOfLeaveDays, 0);
+    this.leaveDaysUsed = this.leaveSummary.reduce((n, {daysUsed}) => n + daysUsed, 0);
+    this.leaveBreakdown = this.leaveSummary.map((item, index) => {
+      let data = {
+        id: index + 1,
+        daysUsed: item.daysUsed,
+        totalDays: item.noOfLeaveDays,
+        name: item.leaveName,
+        colorDark: this.leaveAttr[index].colorDark,
+        colorLight: this.leaveAttr[index].colorLight,
+        icon: this.leaveAttr[index].icon
+      }
+      return data;
+    });
+    console.log(this.leaveBreakdown);
+
+
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
-    this.dataSource = new MatTableDataSource(this.tableData);
 
     this.leaveRequestFields = [
       {
@@ -231,11 +215,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
         controlLabel: 'Leave Type',
         controlWidth: '100%',
         initialValue: '',
-        selectOptions: {
-          Paid: 'paid',
-          Unpaid: 'unpaid',
-          Sick: 'sick'
-        },
+        selectOptions: this.arrayToObject(this.userDetails.leaveAssignment, 'leaveName'),
         validators: [Validators.required],
         order: 1
       },
@@ -275,6 +255,117 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
       const formControl = this.fb.control(field.initialValue, field.validators)
       this.leaveForm.addControl(field.controlName, formControl)
     })
+  }
+
+  getPageData = async () => {
+    this.leaveRecords = await this.hrService.getLeaveRequests().toPromise();
+    this.dataSource = new MatTableDataSource(this.leaveRecords['data']);
+
+    console.log(this.leaveRecords);
+
+    this.Highcharts = Highcharts;
+    this.chartOptions = {
+      chart: {
+        type: 'pie',
+        plotShadow: false
+      },
+      credits: {
+        enabled: false
+      },
+      plotOptions: {
+        pie: {
+          innerSize: '99%',
+          borderWidth: 20,
+          borderColor: null,
+          slicedOffset: 5,
+          dataLabels: {
+            connectorWidth: 0,
+            enabled: false
+          }
+        }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:11px; letter-spacing: 0.03rem; font-family: Roboto">{series.name}</span><br>',
+        pointFormat: '<span style="font-size:11px; letter-spacing: 0.03rem; font-family: Roboto; color:{point.color}">{point.name}</span>: <b>{point.value}days</b> <br/>'
+      },
+      title: {
+        verticalAlign: 'middle',
+        floating: false,
+        text: ''
+      },
+      legend: {
+        enabled: false
+      },
+      series: [
+        {
+          type: 'pie',
+          name: 'Leave Days',
+          data: [
+            {
+              name: 'Days Used', 
+              y: this.leaveDaysUsed*100/this.totalLeaveDays, 
+              value: this.leaveDaysUsed, 
+              color: '#f08585'
+            },
+            {
+              name: 'Days Left', 
+              y: ((this.totalLeaveDays - this.leaveDaysUsed)*100)/this.totalLeaveDays, 
+              value: this.totalLeaveDays - this.leaveDaysUsed, 
+              color: '#4dc781'
+            },
+          ]
+        }
+      ]
+    }
+  }
+
+  //Converts an array to an Object of key value pairs
+  arrayToObject(arrayVar, key:string) {
+    let reqObj = {}
+    reqObj = arrayVar.reduce((agg, item, index) => {
+      agg[item['leaveTypeId']] = item[key];
+      return agg;
+    }, {})
+    return reqObj;
+  }
+
+  leaveApplication() {
+    if(this.leaveForm.valid) {
+      let data = {
+        leaveTypeId: this.leaveForm.value.leaveType,
+        leaveStartDate: this.datePipe.transform(this.leaveForm.value.startDate, 'dd-MM-yyyy'),
+        leaveEndDate: this.datePipe.transform(this.leaveForm.value.endDate, 'dd-MM-yyyy'),
+        comments: this.leaveForm.value.message
+      }
+      console.log(data);
+      this.hrService.createLeaveRequest(data).subscribe({
+        next: res => {
+          console.log(res);
+          if(res.status == 200) {
+            this.notifyService.showSuccess('You leave application has been sent successfully');
+            this.getPageData();
+          }
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+  }
+
+  strToDate(dateVal: string, key:string) {
+    if(key == 'requestDate') {
+      let newFormat = new Date(dateVal);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }
+    else {
+      const [day, month, year] = dateVal.split('-');
+      let newFormat = new Date(+year, +month - 1, +day);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }    
   }
 
 }

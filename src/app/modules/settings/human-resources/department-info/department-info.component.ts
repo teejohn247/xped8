@@ -14,6 +14,7 @@ export class DepartmentInfoComponent implements OnInit {
 
   departmentFieldData: FormFields[];
   departmentForm!: FormGroup;
+  employees: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -23,6 +24,7 @@ export class DepartmentInfoComponent implements OnInit {
     private fb: FormBuilder
 
   ) {
+    this.employees = this.data.staff;
     this.departmentForm = this.fb.group({})
 
     this.departmentFieldData = [
@@ -36,14 +38,24 @@ export class DepartmentInfoComponent implements OnInit {
         order: 1
       },
       {
-        controlName: 'description',
-        controlType: 'textarea',
-        controlLabel: 'Description',
+        controlName: 'manager',
+        controlType: 'select',
+        controlLabel: 'Manager',
         controlWidth: '100%',
-        initialValue: this.data.isExisting ? this.data.modalInfo.description : null,
+        initialValue: '',
+        selectOptions: this.arrayToObject(this.employees, 'email'),
         validators: null,
-        order: 2
-      }
+        order: 7
+      },
+      // {
+      //   controlName: 'description',
+      //   controlType: 'textarea',
+      //   controlLabel: 'Description',
+      //   controlWidth: '100%',
+      //   initialValue: this.data.isExisting ? this.data.modalInfo.description : null,
+      //   validators: null,
+      //   order: 2
+      // }
     ]
 
     this.departmentFieldData.forEach(field => {
@@ -59,6 +71,7 @@ export class DepartmentInfoComponent implements OnInit {
     if(this.departmentForm.valid) {
       let data = {
         departmentName: this.departmentForm.value.name,
+        managerId: this.departmentForm.value.manager
       }
       console.log(this.data);
       if(this.data.modalInfo?.departmentName) {
@@ -95,6 +108,17 @@ export class DepartmentInfoComponent implements OnInit {
         })
       }
     }
+  }
+
+  //Converts an array to an Object of key value pairs
+  arrayToObject(arrayVar, key:string) {
+    let reqObj = {}
+    reqObj = arrayVar.reduce((agg, item, index) => {
+      agg[item['_id']] = item[key];
+      return agg;
+    }, {})
+    console.log(reqObj);
+    return reqObj;
   }
 
 }

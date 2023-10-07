@@ -22,6 +22,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
   companyRoles: any[] = [];
   designationList: any[] = [];
   leaveTypeList: any[] = [];
+  employees: any[] = [];
 
   hrSettingsForm: FormGroup;
 
@@ -45,7 +46,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   getPageData = async () => {
     this.departmentList = await this.hrService.getDepartments().toPromise();
-    this.companyRoles = await this.hrService.getCompanyRoles().toPromise();
+    this.employees = await this.hrService.getEmployees().toPromise();
     this.designationList = await this.hrService.getDesignations().toPromise();
     this.leaveTypeList = await this.hrService.getLeaveTypes().toPromise();
     this.accordionItems = [
@@ -94,7 +95,8 @@ export class HumanResourcesSettingsComponent implements OnInit {
               data: {
                 name: data.departmentName,
                 id: res.data._id,
-                isExisting: false
+                isExisting: false,
+                staff: this.employees['data']
               },
             }).afterClosed().subscribe(() => {
               this.hrSettingsForm.reset();
@@ -115,7 +117,8 @@ export class HumanResourcesSettingsComponent implements OnInit {
         height: 'auto',
         data: {
           name: data.departmentName,
-          isExisting: false
+          isExisting: false,
+          staff: this.employees['data']
         },
       }).afterClosed().subscribe(() => {
         this.getPageData();
@@ -132,7 +135,8 @@ export class HumanResourcesSettingsComponent implements OnInit {
         name: details.departmentName,
         id: details._id,
         isExisting: true,
-        modalInfo: details
+        modalInfo: details,
+        staff: this.employees['data']
       },
     }).afterClosed().subscribe(() => {
       this.getPageData();
