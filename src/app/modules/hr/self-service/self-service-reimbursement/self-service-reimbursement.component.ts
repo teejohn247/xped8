@@ -6,6 +6,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ReimbursementTable } from 'src/app/shared/models/reimbursement-data';
 import { FormFields } from '../../../../shared/models/form-fields';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 
 @Component({
   selector: 'app-self-service-reimbursement',
@@ -14,6 +16,8 @@ import { FormFields } from '../../../../shared/models/form-fields';
 })
 export class SelfServiceReimbursementComponent implements OnInit {
 
+  userDetails: any;
+  userId: string;
   displayedColumns: any[];
   dataSource: MatTableDataSource<ReimbursementTable>;
 
@@ -151,9 +155,17 @@ export class SelfServiceReimbursementComponent implements OnInit {
     },
   ]
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private hrService: HumanResourcesService,
+    private notifyService: NotificationService,     
+    private fb: FormBuilder
+  ) { }
 
   ngOnInit(): void {
+    this.userDetails = JSON.parse(sessionStorage.getItem("loggedInUser"))['data'];
+    console.log(this.userDetails);
+    this.userId = this.userDetails._id;
+
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
     this.dataSource = new MatTableDataSource(this.tableData);
@@ -242,6 +254,11 @@ export class SelfServiceReimbursementComponent implements OnInit {
       const formControl = this.fb.control(field.initialValue, field.validators)
       this.expenseForm.addControl(field.controlName, formControl)
     })
+  }
+
+  //Converts amount to comma separated format
+  convertAmount(amount: string) {
+    return (Number(amount)).toLocaleString();
   }
 
 }

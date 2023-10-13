@@ -28,7 +28,7 @@
                                         <div class="card-balance">
                                             <div class="hdr">Balance</div>
                                             <!-- <div class="amount">₦ 2,500,000</div> -->
-                                            <div class="amount">£ 2,500.70</div>
+                                            <div class="amount">£ {{convertAmount(userDetails.expenseDetails.cardBalance)}}</div>
                                         </div>
                                         <div class="card-circles"></div>
                                         <div class="card-contactless">
@@ -44,7 +44,7 @@
                                             </svg>
                                         </div>
                                         <div class="card-chip"></div>
-                                        <div class="card-holder">Onome Jike</div>
+                                        <div class="card-holder">{{userDetails.fullName}}</div>
                                         <div class="card-number">1234 5678 9000 1234</div>
                                         <div class="card-valid">12/24</div>
                                     </div>
@@ -60,7 +60,7 @@
                                 <div class="content">
                                     <div class="det">
                                         <div class="minor">Card Holder</div>
-                                        <div class="major">Onome Jike</div>
+                                        <div class="major">{{userDetails.fullName}}</div>
                                     </div>
                                 </div>
                                 <div class="content">
@@ -78,13 +78,13 @@
                                 <div class="content">
                                     <div class="det">
                                         <div class="minor">Card Limit</div>
-                                        <div class="major">£ 5,000 monthly</div>
+                                        <div class="major">£ {{convertAmount(userDetails.expenseDetails.cardLimit)}} monthly</div>
                                     </div>
                                 </div>
                                 <div class="content">
                                     <div class="det">
                                         <div class="minor">Current Month Expense</div>
-                                        <div class="major">£ 2,500</div>
+                                        <div class="major">£ {{convertAmount(userDetails.expenseDetails.currentExpense)}}</div>
                                     </div>
                                 </div>
                             </div>

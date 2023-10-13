@@ -11,6 +11,7 @@ import { LeaveRequestTable } from 'src/app/shared/models/leave-requests';
 import { FormFields } from '../../../../shared/models/form-fields';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { LeaveReviewComponent } from 'src/app/shared/components/leave-review/leave-review.component';
 
 @Component({
   selector: 'app-self-service-leave-requests',
@@ -48,6 +49,11 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
       colorDark: "rgb(191,148,60)",
       colorLight: "rgba(191,148,60, 0.2)",
       icon: "bi bi-bandaid"
+    },
+    {
+      colorDark: "rgb(235, 87, 87)",
+      colorLight: "rgba(235, 87, 87, 0.2)",
+      icon: "bi bi-exclamation-diamond"
     }
   ]
 
@@ -86,7 +92,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
       sortable: true
     },
     {
-      key: "leaveApprovalName",
+      key: "approver",
       label: "Approver",
       order: 6,
       columnWidth: "12%",
@@ -178,6 +184,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
     private notifyService: NotificationService,     
     private fb: FormBuilder,
     private datePipe: DatePipe,
+    public dialog: MatDialog,
   ) {
     this.getPageData();  
   }
@@ -202,7 +209,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
       }
       return data;
     });
-    console.log(this.leaveBreakdown);
+    console.log(this.leaveSummary);
 
 
     this.tableColumns.sort((a,b) => (a.order - b.order));
@@ -329,7 +336,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
     return reqObj;
   }
 
-  leaveApplication() {
+  createLeaveRequest() {
     if(this.leaveForm.valid) {
       let data = {
         leaveTypeId: this.leaveForm.value.leaveType,
@@ -352,6 +359,48 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
         } 
       })
     }
+  }
+
+  editLeaveRequest(details: any) {
+    this.dialog.open(LeaveReviewComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        id: details._id,
+        isExisting: true,
+        modalInfo: details,
+        leaveTypes: this.leaveSummary, 
+        forApproval: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });
+  }
+
+  //Delete a leave request
+  deleteLeaveRequest(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Delete Leave Request',
+      message: 'Are you sure you want to delete this leave request?',
+      confirmText: 'Delete Request',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteLeaveRequest(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('This leave request has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    });
   }
 
   strToDate(dateVal: string, key:string) {

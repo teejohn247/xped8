@@ -7,6 +7,7 @@ export interface FormFields {
     controlWidth: string,
     initialValue: string,
     placeholder?: string,
+    readonly?: boolean,
     selectOptions?: {[key: string]: string},
     validators?: ValidatorFn[],
     order: number

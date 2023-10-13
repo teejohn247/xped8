@@ -43,7 +43,7 @@ export class DepartmentInfoComponent implements OnInit {
         controlLabel: 'Manager',
         controlWidth: '100%',
         initialValue: '',
-        selectOptions: this.arrayToObject(this.employees, 'email'),
+        selectOptions: this.arrayToObject(this.employees, 'fullName'),
         validators: null,
         order: 7
       },

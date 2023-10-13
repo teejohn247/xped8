@@ -140,7 +140,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
       },
     }).afterClosed().subscribe(() => {
       this.getPageData();
-    });;
+    });
   }
 
   //Delete a department

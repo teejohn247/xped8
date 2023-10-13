@@ -134,6 +134,16 @@ export class HumanResourcesService {
     return this.http.post<any>(`${this.path}/leaveApplication`, leaveDetails, this.requestOptions);
   }
 
+  //Update Leave Request
+  public updateLeaveRequest(data: any, leaveId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateLeaveApplication/${leaveId}`, data, this.requestOptions);
+  }
+
+  //Delete leave request
+  public deleteLeaveRequest(leaveId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteLeaveApplication/${leaveId}`, this.requestOptions);
+  }
+
   //Get the list of all leave applications
   public getLeaveRequests(): Observable<any> {
     return this.http.get<any>(`${this.path}/getLeaveRecords`, this.requestOptions);
@@ -142,6 +152,11 @@ export class HumanResourcesService {
   //Get the list of all requested leave applications
   public getRequestedLeaveApprovals(): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchRequestedLeaves`, this.requestOptions);
+  }
+
+  //Approve or Decline a leave request
+  public actionLeaveRequest(leaveDetails: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/leaveAction`, leaveDetails, this.requestOptions);
   }
 
 }
