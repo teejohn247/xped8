@@ -33,13 +33,13 @@
             .edit {
                 cursor: pointer;
                 position: absolute;
-                color: var(--primary);
+                color: white;
                 transition: var(--transition-norm);
                 right: 0%;
                 top: -3%;
 
                 &:hover {
-                    color: var(--primary);
+                    color: rgba(#fff, 0.9);
                 }
             }
 

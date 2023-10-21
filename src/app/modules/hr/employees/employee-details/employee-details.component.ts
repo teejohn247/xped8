@@ -6,6 +6,7 @@ import { Chart, Options } from 'highcharts';
 import * as Highcharts from 'highcharts';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { EditEmployeeComponent } from '../edit-employee/edit-employee.component';
 
 @Component({
   selector: 'app-employee-details',
@@ -16,6 +17,9 @@ export class EmployeeDetailsComponent implements OnInit {
 
   employeeId: string;
   employeeDetails: any;
+  departmentList: any[] = [];
+  designationList: any[] = [];
+
   chartOptions: Options;
   Highcharts: typeof Highcharts;
 
@@ -52,7 +56,6 @@ export class EmployeeDetailsComponent implements OnInit {
     private datePipe: DatePipe,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
-
   ) { }
 
   ngOnInit(): void {
@@ -110,7 +113,10 @@ export class EmployeeDetailsComponent implements OnInit {
   getPageData = async () => {
     this.employeeDetails = await this.hrService.getEmployeeDetails(this.employeeId).toPromise();
     this.employeeDetails = this.employeeDetails['data'][0];
-    console.log(this.employeeDetails)
+    this.departmentList = await this.hrService.getDepartments().toPromise();
+    this.designationList = await this.hrService.getDesignations().toPromise();
+
+    // console.log(this.employeeDetails)
 
     this.leaveSummary = this.employeeDetails.leaveAssignment;
     this.totalLeaveDays = this.leaveSummary.reduce((n, {noOfLeaveDays}) => n + noOfLeaveDays, 0);
@@ -198,7 +204,22 @@ export class EmployeeDetailsComponent implements OnInit {
       // console.log(newFormat.toDateString());
       return this.datePipe.transform(newFormat, 'd MMMM, y')
     }    
-  }  
+  } 
+
+  editEmployeeInfo() {
+    let dialogRef = this.dialog.open(EditEmployeeComponent, {
+      width: '35%',
+      height: 'auto',
+      data: {
+        departmentList: this.departmentList['data'],
+        designationList: this.designationList['data'],
+        isExisting: false
+      },
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.getPageData();
+    });
+  }
 
 
 }

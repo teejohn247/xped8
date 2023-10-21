@@ -15,62 +15,63 @@
                             <div class="image bkg-standard" style="background-image: url('../../../../../assets/images/illustrations/staff2.jpg');"></div>
                             <div class="info-wrap">
                                 <div class="info-title">
-                                    <span>Olivia Emmanuel</span>
-                                    <span>Sales Marketer</span>
+                                    <span>{{employeeDetails?.fullName}}</span>
+                                    <span class="text-capitalize">{{employeeDetails?.companyRole}}</span>
                                 </div>
                                 <div class="info-list mt-lg-3">
                                     <div class="info duo">
                                         <span class="label">Department:</span>
-                                        <span class="text">Marketing</span>
+                                        <span class="text">{{employeeDetails?.department}}</span>
                                     </div>
                                     <div class="info duo">
                                         <span class="label">Date Joined:</span>
-                                        <span class="text">4 September, 2018</span>
+                                        <span class="text">{{strToDate(employeeDetails?.employmentStartDate, false)}}</span>
                                     </div>
                                     <div class="info duo">
                                         <span class="label">Email:</span>
-                                        <span class="text">oliviaemmanuel@silo.com</span>
+                                        <span class="text">{{employeeDetails?.email}}</span>
                                     </div>
                                     <div class="info duo">
                                         <span class="label">Phone:</span>
-                                        <span class="text">(+44)-709-7622-354</span>
+                                        <span class="text">{{employeeDetails?.phoneNumber}}</span>
                                     </div>
                                     
                                 </div>
                             </div>
-                            <div class="edit"><i class="bi bi-pencil-square"></i></div>
+                            <div (click)="editEmployeeInfo()" class="edit cta quick primary-bkg xs">Edit Info</div>
+                            <!-- <div class="edit"><i class="bi bi-pencil-square"></i></div> -->
                         </div>
                         <div class="details">
                             <div class="info-wrap">
                                 <div class="info-list space">
                                     <div class="info tri">
                                         <span class="label">Birthday:</span>
-                                        <span class="text">17 February, 1993</span>
+                                        <span class="text">{{strToDate(employeeDetails?.dateOfBirth, false)}}</span>
                                     </div>
                                     <div class="info">
                                         <span class="label">Address:</span>
-                                        <span class="text">87 Rothingham Rd, Crobsley, United Kingdom</span>
+                                        <span class="text">{{employeeDetails?.address}}</span>
                                     </div>
                                     <div class="info tri">
                                         <span class="label">Contract Type:</span>
-                                        <span class="text">Full Time</span>
+                                        <span class="text">{{employeeDetails?.employmentType}}</span>
                                     </div>
-        
+    
                                     <div class="info tri">
                                         <span class="label">Manager:</span>
-                                        <span class="text">Tony Lorenzo</span>
+                                        <span class="text">{{employeeDetails?.managerName}}</span>
                                     </div>
-        
+    
                                     <div class="info tri">
                                         <span class="label">Branch:</span>
                                         <span class="text">Remote</span>
                                     </div>
-        
+    
                                     <div class="info tri">
                                         <span class="label">Gender:</span>
-                                        <span class="text">Female</span>
+                                        <span class="text">{{employeeDetails?.gender}}</span>
                                     </div>
-        
+    
                                     <div class="info duo">
                                         <span class="label">Next of Kin:</span>
                                         <span class="text">Reginna Joselyn</span>
@@ -142,7 +143,7 @@
                         <div class="donut-chart">
                             <!-- <canvas #doughnutCanvas></canvas> -->
                             <div class="chart-title">
-                                <span>14</span>
+                                <span>{{totalLeaveDays}}</span>
                                 <span>Leave Balance <br> (Days)</span>
                             </div>
                             <highcharts-chart
@@ -154,8 +155,14 @@
                         </div>
         
                         <div class="leave-wrap mt-lg-3">
+
+                            <div *ngFor="let item of leaveBreakdown" class="leave-hld" [ngStyle]="{'border-color': item.colorDark}">
+                                <div class="icon"><i class="{{item.icon}}"></i></div>
+                                <div class="title">{{item.name}}</div>
+                                <div class="count"><span>{{item.daysUsed}}</span>/{{item.totalDays}} days</div>
+                            </div>
                             
-                            <div class="leave-hld annual">
+                            <!-- <div class="leave-hld annual">
                                 <div class="icon"><i class="bi bi-calendar-check"></i></div>
                                 <div class="title">Annual</div>
                                 <div class="count"><span>9</span>/21 days</div>
@@ -174,7 +181,7 @@
                                 <div class="icon"><i class="bi bi-bandaid"></i></div>
                                 <div class="title">Sick Leave</div>
                                 <div class="count"><span>2</span>/5 days</div>
-                            </div>
+                            </div> -->
                             
                         </div>
                         
