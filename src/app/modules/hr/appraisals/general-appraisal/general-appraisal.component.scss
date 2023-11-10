@@ -139,3 +139,119 @@
     }
 }
 
+.mat-expansion-panel {
+    background-color: white;
+    border-radius: 0;
+    color: var(--darker);
+
+    &:nth-child(n+2) {
+        border-top: 1px solid var(--border-grey-light);
+    }
+
+    .mat-expansion-panel-header {
+        padding: 0 2%;
+
+        &.mat-expanded {
+            height: 50px !important;
+        }
+    }
+
+    .mat-expansion-panel-header-title {
+        color: var(--black-tint);
+        letter-spacing: 0.03rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .info-section {
+
+        .name {
+            font-size: 0.75rem;
+            line-height: 1.2;
+            letter-spacing: 0.04rem;
+            color: rgba($color: #000000, $alpha: 0.6);
+
+            .rating-icon {
+                color: var(--pending);
+            }
+        }
+
+        .actions {
+            font-size: 0.7rem;
+
+            i {
+                cursor: pointer;
+
+                &:first-child {
+                    color: var(--primary);
+                }
+
+                &:last-child {
+                    color: var(--warning);
+                    margin-left: 0.8rem;
+                }
+            }
+        }
+    }
+
+    .info-body {
+        font-size: 0.75rem;
+        letter-spacing: 0.03rem;
+        color: rgba($color: #000000, $alpha: 0.6);
+    }
+}
+
+::ng-deep {
+
+    .mat-expansion-indicator::after {
+        color: var(--black-tint);
+    }
+
+    .mat-expansion-panel-body {
+        padding: 0 2% !important;
+    }
+
+    .mat-expansion-panel-spacing {
+        margin: 0;
+    }
+} 
+
+
+.sidenav-container {
+    width: 0;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba($color: #000000, $alpha: 0.3);
+    right: 0;
+    top: 0;
+    z-index: 7;
+
+    &.opened {
+        width: 100%;
+    }
+
+    .sidenav-bkg {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        z-index: 2;
+    }
+
+    .sidenav-content {
+        width: 0;
+        height: 100%;
+        position: absolute;
+        background-color: white;
+        transition: all 0.7s ease;
+        -webkit-box-shadow: -20px 0 25px -10px rgba(0,0,0,0.2);
+        box-shadow: -20px 0 25px -10px rgba(0,0,0,0.2);
+        right: 0;
+        top: 0;
+        z-index: 3;
+
+        &.opened {
+            width: 50%;
+        }
+    }
+}
+  

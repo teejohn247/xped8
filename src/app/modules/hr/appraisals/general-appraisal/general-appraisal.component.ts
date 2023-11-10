@@ -1,4 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateKpiGroupComponent } from '../create-kpi-group/create-kpi-group.component';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { CreateKpiComponent } from '../create-kpi/create-kpi.component';
+import { CreateAppraisalPeriodComponent } from '../create-appraisal-period/create-appraisal-period.component';
+import { CreateRatingScaleComponent } from '../create-rating-scale/create-rating-scale.component';
+
 
 @Component({
   selector: 'app-general-appraisal',
@@ -6,6 +14,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./general-appraisal.component.scss']
 })
 export class GeneralAppraisalComponent implements OnInit {
+
+  departmentList: any[] = [];
+  sideModalOpened: boolean = false;
 
   matrixItems = [
     {
@@ -111,10 +122,97 @@ export class GeneralAppraisalComponent implements OnInit {
     }
   ]
 
-  constructor() { }
+  accordionItems = [
+    {
+      name: "Excellent",
+      description: "Highest quality of delivery and professionalism",
+      ratingValue: 5
+    },
+    {
+      name: "Very Good",
+      description: "Great quality of delivery and professionalism",
+      ratingValue: 4
+    },
+    {
+      name: "Good",
+      description: "Good quality of delivery and professionalism",
+      ratingValue: 3
+    },
+    {
+      name: "Average",
+      description: "Average quality of delivery and professionalism",
+      ratingValue: 2
+    },
+    {
+      name: "Poor",
+      description: "Poor quality of delivery and professionalism",
+      ratingValue: 1
+    }
+  ]
+
+  constructor(    
+    public dialog: MatDialog,
+    private hrService: HumanResourcesService,     
+    private notifyService: NotificationService,
+  ) { }
 
   ngOnInit(): void {
     this.matrixItems.sort((a,b) => (a.order - b.order));
+    this.getPageData();
+  }
+
+  getPageData = async () => {
+    this.departmentList = await this.hrService.getDepartments().toPromise();
+  }
+
+  addKpiGroup() {
+    this.dialog.open(CreateKpiGroupComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: '',
+        departments: this.departmentList['data'],
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });
+  }
+
+  addKpi() {
+    this.dialog.open(CreateKpiComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });
+  }
+
+  addAppraisalPeriod() {
+    this.dialog.open(CreateAppraisalPeriodComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });
+  }
+
+  addRating() {
+    this.dialog.open(CreateRatingScaleComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });
   }
 
 }
