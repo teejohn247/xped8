@@ -16,10 +16,6 @@ export class LayoutComponent implements OnInit {
   constructor(private router: Router, private auth: AuthenticationService, private notify: NotificationService) { }
 
   ngOnInit(): void {
-    this.userDetails = this.auth.loggedInUser;
-  }
-
-  ngAfterViewInit() {
     if(this.userDetails.data.firstTimeLogin) {
       let urlsplit = this.router.url?.split("/dashboard/");
 
@@ -43,6 +39,7 @@ export class LayoutComponent implements OnInit {
                 next: res => {
                   console.log(res);
                   if(res.status == 200) {
+                    this.userDetails = res.data;
                     if(res.data.isSuperAdmin) this.router.navigate(['app/settings']);
                     else this.router.navigate(['set-password']);
                   }
@@ -62,7 +59,14 @@ export class LayoutComponent implements OnInit {
       }
       //console.log(userParam);
     } 
+    else {
+      this.userDetails = this.auth.loggedInUser;
+    }
   }
+
+  // ngAfterViewInit() {
+    
+  // }
 
   get token() {
     return localStorage.getItem(this.TOKEN_NAME);
