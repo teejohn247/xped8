@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule }  from '@angular/material/table';
+import {MatChipsModule} from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -13,6 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import { DeleteConfirmationComponent } from './components/delete-confirmation/delete-confirmation.component';
 import { CreateSingleInfoComponent } from './components/create-single-info/create-single-info.component';
 import { RegisterGuestComponent } from './components/register-guest/register-guest.component';
@@ -24,6 +26,7 @@ const SHARED_COMP = [
   MatIconModule,
   MatTableModule,
   MatCheckboxModule,
+  MatChipsModule,
   MatSortModule,
   MatDialogModule,
   MatFormFieldModule,
@@ -31,7 +34,8 @@ const SHARED_COMP = [
   MatSelectModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatExpansionModule
+  MatExpansionModule,
+  MatSidenavModule
 ];
 
 @NgModule({

@@ -6,6 +6,13 @@
     cursor: pointer;
     align-items: center;
 
+    &.xxs {
+        font-size: 0.55rem;
+        letter-spacing: 0.04rem;
+        padding: 0rem 0.5rem;
+        border-radius: var(--radius-xs);
+    }
+
     &.xs {
         font-size: 0.655rem;
         letter-spacing: 0.04rem;

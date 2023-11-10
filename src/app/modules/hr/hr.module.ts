@@ -22,6 +22,11 @@ import { GeneralAppraisalComponent } from './appraisals/general-appraisal/genera
 import { LeaveManagementOverviewComponent } from './leave-management/leave-management-overview/leave-management-overview.component';
 import { BulkUploadComponent } from './employees/bulk-upload/bulk-upload.component';
 import { EditEmployeeComponent } from './employees/edit-employee/edit-employee.component';
+import { CreateKpiGroupComponent } from './appraisals/create-kpi-group/create-kpi-group.component';
+import { CreateKpiComponent } from './appraisals/create-kpi/create-kpi.component';
+import { CreateAppraisalPeriodComponent } from './appraisals/create-appraisal-period/create-appraisal-period.component';
+import { AppraisalFormComponent } from './appraisals/appraisal-form/appraisal-form.component';
+import { CreateRatingScaleComponent } from './appraisals/create-rating-scale/create-rating-scale.component';
 
 
 @NgModule({
@@ -31,7 +36,7 @@ import { EditEmployeeComponent } from './employees/edit-employee/edit-employee.c
     SelfServicePortalComponent, 
     SelfServiceLeaveRequestsComponent, 
     SelfServicePayrollComponent, 
-    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent, EditEmployeeComponent
+    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent, EditEmployeeComponent, CreateKpiGroupComponent, CreateKpiComponent, CreateAppraisalPeriodComponent, AppraisalFormComponent, CreateRatingScaleComponent
   ],
   imports: [
     CommonModule,

@@ -46,6 +46,11 @@ export const navbarData = [
                 label: 'Leave Management'
             },
             {
+                routeLink: 'human-resources/self-service/reimbursement',
+                icon: 'bi bi-credit-card-fill',
+                label: 'Expense Management',
+            },
+            {
                 routeLink: 'human-resources/visitors-log',
                 icon: 'bi bi-person-workspace',
                 label: 'Visitors Log'
@@ -194,12 +199,12 @@ export const navbarDataManager = [
         label: 'Expense Management',
     },
     {
-        routeLink: 'human-resources/self-service/appraisals',
+        routeLink: 'human-resources/appraisal-requests',
         icon: 'bi bi-journal-x',
         label: 'Appraisal Requests',
     },
     {
-        routeLink: 'human-resources/self-service/appraisals-approval',
+        routeLink: 'human-resources/appraisals',
         icon: 'bi bi-journal-check',
         label: 'Appraisal Management',
     },
