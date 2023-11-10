@@ -170,10 +170,10 @@ export class LoginComponent implements OnInit {
             if(res.status == 200) {
               if(res.data.isSuperAdmin) {
                 if(!res.data.activeStatus) this.route.navigate(['app/settings']);
-                else this.route.navigate(['/app']);
+                else this.route.navigate(['/dashboard']);
               }
               else {
-                this.route.navigate(['/app']);
+                this.route.navigate(['/dashboard']);
               }
             }
           },

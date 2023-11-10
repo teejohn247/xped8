@@ -41,7 +41,7 @@ export class LayoutComponent implements OnInit {
                 console.log(res);
                 if(res.status == 200) {
                   this.userDetails = res.data;
-                  if(res.data.isSuperAdmin) this.router.navigate(['app/settings']);
+                  if(res.data.isSuperAdmin) this.router.navigate(['dashboard/settings']);
                   else this.router.navigate(['set-password']);
                 }
               },
