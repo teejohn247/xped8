@@ -17,18 +17,15 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     let urlsplit = this.router.url?.split("/dashboard/");
-    if(urlsplit.length > 1) {
-      console.log(urlsplit);
-      console.log(JSON.parse(atob(urlsplit[1].split('.')[1])))
-      this.authDetails = JSON.parse(atob(urlsplit[1].split('.')[1]))
-      console.log(this.authDetails);
-      this.userDetails = this.authDetails;
+    console.log(JSON.parse(atob(urlsplit[1].split('.')[1])))
+    this.authDetails = JSON.parse(atob(urlsplit[1].split('.')[1]))
+
+    if(this.authDetails) {
+      // console.log(urlsplit);
+      // console.log(this.authDetails);
+      // this.userDetails = this.authDetails;
       let info = {
         token: urlsplit[1]
-      }
-      if(this.userDetails.data.firstTimeLogin) {
-        
-        //console.log(userParam);
       }
       this.auth.verifyEmail(info).subscribe({
         next: res => {
@@ -63,6 +60,10 @@ export class LayoutComponent implements OnInit {
     }
     else {
       this.userDetails = this.auth.loggedInUser;
+      // if(this.userDetails.data.firstTimeLogin) {
+        
+      //   //console.log(userParam);
+      // }
     }
   }
 
