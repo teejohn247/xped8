@@ -17,13 +17,12 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     let urlsplit = this.router.url?.split("/dashboard");
-    console.log(JSON.parse(atob(urlsplit[1].split('.')[1])))
-    this.authDetails = JSON.parse(atob(urlsplit[1].split('.')[1]))
+    console.log(urlsplit);
 
-    if(this.authDetails) {
+    if(urlsplit[1] && urlsplit[1].includes('.')) {
+      console.log(JSON.parse(atob(urlsplit[1].split('.')[1])))
+      this.authDetails = JSON.parse(atob(urlsplit[1].slice(0,1).split('.')[1]))
       // console.log(urlsplit);
-      // console.log(this.authDetails);
-      // this.userDetails = this.authDetails;
       let info = {
         token: urlsplit[1]
       }

@@ -27,6 +27,8 @@ import { CreateKpiComponent } from './appraisals/create-kpi/create-kpi.component
 import { CreateAppraisalPeriodComponent } from './appraisals/create-appraisal-period/create-appraisal-period.component';
 import { AppraisalFormComponent } from './appraisals/appraisal-form/appraisal-form.component';
 import { CreateRatingScaleComponent } from './appraisals/create-rating-scale/create-rating-scale.component';
+import { PayrollDetailsComponent } from './payroll/payroll-details/payroll-details.component';
+import { PayrollUploadComponent } from './payroll/payroll-upload/payroll-upload.component';
 
 
 @NgModule({
@@ -36,7 +38,7 @@ import { CreateRatingScaleComponent } from './appraisals/create-rating-scale/cre
     SelfServicePortalComponent, 
     SelfServiceLeaveRequestsComponent, 
     SelfServicePayrollComponent, 
-    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent, EditEmployeeComponent, CreateKpiGroupComponent, CreateKpiComponent, CreateAppraisalPeriodComponent, AppraisalFormComponent, CreateRatingScaleComponent
+    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent, EditEmployeeComponent, CreateKpiGroupComponent, CreateKpiComponent, CreateAppraisalPeriodComponent, AppraisalFormComponent, CreateRatingScaleComponent, PayrollDetailsComponent, PayrollUploadComponent
   ],
   imports: [
     CommonModule,

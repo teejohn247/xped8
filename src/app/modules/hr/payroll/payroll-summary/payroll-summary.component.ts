@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
 import { TableColumn } from 'src/app/shared/models/table-columns';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Highcharts from 'highcharts';
 import { PayrollSummary } from 'src/app/shared/models/payroll-data';
+import { MatDialog } from '@angular/material/dialog';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { PayrollUploadComponent } from '../payroll-upload/payroll-upload.component';
+
 
 @Component({
   selector: 'app-payroll-summary',
@@ -251,12 +257,30 @@ export class PayrollSummaryComponent implements OnInit {
       }
     ]
   }
-  constructor() { }
+  constructor(
+    public dialog: MatDialog,
+    private router: Router,
+    private hrService: HumanResourcesService,     
+    private notifyService: NotificationService,
+  ) { }
 
   ngOnInit(): void {
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
     this.dataSource = new MatTableDataSource(this.tableData);
+  }
+
+  addNewPayrollFile() {
+    let dialogRef = this.dialog.open(PayrollUploadComponent, {
+      width: '35%',
+      height: 'auto',
+      data: {
+        isExisting: false
+      },
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      // this.getPageData();
+    }); 
   }
 
 }

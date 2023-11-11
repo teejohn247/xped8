@@ -8,6 +8,8 @@ import { HumanResourcesSettingsComponent } from './human-resources/human-resourc
 import { DesignationInfoComponent } from './human-resources/designation-info/designation-info.component';
 import { LeaveTypeInfoComponent } from './human-resources/leave-type-info/leave-type-info.component';
 import { DepartmentInfoComponent } from './human-resources/department-info/department-info.component';
+import { PayrollDebitInfoComponent } from './human-resources/payroll-debit-info/payroll-debit-info.component';
+import { PayrollCreditInfoComponent } from './human-resources/payroll-credit-info/payroll-credit-info.component';
 
 
 @NgModule({
@@ -17,7 +19,9 @@ import { DepartmentInfoComponent } from './human-resources/department-info/depar
     HumanResourcesSettingsComponent,
     DesignationInfoComponent,
     LeaveTypeInfoComponent,
-    DepartmentInfoComponent
+    DepartmentInfoComponent,
+    PayrollDebitInfoComponent,
+    PayrollCreditInfoComponent
   ],
   imports: [
     CommonModule,

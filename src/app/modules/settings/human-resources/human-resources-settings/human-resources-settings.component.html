@@ -47,6 +47,25 @@
                         </div>
                     </div>
 
+                    <div class="form-wrap d-flex justify-content-between card-xxl">
+                        <div class="sec-hld d-flex align-items-end mb-lg-2" style="width: 48%">
+                            <div class="form-hld" style="flex: 1;">
+                                <label class="mb-lg-2">Create New Payroll Credit</label>
+                                <input type="text" formControlName="payrollCredit" class="form-control form-control-md" id="payrollCredit" placeholder="Enter payroll credit name">    
+                            </div>
+                            <div (click)="createPayrollCredit()" class="cta"><i class="bi bi-plus"></i></div>
+                        </div>
+
+                        <div class="sec-hld d-flex align-items-end mb-lg-2" style="width: 48%">
+                            <div class="form-hld" style="flex: 1;">
+                                <label class="mb-lg-2">Create New Payroll Debit</label>
+                                <input type="text" formControlName="payrollDebit" class="form-control form-control-md" id="payrollDebit" placeholder="Enter payroll debit name">    
+                            </div>
+                            <div (click)="createPayrollDebit()" class="cta"><i class="bi bi-plus"></i></div>
+                        </div>
+
+                    </div>
+
                 </form>
             </div>
 
@@ -86,6 +105,33 @@
                 </div>
 
                 <div class="cont mt-lg-4">
+                    <div class="card-title clr mb-lg-1">Payroll Entities</div>
+                    <mat-accordion>
+                        <mat-expansion-panel *ngFor="let item of payrollAccordionItems; let i = index" class="mat-elevation-z0">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>{{item.label}}</mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="list-section">
+                                <div class="list-scroll">
+                                    <div *ngFor="let entity of item.list; let j = index" class="list-hld">
+                                        <div class="name">{{entity.name}}</div>
+                                        <div *ngIf="item.label == 'Payroll Credits'" class="actions">
+                                            <i (click)="editPayrollCredit(entity)" class="bi bi-pen-fill"></i>
+                                            <i (click)="deletePayrollCredit(entity)" class="bi bi-trash3-fill"></i>
+                                        </div>
+                                        <div *ngIf="item.label == 'Payroll Debits'" class="actions">
+                                            <i (click)="editPayrollDebit(entity)" class="bi bi-pen-fill"></i>
+                                            <i (click)="deletePayrollDebit(entity)" class="bi bi-trash3-fill"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+                </div>
+
+                <!-- <div class="cont mt-lg-4">
                     <div class="card-title clr mb-lg-2">Audit Trail</div>
                     <div class="listed-items mt-lg-3">
                         <div class="item">
@@ -116,7 +162,7 @@
                         </div>
 
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

@@ -7,6 +7,8 @@ import { HumanResourcesService } from 'src/app/shared/services/hr/human-resource
 import { DesignationInfoComponent } from '../designation-info/designation-info.component';
 import { LeaveTypeInfoComponent } from '../leave-type-info/leave-type-info.component';
 import { DepartmentInfoComponent } from '../department-info/department-info.component';
+import { PayrollCreditInfoComponent } from '../payroll-credit-info/payroll-credit-info.component';
+import { PayrollDebitInfoComponent } from '../payroll-debit-info/payroll-debit-info.component';
 
 @Component({
   selector: 'app-human-resources-settings',
@@ -17,11 +19,14 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   panelOpenState = false;
   accordionItems: any[] = [];
+  payrollAccordionItems: any[] = [];
 
   departmentList: any[] = [];
   companyRoles: any[] = [];
   designationList: any[] = [];
   leaveTypeList: any[] = [];
+  payrollCreditList: any[] = [];
+  payrollDebitList:any[] = [];
   employees: any[] = [];
 
   hrSettingsForm: FormGroup;
@@ -36,7 +41,9 @@ export class HumanResourcesSettingsComponent implements OnInit {
       department: [''],
       designation: [''],
       companyRole: [''],
-      leaveType: ['']
+      leaveType: [''],
+      payrollCredit: [''],
+      payrollDebit: ['']
     })
   }
 
@@ -45,10 +52,13 @@ export class HumanResourcesSettingsComponent implements OnInit {
   }
 
   getPageData = async () => {
+    this.payrollCreditList = await this.hrService.getPayrollCredits().toPromise();
+    this.payrollDebitList = await this.hrService.getPayrollDebits().toPromise();
+
     this.departmentList = await this.hrService.getDepartments().toPromise();
     this.employees = await this.hrService.getEmployees().toPromise();
     this.designationList = await this.hrService.getDesignations().toPromise();
-    this.leaveTypeList = await this.hrService.getLeaveTypes().toPromise();
+    // this.leaveTypeList = await this.hrService.getLeaveTypes().toPromise();
     this.accordionItems = [
       {
         label: "Departments",
@@ -72,9 +82,24 @@ export class HumanResourcesSettingsComponent implements OnInit {
       }
     ]
 
+    this.payrollAccordionItems = [
+      {
+        label: "Payroll Credits",
+        key: "payrollCredits",
+        list: this.payrollCreditList['data']
+      },
+      {
+        label: "Payroll Debits",
+        key: "payrollDebits",
+        list: this.payrollDebitList['data']
+      }
+    ]
+
     console.log(this.departmentList);
     console.log(this.designationList);
     console.log(this.leaveTypeList);
+    console.log(this.payrollCreditList);
+    console.log(this.payrollDebitList);
   }
 
   /*************** DEPARTMENT RELATED ACTIONS ***************/
@@ -363,4 +388,193 @@ export class HumanResourcesSettingsComponent implements OnInit {
     });
   }
 
+  /*************** PAYROLL CREDIT TYPES RELATED ACTIONS ***************/
+
+  //Create a new payroll credit type
+  createPayrollCredit() {
+    let data = {
+      name: this.hrSettingsForm.value.payrollCredit ? this.hrSettingsForm.value.payrollCredit : ""
+    }
+    if(this.hrSettingsForm.value.leaveType) {
+      this.hrService.createPayrollCredit(data).subscribe({
+        next: res => {
+          console.log(res);
+          if(res.status == 200) {
+            this.getPageData();
+            // this.notifyService.showSuccess('This leave type has been created successfully');
+            this.dialog.open(PayrollCreditInfoComponent, {
+              width: '30%',
+              height: 'auto',
+              data: {
+                name: data.name,
+                isExisting: false
+              },
+            }).afterClosed().subscribe(() => {
+              this.getPageData();
+            });
+          }
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+    else {
+      this.dialog.open(PayrollCreditInfoComponent, {
+        width: '30%',
+        height: 'auto',
+        data: {
+          name: data.name,
+          isExisting: false
+        },
+      }).afterClosed().subscribe(() => {
+        this.getPageData();
+      });
+    }
+    
+    // console.log(data);
+    // this.hrService.createDesignation(data).subscribe(res => {
+    //   if(res.status == 200) {
+    //     location.reload();
+    //   }
+    // })
+  }
+
+  //Edit a payroll credit type
+  editPayrollCredit(details: any) {
+    this.dialog.open(LeaveTypeInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: details.leaveName,
+        id: details._id,
+        isExisting: true,
+        modalInfo: details
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });;
+  }
+
+  //Delete a payroll credit type
+  deletePayrollCredit(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Remove ' + info.name,
+      message: 'Are you sure you want to remove this payroll credit type?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteLeaveType(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('The leave type has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    });
+  }
+
+  /*************** PAYROLL DEBIT TYPES RELATED ACTIONS ***************/
+
+  //Create a new payroll debit type
+  createPayrollDebit() {
+    let data = {
+      name: this.hrSettingsForm.value.payrollDebit ? this.hrSettingsForm.value.payrollDebit : ""
+    }
+    if(this.hrSettingsForm.value.leaveType) {
+      this.hrService.createPayrollDebit(data).subscribe({
+        next: res => {
+          console.log(res);
+          if(res.status == 200) {
+            this.getPageData();
+            // this.notifyService.showSuccess('This leave type has been created successfully');
+            this.dialog.open(PayrollDebitInfoComponent, {
+              width: '30%',
+              height: 'auto',
+              data: {
+                name: data.name,
+                isExisting: false
+              },
+            }).afterClosed().subscribe(() => {
+              this.getPageData();
+            });
+          }
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+    else {
+      this.dialog.open(PayrollDebitInfoComponent, {
+        width: '30%',
+        height: 'auto',
+        data: {
+          name: data.name,
+          isExisting: false
+        },
+      }).afterClosed().subscribe(() => {
+        this.getPageData();
+      });
+    }
+    
+    // console.log(data);
+    // this.hrService.createDesignation(data).subscribe(res => {
+    //   if(res.status == 200) {
+    //     location.reload();
+    //   }
+    // })
+  }
+
+  //Edit a payroll debit type
+  editPayrollDebit(details: any) {
+    this.dialog.open(PayrollDebitInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: details.leaveName,
+        id: details._id,
+        isExisting: true,
+        modalInfo: details
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });;
+  }
+
+  //Delete a payroll debit type
+  deletePayrollDebit(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Remove ' + info.leaveName + ' Leave Type',
+      message: 'Are you sure you want to remove this leave type?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteLeaveType(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('The leave type has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    });
+  }
 }

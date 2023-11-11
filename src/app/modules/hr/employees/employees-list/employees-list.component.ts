@@ -178,9 +178,9 @@ export class EmployeesListComponent implements OnInit {
     console.log(this.employeeList);
   }
 
-  ngAfterViewInit() {
+  // ngAfterViewInit() {
     
-  }
+  // }
 
 
   /** Whether the number of selected elements matches the total number of rows. */

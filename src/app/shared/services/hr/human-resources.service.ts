@@ -159,4 +159,40 @@ export class HumanResourcesService {
     return this.http.patch<any>(`${this.path}/leaveAction`, leaveDetails, this.requestOptions);
   }
 
+  /*************** PAYROLL RELATED ACTIONS ***************/
+
+  //Payroll details upload
+  public payrollFileUpload(file: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/uploadPayroll`, file, this.requestOptions);
+  }
+
+  //Create a new payroll credit
+  public createPayrollCredit(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createCredits`, info, this.requestOptions);
+  }
+
+  //Get the list of all payroll credits
+  public getPayrollCredits(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchCredits`, this.requestOptions);
+  }
+
+  //Delete payroll credit
+  public deletePayrollCredit(payrollCreditId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteCredits/${payrollCreditId}`, this.requestOptions);
+  }
+
+  //Create a new payroll debit
+  public createPayrollDebit(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createDebits`, info, this.requestOptions);
+  }
+
+  //Get the list of all payroll debits
+  public getPayrollDebits(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchDebits`, this.requestOptions);
+  }
+
+  //Delete payroll debit
+  public deletePayrollDebit(payrollDebitId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteDebits/${payrollDebitId}`, this.requestOptions);
+  }
 }
