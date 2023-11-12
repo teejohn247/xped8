@@ -58,7 +58,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
     this.departmentList = await this.hrService.getDepartments().toPromise();
     this.employees = await this.hrService.getEmployees().toPromise();
     this.designationList = await this.hrService.getDesignations().toPromise();
-    // this.leaveTypeList = await this.hrService.getLeaveTypes().toPromise();
+    this.leaveTypeList = await this.hrService.getLeaveTypes().toPromise();
     this.accordionItems = [
       {
         label: "Departments",
