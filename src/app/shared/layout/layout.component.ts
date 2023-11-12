@@ -21,7 +21,7 @@ export class LayoutComponent implements OnInit {
 
     if(urlsplit[1] && urlsplit[1].includes('.')) {
       console.log(JSON.parse(atob(urlsplit[1].split('.')[1])))
-      this.authDetails = JSON.parse(atob(urlsplit[1].slice(0,1).split('.')[1]))
+      this.authDetails = JSON.parse(atob(urlsplit[1].substring(1).split('.')[1]))
       // console.log(urlsplit);
       let info = {
         token: urlsplit[1]
