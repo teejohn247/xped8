@@ -213,6 +213,7 @@ export class EmployeeDetailsComponent implements OnInit {
       data: {
         departmentList: this.departmentList['data'],
         designationList: this.designationList['data'],
+        employeeDetails: this.employeeDetails,
         isExisting: false
       },
     });

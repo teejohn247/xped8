@@ -10,6 +10,7 @@ export class HeaderComponent implements OnInit {
   @Input() userDetails:any;
   userName:string;
   userRole:string;
+  profilePhoto: string;
 
   constructor() { }
 
@@ -21,6 +22,7 @@ export class HeaderComponent implements OnInit {
     else {
       this.userName = this.userDetails.data.fullName;
       this.userRole = this.userDetails.data.companyRole;
+      this.profilePhoto = this.userDetails.data.profilePic;
     }
   }
 }

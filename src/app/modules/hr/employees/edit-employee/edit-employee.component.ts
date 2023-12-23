@@ -4,8 +4,10 @@ import { SafeUrl, DomSanitizer } from "@angular/platform-browser";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { EmployeeFormData } from 'src/app/shared/models/employee-data';
+import { Countries } from 'src/app/core/constants/nav-data';
 
 @Component({
   selector: 'app-edit-employee',
@@ -25,22 +27,29 @@ export class EditEmployeeComponent implements OnInit {
 
   departmentList: any[] = [];
   designationList: any[] = [];
+  employeeDetails: any;
+  loggedInUser: any;
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private datePipe: DatePipe,
     public dialogRef: MatDialogRef<EditEmployeeComponent>,
-    private hrService: HumanResourcesService,     
+    private hrService: HumanResourcesService,
+    private authService: AuthenticationService,     
     private notifyService: NotificationService,
     private sanitizer: DomSanitizer,
     private fb: FormBuilder
   ) {
+    this.loggedInUser = authService.loggedInUser.data;
+    this.employeeDetails = this.dialogData.employeeDetails;
+    console.log(this.loggedInUser);
     this.officialInfoForm = this.fb.group({})
     this.personalInfoForm = this.fb.group({})
     this.setUpForm();
   }
 
   ngOnInit(): void {
+    
   }
 
   profilePicUpload(event) {
@@ -65,7 +74,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'First Name',
         controlWidth: '48%',
-        initialValue: null,
+        readonly: !this.loggedInUser.isSuperAdmin,
+        initialValue: this.employeeDetails?.firstName,
         validators: [Validators.required],
         order: 1
       },
@@ -74,7 +84,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Last Name',
         controlWidth: '48%',
-        initialValue: null,
+        readonly: !this.loggedInUser.isSuperAdmin,
+        initialValue: this.employeeDetails?.lastName,
         validators: [Validators.required],
         order: 2
       },
@@ -83,7 +94,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Company Email Address',
         controlWidth: '48%',
-        initialValue: null,
+        readonly: true,
+        initialValue: this.employeeDetails?.email,
         validators: [Validators.required, Validators.email],
         order: 3
       },
@@ -92,7 +104,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Phone Number',
         controlWidth: '48%',
-        initialValue: null,
+        readonly: !this.loggedInUser.isSuperAdmin,
+        initialValue: this.employeeDetails?.phoneNumber,
         validators: [Validators.required],
         order: 4
       },
@@ -101,7 +114,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'date',
         controlLabel: 'Date of Birth',
         controlWidth: '48%',
-        initialValue: null,
+        readonly: !this.loggedInUser.isSuperAdmin,
+        initialValue: this.convertToDate(this.employeeDetails.dateOfBirth),
         validators: [Validators.required],
         order: 5
       },
@@ -110,7 +124,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'select',
         controlLabel: 'Gender',
         controlWidth: '48%',
-        initialValue: '',
+        readonly: !this.loggedInUser.isSuperAdmin,
+        initialValue: this.employeeDetails?.gender[0].toUpperCase() + this.employeeDetails?.gender.substring(1),
         selectOptions: {
           Male: 'Male',
           Female: 'Female'
@@ -123,7 +138,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'date',
         controlLabel: 'Employment Start Date',
         controlWidth: '48%',
-        initialValue: null,
+        readonly: !this.loggedInUser.isSuperAdmin,
+        initialValue: this.convertToDate(this.employeeDetails.employmentStartDate),
         validators: [Validators.required],
         order: 9
       },
@@ -132,7 +148,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'select',
         controlLabel: 'Employment Type',
         controlWidth: '48%',
-        initialValue: '',
+        readonly: !this.loggedInUser.isSuperAdmin,
+        initialValue: this.employeeDetails?.employmentType,
         selectOptions: {
           Contract: 'Contract',
           Permanent: 'Permanent'
@@ -145,7 +162,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'select',
         controlLabel: 'Designation',
         controlWidth: '48%',
-        initialValue: '',
+        readonly: !this.loggedInUser.isSuperAdmin,
+        initialValue: this.employeeDetails?.designationId,
         selectOptions: this.arrayToObject(this.designationList, 'designationName'),
         validators: [Validators.required],
         order: 11
@@ -155,7 +173,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'select',
         controlLabel: 'Department',
         controlWidth: '48%',
-        initialValue: '',
+        readonly: !this.loggedInUser.isSuperAdmin,
+        initialValue: this.employeeDetails?.departmentId,
         selectOptions: this.arrayToObject(this.departmentList, 'departmentName'),
         validators: [Validators.required],
         order: 7
@@ -165,7 +184,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Role',
         controlWidth: '48%',
-        initialValue: null,
+        readonly: !this.loggedInUser.isSuperAdmin,
+        initialValue: this.employeeDetails?.companyRole,
         validators: [Validators.required],
         order: 8
       },
@@ -177,7 +197,7 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Personal Email Address',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: this.employeeDetails?.personalEmail,
         validators: [Validators.email],
         order: 1
       },
@@ -186,7 +206,7 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Personal Phone Number',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: this.employeeDetails?.personalPhone,
         validators: [],
         order: 2
       },
@@ -195,17 +215,16 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'House Address',
         controlWidth: '100%',
-        initialValue: null,
+        initialValue: this.employeeDetails?.address,
         validators: [],
         order: 3
       },
       {
         controlName: 'city',
-        controlType: 'select',
+        controlType: 'text',
         controlLabel: 'City',
         controlWidth: '48%',
-        initialValue: null,
-        selectOptions: {},
+        initialValue: this.employeeDetails?.city,
         validators: [],
         order: 4
       },
@@ -214,8 +233,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'select',
         controlLabel: 'Country',
         controlWidth: '48%',
-        initialValue: null,
-        selectOptions: {},
+        initialValue: this.employeeDetails?.country,
+        selectOptions: this.createCountryOptions(),
         validators: [],
         order: 5
       },
@@ -224,8 +243,14 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'select',
         controlLabel: 'Marital Status',
         controlWidth: '48%',
-        initialValue: null,
-        selectOptions: {},
+        initialValue: this.employeeDetails?.maritalStatus,
+        selectOptions: {
+          Single: 'Single',
+          Married: 'Married',
+          Divorced: 'Divorced',
+          Widow: 'Widow',
+          Widower: 'Widower'
+        },
         validators: [],
         order: 6
       },
@@ -234,8 +259,8 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'select',
         controlLabel: 'Nationality',
         controlWidth: '48%',
-        initialValue: null,
-        selectOptions: {},
+        initialValue: this.employeeDetails?.nationality,
+        selectOptions: this.createCountryOptions(),
         validators: [],
         order: 7
       },
@@ -244,7 +269,7 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Next of Kin Name',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: this.employeeDetails?.nextOfKinFullName,
         validators: [],
         order: 8
       },
@@ -253,7 +278,7 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Next of Kin Relationship',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: this.employeeDetails?.nextOfKinRelationship,
         validators: [],
         order: 9
       },
@@ -262,7 +287,7 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Next of Kin Phone No',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: this.employeeDetails?.nextOfKinPhoneNumber,
         validators: [],
         order: 10
       },
@@ -271,11 +296,13 @@ export class EditEmployeeComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Next of Kin Address',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: this.employeeDetails?.nextOfKinAddress,
         validators: [],
         order: 11
       },
     ]
+
+    console.log(this.officialInfoFields);
     this.officialInfoFields.sort((a,b) => (a.order - b.order));
     this.personalInfoFields.sort((a,b) => (a.order - b.order));
 
@@ -296,7 +323,91 @@ export class EditEmployeeComponent implements OnInit {
       agg[item['_id']] = item[key];
       return agg;
     }, {})
-    console.log(reqObj);
+    //console.log(reqObj);
+    return reqObj;
+  }
+
+  // Convert dd-mm-yyyy to date object
+  convertToDate(dateString: any) {
+    let d = dateString.split("-");
+    let newFormat = new Date(d[2] + '-' + d[1] + '-' + d[0]);
+    return newFormat;     
+  }
+
+  // Update Employee Details
+  updateEmployee() {
+    const formData = new FormData();
+
+    formData.append('profilePhoto', this.profileImgFile);
+    formData.append('firstName', this.officialInfoForm.value.firstName);
+    formData.append('lastName', this.officialInfoForm.value.lastName);
+    formData.append('officialEmail', this.officialInfoForm.value.officialEmail);
+    formData.append('phoneNumber', this.officialInfoForm.value.phoneNo);
+    formData.append('dateOfBirth', this.datePipe.transform(this.officialInfoForm.value.dateOfBirth, 'dd-M-yyyy'));
+    formData.append('gender', this.officialInfoForm.value.gender);
+    formData.append('departmentId', this.officialInfoForm.value.department);
+    formData.append('companyRole', this.officialInfoForm.value.role);
+    formData.append('employmentStartDate', this.datePipe.transform(this.officialInfoForm.value.employmentStartDate, 'dd-M-yyyy'));
+    formData.append('employmentType', this.officialInfoForm.value.employmentType);
+    formData.append('designationId', this.officialInfoForm.value.designation);
+
+    formData.append('personalEmail', this.personalInfoForm.value.personalEmail);
+    formData.append('personalPhone', this.personalInfoForm.value.personalPhoneNo);
+    formData.append('address', this.personalInfoForm.value.address);
+    formData.append('city', this.personalInfoForm.value.city);
+    formData.append('country', this.personalInfoForm.value.country);
+    formData.append('maritalStatus', this.personalInfoForm.value.maritalStatus);
+    formData.append('nationality', this.personalInfoForm.value.nationality);
+    formData.append('nextOfKinFullName', this.personalInfoForm.value.nextOfKinName);
+    formData.append('nextOfKinRelationship', this.personalInfoForm.value.nextOfKinRelationship);
+    formData.append('nextOfKinPhoneNumber', this.personalInfoForm.value.nextOfKinPhoneNo);
+    formData.append('nextOfKinAddress', this.personalInfoForm.value.nextOfKinAddress);
+
+    formData.forEach((value,key) => {
+      console.log(key+" "+value)
+    });
+
+    if(this.loggedInUser.isSuperAdmin) {
+      this.hrService.updateEmployeeByAdmin(formData, this.employeeDetails._id).subscribe({
+        next: res => {
+          // console.log(res);
+          if(res.status == 200) {
+            this.notifyService.showSuccess('This employee has been updated successfully');
+            this.dialogRef.close();
+          }
+          //this.getPageData();
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+    else {
+      this.hrService.updateEmployee(formData).subscribe({
+        next: res => {
+          // console.log(res);
+          if(res.status == 200) {
+            this.notifyService.showSuccess('Your details have been updated successfully');
+            this.dialogRef.close();
+          }
+          //this.getPageData();
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+  }
+
+  createCountryOptions() {
+    let reqObj = {}
+    reqObj = Countries.reduce((agg, item, index) => {
+      agg[item['label']] = item['label'];
+      return agg;
+    }, {})
+    //console.log(reqObj);
     return reqObj;
   }
 

@@ -239,6 +239,7 @@
 
     .sidenav-content {
         width: 0;
+        opacity: 0;
         height: 100%;
         position: absolute;
         background-color: white;
@@ -250,6 +251,7 @@
         z-index: 3;
 
         &.opened {
+            opacity: 1;
             width: 50%;
         }
     }

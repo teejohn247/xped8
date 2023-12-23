@@ -50,7 +50,7 @@ export class SelfServiceOverviewComponent implements OnInit {
     private hrService: HumanResourcesService, 
   ) {
     this.userDetails = this.auth.loggedInUser.data;
-    console.log(this.userDetails);
+    //console.log(this.userDetails);
     this.employeeId = this.userDetails._id;
   }
 
@@ -67,8 +67,6 @@ export class SelfServiceOverviewComponent implements OnInit {
     this.departmentList = await this.hrService.getDepartments().toPromise();
     this.designationList = await this.hrService.getDesignations().toPromise();
 
-    // console.log(this.employeeDetails)
-
     this.leaveSummary = this.employeeDetails.leaveAssignment;
     this.totalLeaveDays = this.leaveSummary.reduce((n, {noOfLeaveDays}) => n + noOfLeaveDays, 0);
     this.leaveDaysUsed = this.leaveSummary.reduce((n, {daysUsed}) => n + daysUsed, 0);
@@ -84,7 +82,7 @@ export class SelfServiceOverviewComponent implements OnInit {
       }
       return data;
     });
-    console.log(this.leaveBreakdown);
+    console.log(this.employeeDetails);
 
     this.Highcharts = Highcharts;
     this.chartOptions = {
@@ -144,16 +142,18 @@ export class SelfServiceOverviewComponent implements OnInit {
   }
 
   strToDate(dateVal: string, isDate:boolean) {
-    if(isDate) {
-      let newFormat = new Date(dateVal);
-      return this.datePipe.transform(newFormat, 'd MMMM, y')
-    }
-    else {
-      const [day, month, year] = dateVal.split('-');
-      let newFormat = new Date(+year, +month - 1, +day);
-      // console.log(newFormat.toDateString());
-      return this.datePipe.transform(newFormat, 'd MMMM, y')
-    }    
+    if(dateVal) {
+      if(isDate) {
+        let newFormat = new Date(dateVal);
+        return this.datePipe.transform(newFormat, 'd MMMM, y')
+      }
+      else {
+        const [day, month, year] = dateVal.split('-');
+        let newFormat = new Date(+year, +month - 1, +day);
+        // console.log(newFormat.toDateString());
+        return this.datePipe.transform(newFormat, 'd MMMM, y')
+      } 
+    }   
   } 
 
   editEmployeeInfo() {
@@ -163,7 +163,7 @@ export class SelfServiceOverviewComponent implements OnInit {
       data: {
         departmentList: this.departmentList['data'],
         designationList: this.designationList['data'],
-        isExisting: false
+        employeeDetails: this.employeeDetails,
       },
     });
     dialogRef.afterClosed().subscribe(() => {

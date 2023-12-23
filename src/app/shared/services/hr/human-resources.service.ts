@@ -48,6 +48,16 @@ export class HumanResourcesService {
     return this.http.delete<any>(`${this.path}/deleteEmployee/${employeeId}`, this.requestOptions);
   }
 
+  //Update Employee
+  public updateEmployee(data: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateEmployee`, data, this.requestOptions);
+  }
+
+  //Update Employee by Admin
+  public updateEmployeeByAdmin(data: any, employeeId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/adminUpdateEmployee/${employeeId}`, data, this.requestOptions);
+  }
+
   /*************** DEPARTMENT RELATED ACTIONS ***************/
 
   //Create a new department

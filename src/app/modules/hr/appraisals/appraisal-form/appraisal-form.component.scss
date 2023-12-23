@@ -113,5 +113,39 @@
                 }
             }
         }
+
+        .appraisal-info {
+            padding: 1rem 4%;
+            background-color: var(--darker);
+            border-radius: var(--radius-sm);
+
+            .appraisal-validation {
+                color: #fff;
+
+                .validation {
+
+                    &:nth-child(2) {
+                        margin-top: 0.7rem;
+                    }
+
+                    .hdr {
+                        font-size: 0.95rem;
+                        font-weight: 500;
+                        letter-spacing: 0.03rem;
+                        margin-bottom: 0.7rem;
+                    }
+
+                    .field-wrap {
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-between;
+
+                        mat-form-field {
+                            width: 31%;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

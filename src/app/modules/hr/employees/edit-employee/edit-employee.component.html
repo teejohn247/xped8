@@ -10,7 +10,7 @@
                 <div class="inner-wrap">
                     <div class="create-icon profile">
                         <div class="image bkg-standard">
-                            <img [src]="profilePic" alt="">
+                            <img [src]="profileImgFile ? profilePic : employeeDetails?.profilePic" alt="">
                         </div>
                         <span (click)="fileUpload.click()"><i class="bi bi-camera-fill"></i></span>
                         <input 
@@ -54,7 +54,7 @@
 
                             <mat-form-field *ngSwitchCase="'text'" color="accent" class="mb-lg-2" [style.width]="field.controlWidth" appearance="fill">
                                 <mat-label>{{field.controlLabel}}</mat-label>
-                                <input matInput [formControlName]="field.controlName">
+                                <input [readonly]="field.readonly" matInput [formControlName]="field.controlName">
                                 <mat-error *ngIf="officialInfoForm.get(field.controlName)?.hasError('email')">Please enter a valid email address</mat-error>
                                 <mat-error *ngIf="officialInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
                                 
@@ -64,6 +64,7 @@
                                 <mat-label>{{field.controlLabel}}</mat-label>
                                 <mat-select
                                     class="selectField"
+                                    [disabled]="field.readonly"
                                     disableOptionCentering
                                     panelClass="matDropdown"
                                     [formControlName]="field.controlName"
@@ -77,7 +78,7 @@
                                 <mat-label>{{field.controlLabel}}</mat-label>
                                 <input matInput [matDatepicker]="picker" readonly [formControlName]="field.controlName">
                                 <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker-toggle [disabled]="field.readonly" matSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-datepicker #picker color="accent" disabled="false"></mat-datepicker>
                                 <mat-error *ngIf="officialInfoForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
                                 <mat-error *ngIf="officialInfoForm.get(field.controlName)?.hasError('date')">{{field.controlLabel}} is invalid</mat-error>
@@ -130,7 +131,7 @@
                 </form>
 
                 <div class="btn-hld d-flex justify-content-end mt-lg-2" style="width: 100%">
-                    <div class="cta primary-bkg mmd text-uppercase" style="min-width: 30%" type="submit">Submit</div>
+                    <div (click)="updateEmployee()" class="cta primary-bkg mmd text-uppercase" style="min-width: 30%" type="submit">Submit</div>
                 </div>
             </div>
         </div>

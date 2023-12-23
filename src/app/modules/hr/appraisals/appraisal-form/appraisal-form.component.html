@@ -51,6 +51,66 @@
             </div>
         </div>
 
-        <div class="appraisal-info"></div>
+        <div class="appraisal-info mt-lg-4 mt-2">
+            <form [formGroup]="appraisalForm">
+
+                <div class="appraisal-validation">
+                    <div class="validation">
+                        <div class="hdr">For Employees:</div>
+                        <div class="field-wrap">
+                            <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
+                                <mat-label class="text-capitalize">Employee Name</mat-label>
+                                <input matInput formControlName="employeeName">
+                                <mat-error *ngIf="appraisalForm.get('employeeName')?.hasError('required')">Your name is required</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
+                                <mat-label class="text-capitalize">Employee Signature</mat-label>
+                                <input matInput formControlName="employeeSignature">
+                                <mat-error *ngIf="appraisalForm.get('employeeSignature')?.hasError('required')">Employee signature is required</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
+                                <mat-label>Signature Date</mat-label>
+                                <input matInput [matDatepicker]="picker" readonly formControlName="employeeSignDate">
+                                <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker color="accent" disabled="false"></mat-datepicker>
+                                <mat-error *ngIf="appraisalForm.get('employeeSignDate')?.hasError('required')">Signature date is required</mat-error>
+                                <mat-error *ngIf="appraisalForm.get('employeeSignDate')?.hasError('date')">Signature date is invalid</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="validation">
+                        <div class="hdr">For Managers:</div>
+                        <div class="field-wrap">
+                            <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
+                                <mat-label class="text-capitalize">Manager Name</mat-label>
+                                <input matInput formControlName="managerName">
+                                <mat-error *ngIf="appraisalForm.get('managerName')?.hasError('required')">Your name is required</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
+                                <mat-label class="text-capitalize">Manager Signature</mat-label>
+                                <input matInput formControlName="managerSignature">
+                                <mat-error *ngIf="appraisalForm.get('managerSignature')?.hasError('required')">Manager signature is required</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
+                                <mat-label>Signature Date</mat-label>
+                                <input matInput [matDatepicker]="picker" readonly formControlName="managerSignDate">
+                                <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker color="accent" disabled="false"></mat-datepicker>
+                                <mat-error *ngIf="appraisalForm.get('managerSignDate')?.hasError('required')">Signature date is required</mat-error>
+                                <mat-error *ngIf="appraisalForm.get('managerSignDate')?.hasError('date')">Signature date is invalid</mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>    
+
+            </form>
+        </div>
     </div>
 </div>

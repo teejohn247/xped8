@@ -668,6 +668,16 @@ a {
     }
 }
 
+@keyframes fadeText {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 
 // .selectField {
 //     padding-top: 12px;

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormFields } from 'src/app/shared/models/form-fields';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 
 @Component({
   selector: 'app-appraisal-form',
@@ -6,6 +10,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./appraisal-form.component.scss']
 })
 export class AppraisalFormComponent implements OnInit {
+
+  appraisalFormFields: FormFields[];
+  appraisalForm!: FormGroup;
 
   kpiCriteria = [
     {
@@ -52,7 +59,75 @@ export class AppraisalFormComponent implements OnInit {
     }
   ]
 
-  constructor() { }
+  constructor(
+    private hrService: HumanResourcesService,     
+    private notifyService: NotificationService,
+    private fb: FormBuilder
+  ) {
+    this.appraisalForm = this.fb.group({})
+
+    this.appraisalFormFields = [
+      {
+        controlName: 'employeeName',
+        controlType: 'text',
+        controlLabel: 'Employee Name',
+        controlWidth: '100%',
+        initialValue: '',
+        validators: [Validators.required],
+        order: 1
+      },
+      {
+        controlName: 'employeeSignature',
+        controlType: 'text',
+        controlLabel: 'Employee Signature',
+        controlWidth: '100%',
+        initialValue: '',
+        validators: [Validators.required],
+        order: 1
+      },
+      {
+        controlName: 'employeeSignDate',
+        controlType: 'date',
+        controlLabel: 'Employee Signature Date',
+        controlWidth: '100%',
+        initialValue: '',
+        validators: null,
+        order: 2
+      },
+      {
+        controlName: 'managerName',
+        controlType: 'text',
+        controlLabel: 'Manager Name',
+        controlWidth: '100%',
+        initialValue: '',
+        validators: [Validators.required],
+        order: 4
+      },
+      {
+        controlName: 'managerSignature',
+        controlType: 'text',
+        controlLabel: 'Manager Signature',
+        controlWidth: '100%',
+        initialValue: '',
+        validators: [Validators.required],
+        order: 5
+      },
+      {
+        controlName: 'managerSignDate',
+        controlType: 'date',
+        controlLabel: 'Manager Signature Date',
+        controlWidth: '100%',
+        initialValue: '',
+        validators: null,
+        order: 6
+      }
+    ]
+
+    this.appraisalFormFields.forEach(field => {
+      const formControl = this.fb.control(field.initialValue, field.validators)
+      this.appraisalForm.addControl(field.controlName, formControl)
+    })
+  }
 
   ngOnInit(): void {
   }
