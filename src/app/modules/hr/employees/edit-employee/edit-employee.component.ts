@@ -7,7 +7,7 @@ import { HumanResourcesService } from 'src/app/shared/services/hr/human-resource
 import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { EmployeeFormData } from 'src/app/shared/models/employee-data';
-import { Countries } from 'src/app/core/constants/nav-data';
+import { Countries } from 'src/app/core/constants/country-list';
 
 @Component({
   selector: 'app-edit-employee',
@@ -49,7 +49,6 @@ export class EditEmployeeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
   }
 
   profilePicUpload(event) {
@@ -363,9 +362,9 @@ export class EditEmployeeComponent implements OnInit {
     formData.append('nextOfKinPhoneNumber', this.personalInfoForm.value.nextOfKinPhoneNo);
     formData.append('nextOfKinAddress', this.personalInfoForm.value.nextOfKinAddress);
 
-    formData.forEach((value,key) => {
-      console.log(key+" "+value)
-    });
+    // formData.forEach((value,key) => {
+    //   console.log(key+" "+value)
+    // });
 
     if(this.loggedInUser.isSuperAdmin) {
       this.hrService.updateEmployeeByAdmin(formData, this.employeeDetails._id).subscribe({

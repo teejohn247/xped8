@@ -132,7 +132,7 @@ export class HumanResourcesService {
     return this.http.patch<any>(`${this.path}/updateLeave/${leaveTypeId}`, data, this.requestOptions);
   }
 
-  //Delete department
+  //Delete Leave Type
   public deleteLeaveType(leaveId: any): Observable<any> {
     return this.http.delete<any>(`${this.path}/deleteLeave/${leaveId}`, this.requestOptions);
   }
@@ -167,6 +167,55 @@ export class HumanResourcesService {
   //Approve or Decline a leave request
   public actionLeaveRequest(leaveDetails: any): Observable<any> {
     return this.http.patch<any>(`${this.path}/leaveAction`, leaveDetails, this.requestOptions);
+  }
+
+  /*************** EXPENSE TYPES RELATED ACTIONS ***************/
+
+  //Create a new expense type
+  public createExpenseType(expenseTypeName: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createExpenseType`, expenseTypeName, this.requestOptions);
+  }
+
+  //Get the list of all Expense Types
+  public getExpenseTypes(): Observable<any> {
+    return this.http.get<any>(`${this.path}/getExpenseTypes`, this.requestOptions);
+  }
+
+  //Update Expense Type
+  public updateExpenseType(data: any, expenseTypeId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateExpense/${expenseTypeId}`, data, this.requestOptions);
+  }
+
+  //Delete Expense Type
+  public deleteExpenseType(expenseTypeId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteExpenseType/${expenseTypeId}`, this.requestOptions);
+  }
+
+  /*************** REIMBURSEMENT APPLICATIONS RELATED ACTIONS ***************/
+
+  //Create a new expense request
+  public createExpenseRequest(expenseDetails: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createExpenseRequests`, expenseDetails, this.requestOptions);
+  }
+
+  //Get the list of all expense applications
+  public getExpenseRequests(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchExpenseRequests`, this.requestOptions);
+  }
+
+  //Get the list of all requested expense applications
+  public getRequestedExpenseApprovals(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchApprovalExpenseRequest`, this.requestOptions);
+  }
+
+  //Delete expense request
+  public deleteExpenseRequest(requestId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteExpenseRequest/${requestId}`, this.requestOptions);
+  }
+
+  //Approve or Decline a expense request
+  public actionExpenseRequest(expenseDetails: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/approveExpenseRequests`, expenseDetails, this.requestOptions);
   }
 
   /*************** PAYROLL RELATED ACTIONS ***************/

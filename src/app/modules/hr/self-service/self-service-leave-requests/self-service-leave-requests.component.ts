@@ -54,7 +54,17 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
       colorDark: "rgb(235, 87, 87)",
       colorLight: "rgba(235, 87, 87, 0.2)",
       icon: "bi bi-exclamation-diamond"
-    }
+    },
+    {
+      colorDark: "rgb(235, 87, 87)",
+      colorLight: "rgba(235, 87, 87, 0.2)",
+      icon: "bi bi-exclamation-diamond"
+    },
+    {
+      colorDark: "rgb(191,148,60)",
+      colorLight: "rgba(191,148,60, 0.2)",
+      icon: "bi bi-bandaid"
+    },
   ]
 
   //Leave Request Table Column Names
@@ -197,6 +207,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
     this.leaveSummary = this.userDetails.leaveAssignment;
     this.totalLeaveDays = this.leaveSummary.reduce((n, {noOfLeaveDays}) => n + noOfLeaveDays, 0);
     this.leaveDaysUsed = this.leaveSummary.reduce((n, {daysUsed}) => n + daysUsed, 0);
+    console.log(this.leaveSummary);
     this.leaveBreakdown = this.leaveSummary.map((item, index) => {
       let data = {
         id: index + 1,

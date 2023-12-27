@@ -150,7 +150,7 @@ export class LeaveReviewComponent implements OnInit {
         next: res => {
           console.log(res);
           if(res.status == 200) {
-            this.notifyService.showSuccess('You leave application has been updated successfully');
+            this.notifyService.showSuccess('Your leave application has been updated successfully');
             this.dialogRef.close();
           }
         },

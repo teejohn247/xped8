@@ -16,6 +16,7 @@ import { SelfServicePayrollComponent } from './self-service/self-service-payroll
 import { SelfServicePortalComponent } from './self-service/self-service-portal/self-service-portal.component';
 import { SelfServiceReimbursementComponent } from './self-service/self-service-reimbursement/self-service-reimbursement.component';
 import { VisitorsLogComponent } from './visitors-log/visitors-log/visitors-log.component';
+import { ExpenseManagementComponent } from './expense-management/expense-management/expense-management.component';
 
 
 const routes: Routes = [
@@ -94,6 +95,10 @@ const routes: Routes = [
   {
     path: 'leave-management',
     component: LeaveManagementOverviewComponent
+  },
+  {
+    path: 'expense-management',
+    component: ExpenseManagementComponent
   },
   {
     path: 'appraisals',

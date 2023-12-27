@@ -30,13 +30,13 @@
                             <div (click)="createDesignation()" class="cta"><i class="bi bi-plus"></i></div>
                         </div>
 
-                        <div class="sec-hld d-flex align-items-end mt-lg-3 mb-lg-2" style="width: 48%">
+                        <!-- <div class="sec-hld d-flex align-items-end mt-lg-3 mb-lg-2" style="width: 48%">
                             <div class="form-hld" style="flex: 1;">
                                 <label class="mb-lg-2">Create New Company Role</label>
                                 <input type="text" formControlName="companyRole" class="form-control form-control-md" id="companyRole" placeholder="Enter company role">    
                             </div>
                             <div class="cta"><i class="bi bi-plus"></i></div>
-                        </div>
+                        </div> -->
 
                         <div class="sec-hld d-flex align-items-end mt-lg-3 mb-lg-2" style="width: 48%">
                             <div class="form-hld" style="flex: 1;">
@@ -44,6 +44,14 @@
                                 <input type="text" formControlName="leaveType" class="form-control form-control-md" id="leaveType" placeholder="Enter leave type">    
                             </div>
                             <div (click)="createLeaveType()" class="cta"><i class="bi bi-plus"></i></div>
+                        </div>
+
+                        <div class="sec-hld d-flex align-items-end mt-lg-3 mb-lg-2" style="width: 48%">
+                            <div class="form-hld" style="flex: 1;">
+                                <label class="mb-lg-2">Create New Expense Type</label>
+                                <input type="text" formControlName="expenseType" class="form-control form-control-md" id="expenseType" placeholder="Enter expense type">    
+                            </div>
+                            <div (click)="createExpenseType()" class="cta"><i class="bi bi-plus"></i></div>
                         </div>
                     </div>
 
@@ -84,6 +92,7 @@
                                         <!-- <div *ngIf="designationList.length > 0 && item.label == 'Company Roles' " class="name">{{entity.roleName}}</div> -->
                                         <div *ngIf="item.label == 'Designations' " class="name">{{entity.designationName}}</div>
                                         <div *ngIf="item.label == 'Leave Types' " class="name">{{entity.leaveName}} Leave</div>
+                                        <div *ngIf="item.label == 'Expense Types' " class="name">{{entity.expenseType}}</div>
                                         <div *ngIf="item.label == 'Departments'" class="actions">
                                             <i (click)="editDepartment(entity)" class="bi bi-pen-fill"></i>
                                             <i (click)="deleteDept(entity)" class="bi bi-trash3-fill"></i>
@@ -91,6 +100,10 @@
                                         <div *ngIf="item.label == 'Leave Types'" class="actions">
                                             <i (click)="editLeaveType(entity)" class="bi bi-pen-fill"></i>
                                             <i (click)="deleteLeaveType(entity)" class="bi bi-trash3-fill"></i>
+                                        </div>
+                                        <div *ngIf="item.label == 'Expense Types'" class="actions">
+                                            <i (click)="editExpenseType(entity)" class="bi bi-pen-fill"></i>
+                                            <i (click)="deleteExpenseType(entity)" class="bi bi-trash3-fill"></i>
                                         </div>
                                         <div *ngIf="item.label == 'Designations'" class="actions">
                                             <i (click)="editDesignation(entity)" class="bi bi-pen-fill"></i>

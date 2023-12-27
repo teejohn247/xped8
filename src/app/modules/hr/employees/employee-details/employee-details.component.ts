@@ -116,7 +116,7 @@ export class EmployeeDetailsComponent implements OnInit {
     this.departmentList = await this.hrService.getDepartments().toPromise();
     this.designationList = await this.hrService.getDesignations().toPromise();
 
-    // console.log(this.employeeDetails)
+    //console.log(this.departmentList);
 
     this.leaveSummary = this.employeeDetails.leaveAssignment;
     this.totalLeaveDays = this.leaveSummary.reduce((n, {noOfLeaveDays}) => n + noOfLeaveDays, 0);

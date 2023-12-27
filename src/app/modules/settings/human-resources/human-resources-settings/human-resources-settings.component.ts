@@ -9,6 +9,7 @@ import { LeaveTypeInfoComponent } from '../leave-type-info/leave-type-info.compo
 import { DepartmentInfoComponent } from '../department-info/department-info.component';
 import { PayrollCreditInfoComponent } from '../payroll-credit-info/payroll-credit-info.component';
 import { PayrollDebitInfoComponent } from '../payroll-debit-info/payroll-debit-info.component';
+import { ExpenseTypeInfoComponent } from '../expense-type-info/expense-type-info.component';
 
 @Component({
   selector: 'app-human-resources-settings',
@@ -25,6 +26,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
   companyRoles: any[] = [];
   designationList: any[] = [];
   leaveTypeList: any[] = [];
+  expenseTypeList: any[] = [];
   payrollCreditList: any[] = [];
   payrollDebitList:any[] = [];
   employees: any[] = [];
@@ -42,6 +44,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
       designation: [''],
       companyRole: [''],
       leaveType: [''],
+      expenseType: [''],
       payrollCredit: [''],
       payrollDebit: ['']
     })
@@ -59,6 +62,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
     this.employees = await this.hrService.getEmployees().toPromise();
     this.designationList = await this.hrService.getDesignations().toPromise();
     this.leaveTypeList = await this.hrService.getLeaveTypes().toPromise();
+    this.expenseTypeList = await this.hrService.getExpenseTypes().toPromise();
     this.accordionItems = [
       {
         label: "Departments",
@@ -79,7 +83,12 @@ export class HumanResourcesSettingsComponent implements OnInit {
         label: "Leave Types",
         key: "leaveTypes",
         list: this.leaveTypeList['data']
-      }
+      },
+      {
+        label: "Expense Types",
+        key: "expenseTypes",
+        list: this.expenseTypeList['data']
+      },
     ]
 
     this.payrollAccordionItems = [
@@ -95,11 +104,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
       }
     ]
 
-    console.log(this.departmentList);
-    console.log(this.designationList);
-    console.log(this.leaveTypeList);
-    console.log(this.payrollCreditList);
-    console.log(this.payrollDebitList);
+    console.log(this.expenseTypeList);
   }
 
   /*************** DEPARTMENT RELATED ACTIONS ***************/
@@ -376,6 +381,101 @@ export class HumanResourcesSettingsComponent implements OnInit {
             // console.log(res);
             if(res.status == 200) {
               this.notifyService.showInfo('The leave type has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    });
+  }
+
+   /*************** EXPENSE TYPES RELATED ACTIONS ***************/
+
+  //Create a new expense type
+  createExpenseType() {
+    let data = {
+      expenseName: this.hrSettingsForm.value.expenseType ? this.hrSettingsForm.value.expenseType : ""
+    }
+    if(this.hrSettingsForm.value.expenseType) {
+      this.hrService.createExpenseType(data).subscribe({
+        next: res => {
+          console.log(res);
+          if(res.status == 200) {
+            this.getPageData();
+            // this.notifyService.showSuccess('This leave type has been created successfully');
+            this.dialog.open(ExpenseTypeInfoComponent, {
+              width: '30%',
+              height: 'auto',
+              data: {
+                name: data.expenseName,
+                isExisting: false
+              },
+            }).afterClosed().subscribe(() => {
+              this.getPageData();
+            });
+          }
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+    else {
+      this.dialog.open(ExpenseTypeInfoComponent, {
+        width: '30%',
+        height: 'auto',
+        data: {
+          name: data.expenseName,
+          isExisting: false
+        },
+      }).afterClosed().subscribe(() => {
+        this.getPageData();
+      });
+    }
+    
+    // console.log(data);
+    // this.hrService.createDesignation(data).subscribe(res => {
+    //   if(res.status == 200) {
+    //     location.reload();
+    //   }
+    // })
+  }
+
+  //Edit an expense type
+  editExpenseType(details: any) {
+    this.dialog.open(ExpenseTypeInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: details.expenseName,
+        id: details._id,
+        isExisting: true,
+        modalInfo: details
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });;
+  }
+
+  //Delete an expense type
+  deleteExpenseType(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Remove ' + info.leaveName + ' Expense Type',
+      message: 'Are you sure you want to remove this expense type?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteExpenseType(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('The expense type has been deleted successfully');
             }
             this.getPageData();
           },

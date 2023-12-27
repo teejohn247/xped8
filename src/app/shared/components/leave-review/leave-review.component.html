@@ -53,6 +53,7 @@
                                 <mat-label>{{field.controlLabel}}</mat-label>
                                 <mat-select
                                     class="selectField"
+                                    [disabled]="field.readonly"
                                     disableOptionCentering
                                     panelClass="matDropdown"
                                     [formControlName]="field.controlName"

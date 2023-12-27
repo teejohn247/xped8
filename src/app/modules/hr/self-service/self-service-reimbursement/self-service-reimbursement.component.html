@@ -95,7 +95,7 @@
                 <div class="row-card card-yxl" style="flex: 1;">
                     <div class="cont bkg-dark">
                         <div class="card-title">Expense Request</div>
-                        <form [formGroup]="expenseForm" class="form-container mt-lg-3 d-flex justify-content-between" style="font-size: 0.75rem; color: white; flex-wrap: wrap;">
+                        <form *ngIf="expenseRequestFields" [formGroup]="expenseForm" class="form-container mt-lg-3 d-flex justify-content-between" style="font-size: 0.75rem; color: white; flex-wrap: wrap;">
 
                             <ng-container class="d-flex justify-content-between" *ngFor="let field of expenseRequestFields">
                                 <ng-container [ngSwitch]="field.controlType">
@@ -105,8 +105,21 @@
                                         <input matInput [formControlName]="field.controlName">
                                         <mat-error *ngIf="expenseForm.get(field.controlName)?.hasError('email')">Please enter a valid email address</mat-error>
                                         <mat-error *ngIf="expenseForm.get(field.controlName)?.hasError('required')">Required</mat-error>
-                                        
                                     </mat-form-field>
+
+                                    <mat-form-field *ngSwitchCase="'file'" color="accent" class="mb-lg-1" [style.width]="field.controlWidth" appearance="outline">
+                                        <mat-label>{{field.controlLabel}}</mat-label>
+                                        <input (click)="fileUpload.click()" matInput [formControlName]="field.controlName">
+                                        <input 
+                                            type="file" 
+                                            class="file-upload"
+                                            style="display: none;"
+                                            (change)="attachmentUpload($event)" 
+                                            #fileUpload
+                                        />
+                                        <mat-error *ngIf="expenseForm.get(field.controlName)?.hasError('required')">Required</mat-error>
+                                    </mat-form-field>
+
             
                                     <mat-form-field *ngSwitchCase="'select'" color="accent" class="mb-lg-0" [style.width]="field.controlWidth" appearance="outline">
                                         <mat-label>{{field.controlLabel}}</mat-label>
@@ -116,7 +129,7 @@
                                             panelClass="matDropdown"
                                             [formControlName]="field.controlName"
                                         >
-                                            <mat-option *ngFor="let option of field.selectOptions | keyvalue" [value]="option.value">{{option.key}}</mat-option>
+                                            <mat-option *ngFor="let option of field.selectOptions | keyvalue" [value]="option.key">{{option.value}}</mat-option>
                                         </mat-select>
                                         <mat-error *ngIf="expenseForm.get(field.controlName)?.hasError('required')">Required</mat-error>
                                     </mat-form-field>
@@ -135,7 +148,7 @@
                             </ng-container>
         
                             <div class="btn-hld d-flex justify-content-end" style="width: 100%">
-                                <div class="cta primary-bkg sm text-uppercase" style="min-width: 30%" type="submit">Submit</div>
+                                <div (click)="createExpenseRequest()" class="cta primary-bkg sm text-uppercase" style="min-width: 30%" type="submit">Submit</div>
                             </div>
         
                         </form>
@@ -164,20 +177,20 @@
                     <!-- Table Columns -->
                     <ng-container *ngFor="let column of tableColumns" [matColumnDef]="column.label">
 
-                        <ng-container *ngIf="column.key == 'expenseType'">
+                        <ng-container *ngIf="column.key == 'expenseTypeName'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
                             <td mat-cell 
                                 *matCellDef="let row">
-                                <div class="major">{{ row[column.label] }}</div>
-                                <div class="minor">{{row["Date Used"]}}</div>
+                                <div class="major">{{ row[column.key] }}</div>
+                                <div class="minor">{{row["expenseDate"]}}</div>
                             </td>
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'attachment'">
-                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef></th>
                             <td mat-cell 
                                 *matCellDef="let row">
-                                <span class="icon adobe"><i class="bi bi-file-earmark-pdf"></i> {{ row[column.label] }}</span>
+                                <span class="icon adobe"><i class="bi bi-file-earmark-pdf"></i></span>
                             </td>
                         </ng-container>
 
@@ -185,18 +198,24 @@
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
                             <td mat-cell 
                                 *matCellDef="let row">
-                                <div class="major">{{ row[column.label] }}</div>
+                                <div class="major">{{ row[column.key] }}</div>
                                 <div class="minor">{{row["Decision Date"]}}</div>
                             </td>
+                        </ng-container>
+
+                        <ng-container *ngIf="column.key == 'dateRequested'">
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
+                            <!-- <td mat-cell *matCellDef="let row">{{ strToDate(row[column.key], 'dateRequested') }}</td> -->
+                            <td mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'status'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
                             <td mat-cell 
                                 *matCellDef="let row">
-                                <span class="status approved" *ngIf="row[column.label] == 'Completed'">{{ row[column.label] }}</span>
-                                <span class="status pending" *ngIf="row[column.label] == 'Pending'">{{ row[column.label] }}</span>
-                                <span class="status rejected" *ngIf="row[column.label] == 'Declined'">{{ row[column.label] }}</span>
+                                <span class="status approved" *ngIf="row[column.key] == 'Completed'">{{ row[column.key] }}</span>
+                                <span class="status pending" *ngIf="row[column.key] == 'Pending'">{{ row[column.key] }}</span>
+                                <span class="status rejected" *ngIf="row[column.key] == 'Declined'">{{ row[column.key] }}</span>
                             </td>
                         </ng-container>
 
@@ -204,14 +223,14 @@
                             <th style="width:5%" mat-header-cell *matHeaderCellDef>
                             </th>
                             <td style="width:1%; white-space: nowrap;" mat-cell *matCellDef="let element">
-                                <span class="table-icon edit"><i class="bi bi-pen-fill"></i></span>
-                                <span *ngIf="element['Status'] == 'Pending'" class="table-icon delete ms-lg-3"><i class="bi bi-trash3-fill"></i></span>
+                                <span (click)="editExpenseRequest(element)" class="table-icon edit"><i class="bi bi-pen-fill"></i></span>
+                                <span (click)="deleteExpenseRequest(element)" *ngIf="element['status'] == 'Pending'" class="table-icon delete ms-lg-3"><i class="bi bi-trash3-fill"></i></span>
                             </td>
                         </ng-container>
 
                         <ng-container>
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.key == 'image' || column.key == 'actions' ? "" : column.label }}</th>
-                            <td mat-cell *matCellDef="let row">{{ row[column.label] }}</td>
+                            <td mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
                         </ng-container>
                         
                     </ng-container>

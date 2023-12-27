@@ -336,6 +336,25 @@ a {
         }
 
         .row-card {
+
+            .inner-col {
+
+                &.scrollable {
+                    height: 42vh;
+                    overflow: scroll;
+
+                    .cont {
+
+                        &:nth-child(n+2) {
+                            margin-top: 0.5rem;
+                        }
+                    }
+
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
+                }
+            }
             
             .cont {
                 height: 100%;

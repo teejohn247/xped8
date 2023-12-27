@@ -60,8 +60,8 @@
                             </th>
                             <td style="width:1%; white-space: nowrap;" mat-cell 
                                 *matCellDef="let row">
-                                <span *ngIf="!row.image" class="initials">{{row.firstName[0] + row.lastName[0]}}</span>
-                                <span *ngIf="row.image" class="table-img bkg-standard" style="background-image: url('../../../../assets/images/illustrations/human-icon-clr.png');"></span>
+                                <span *ngIf="!row.profilePic" class="initials">{{row.firstName[0] + row.lastName[0]}}</span>
+                                <span *ngIf="row.profilePic" class="table-img bkg-standard" style="background-image: url('{{row.profilePic}}');"></span>
                             </td>
                         </ng-container>
 

@@ -154,8 +154,8 @@
                             </th>
                             <td style="white-space: nowrap;" mat-cell 
                                 *matCellDef="let row">
-                                <span *ngIf="!row.image" class="initials">{{row.fullName[0]}}</span>
-                                <span *ngIf="row.image" class="table-img bkg-standard" style="background-image: url('../../../../assets/images/illustrations/human-icon-clr.png');"></span>
+                                <span *ngIf="!row.employeeImage" class="initials">{{row.fullName[0]}}</span>
+                                <span *ngIf="row.employeeImage" class="table-img bkg-standard" style="background-image: url('{{row.employeeImage}}');"></span>
                             </td>
                         </ng-container>
 
