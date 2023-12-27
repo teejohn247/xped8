@@ -13,7 +13,7 @@
                     </div>
                     <div class="create-details">
                         <div *ngIf="!data.forApproval" class="create-name">Edit Expense Type</div>
-                        <div *ngIf="data.forApproval" class="create-name">{{data.modalInfo.fullName}}</div>
+                        <div *ngIf="data.forApproval" class="create-name">{{data.modalInfo.employeeName}}</div>
                         <!-- <p>The first step is to complete your business information.</p> -->
                     </div>
                     <div (click)="dialogRef.close()" class="close-btn">&times;</div>
