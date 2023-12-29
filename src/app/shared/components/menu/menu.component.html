@@ -12,6 +12,12 @@
                     <!-- <span>{{item.label}}</span> -->
                 </a>
             </li>
+
+            <li>
+                <a (click)="logout()" class="admin-logout">
+                    <i class="bi bi-box-arrow-left"></i>
+                </a>
+            </li>
         </ul>
     </div>
     <div class="sub-nav">
@@ -30,6 +36,12 @@
                                 <span>{{link.label}}</span>
                             </a>
                         </li>
+
+                        <!-- <li (click)="logout()" class="logout">
+                            <i class="bi bi-box-arrow-left"></i>
+                            <span>Logout</span>
+                        </li> -->
+                        <li></li>
                     </ul>
                 </ng-container>
             </div>            
@@ -47,6 +59,11 @@
                                 <span>{{item.label}}</span>
                             </a>
                         </li>
+
+                        <li (click)="logout()" class="logout">
+                            <i class="bi bi-box-arrow-left"></i>
+                            <span>Logout</span>
+                        </li>
                     </ul>
                 </ng-container>
             </div>
@@ -63,6 +80,13 @@
                                 <!-- <mat-icon class="material-icons-round">{{item.icon}}</mat-icon> -->
                                 <span>{{item.label}}</span>
                             </a>
+                        </li>
+
+                        <li (click)="logout()" class="logout">
+                            <span>
+                                <i class="bi bi-box-arrow-left"></i>
+                            </span>   
+                            <span>Logout</span>
                         </li>
                     </ul>
                 </ng-container>

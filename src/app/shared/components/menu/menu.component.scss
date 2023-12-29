@@ -67,6 +67,11 @@
                     &.active {
                         background-color: var(--primary);
                     }
+
+                    &.admin-logout {
+                        cursor: pointer;
+                        background-color: rgba(#eb5757, 0.8);
+                    }
                 }
 
                 &:nth-child(n+2) {
@@ -136,6 +141,51 @@
                             &:hover,
                             &.active {
                                 background-color: var(--primary-light);
+                            }
+                        }
+
+                        &:last-child {
+                            width: 100%;
+                            font-size: 0.875rem;
+                            font-weight: 700;
+                            letter-spacing: 0.04rem;
+                            margin-top: 3rem;
+                            cursor: pointer;
+                            transition: var(--transition-norm);
+                            padding: 0.5rem 0.8rem;
+                            display: inline-flex;
+                            align-items: center;
+                            gap: 10px;
+                            color: var(--black-tint);
+                            color: rgba(#eb5757, 0.7);
+
+                            span {
+                                
+                                &:first-child {
+                                    width: 1.8rem;
+                                    height: 1.8rem;
+                                    display: inline-flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    text-align: center;
+                                    border-radius: 50%;
+                                    color: var(--black-tint);
+                                    background-color: rgba(#eb5757, 0.3);
+                                    border: 1px solid rgba(#eb5757, 0.3);
+                                    //box-shadow: var(--card-shadow);
+                                }
+                            }
+
+                            &:hover,
+                            &.active {
+                                color: rgba(#eb5757, 0.7);
+
+                                span {
+
+                                    &:first-child {
+                                        color: var(--black-tint);
+                                    }
+                                }
                             }
                         }
                     }

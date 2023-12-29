@@ -465,7 +465,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
   //Delete an expense type
   deleteExpenseType(info: any) {
     this.notifyService.confirmAction({
-      title: 'Remove ' + info.leaveName + ' Expense Type',
+      title: 'Remove ' + info.expenseType + ' Expense Type',
       message: 'Are you sure you want to remove this expense type?',
       confirmText: 'Yes, Delete',
       cancelText: 'Cancel',

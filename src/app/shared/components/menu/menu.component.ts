@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { navbarData, navbarDataReg, navbarDataManager } from 'src/app/core/constants/nav-data';
+import { AuthenticationService } from '../../services/utils/authentication.service';
+import { NotificationService } from '../../services/utils/notification.service';
 
 @Component({
   selector: 'app-menu',
@@ -16,7 +18,10 @@ export class MenuComponent implements OnInit {
 
   currentLink = 'General';
 
-  constructor() { }
+  constructor(
+    private authService: AuthenticationService, 
+    private notifyService: NotificationService,
+  ) { }
 
   ngOnInit(): void {
     console.log(this.userDetails);
@@ -24,6 +29,21 @@ export class MenuComponent implements OnInit {
       this.collapsed = false;
       this.currentLink = 'Dashboard';
     };
+  }
+
+
+  //Logout function
+  logout() {
+    this.notifyService.confirmAction({
+      title: 'Logout',
+      message: 'Are you sure you want to logout?',
+      confirmText: 'Logout',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.authService.logout();
+      }
+    });
   }
 
 }

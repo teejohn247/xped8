@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
@@ -22,12 +23,12 @@ export class AuthenticationService {
 
   get loggedInUser() {
     if (sessionStorage.getItem('loggedInUser')) {
-      return  JSON.parse(sessionStorage.getItem('loggedInUser'));
+      return JSON.parse(sessionStorage.getItem('loggedInUser'));
     }
     return null;
   }
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private route: Router) {
     //Checking for login status in local storage
     this._isLoggedin$.next(!!this.token);
   }
@@ -46,6 +47,13 @@ export class AuthenticationService {
         //this.user = this.getUser(res.token);
       })
     );
+  }
+
+  public logout() {
+    sessionStorage.removeItem(this.TOKEN_NAME);
+    sessionStorage.removeItem('loggedInUser');
+    sessionStorage.clear();
+    this.route.navigate(['login']);
   }
 
   public getUser(token: string) {

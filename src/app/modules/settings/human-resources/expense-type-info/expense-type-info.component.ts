@@ -30,7 +30,7 @@ export class ExpenseTypeInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Name',
         controlWidth: '100%',
-        initialValue: this.data.isExisting ? this.data.modalInfo.expenseName : this.data.name,
+        initialValue: this.data.isExisting ? this.data.modalInfo.expenseType : this.data.name,
         validators: [Validators.required],
         order: 1
       },
