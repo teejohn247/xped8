@@ -163,7 +163,7 @@
                     <tr mat-row *matRowDef="let emprow; columns: displayedColumns"></tr>
 
                     <tr class="mat-row" *matNoDataRow>
-                        <td class="mat-cell" [attr.colspan]="leaveRecords['data'].length">
+                        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
                             <div class="empty-data">
                                 <img src="../../../../assets/images/illustrations/empty1.png" alt=""/>
                                 <div class="text">No leave records exist.</div>
