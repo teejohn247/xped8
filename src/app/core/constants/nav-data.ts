@@ -130,7 +130,7 @@ export const navbarDataReg = [
         label: 'Profile',
     },
     {
-        routeLink: 'human-resources/payroll',
+        routeLink: 'human-resources/self-service/payroll',
         icon: 'bi bi-layers-fill',
         label: 'Payroll',
     },
@@ -174,7 +174,7 @@ export const navbarDataManager = [
         label: 'Profile',
     },
     {
-        routeLink: 'human-resources/payroll/overview',
+        routeLink: 'human-resources/self-service/payroll',
         icon: 'bi bi-layers-fill',
         label: 'Payroll',
     },
