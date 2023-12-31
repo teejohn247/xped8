@@ -31,6 +31,8 @@ import { PayrollDetailsComponent } from './payroll/payroll-details/payroll-detai
 import { PayrollUploadComponent } from './payroll/payroll-upload/payroll-upload.component';
 import { ExpenseManagementComponent } from './expense-management/expense-management/expense-management.component';
 import { ExpenseRequestReviewComponent } from './expense-management/expense-request-review/expense-request-review.component';
+import { PayrollPortalComponent } from './payroll/payroll-portal/payroll-portal.component';
+import { PayrollPeriodDetailsComponent } from './payroll/payroll-period-details/payroll-period-details.component';
 
 
 @NgModule({
@@ -40,7 +42,7 @@ import { ExpenseRequestReviewComponent } from './expense-management/expense-requ
     SelfServicePortalComponent, 
     SelfServiceLeaveRequestsComponent, 
     SelfServicePayrollComponent, 
-    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent, EditEmployeeComponent, CreateKpiGroupComponent, CreateKpiComponent, CreateAppraisalPeriodComponent, AppraisalFormComponent, CreateRatingScaleComponent, PayrollDetailsComponent, PayrollUploadComponent, ExpenseManagementComponent, ExpenseRequestReviewComponent
+    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent, EditEmployeeComponent, CreateKpiGroupComponent, CreateKpiComponent, CreateAppraisalPeriodComponent, AppraisalFormComponent, CreateRatingScaleComponent, PayrollDetailsComponent, PayrollUploadComponent, ExpenseManagementComponent, ExpenseRequestReviewComponent, PayrollPortalComponent, PayrollPeriodDetailsComponent
   ],
   imports: [
     CommonModule,

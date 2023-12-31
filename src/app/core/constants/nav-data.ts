@@ -174,7 +174,7 @@ export const navbarDataManager = [
         label: 'Profile',
     },
     {
-        routeLink: 'human-resources/payroll',
+        routeLink: 'human-resources/payroll/overview',
         icon: 'bi bi-layers-fill',
         label: 'Payroll',
     },

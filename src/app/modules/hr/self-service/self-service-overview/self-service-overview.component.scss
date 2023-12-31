@@ -55,6 +55,7 @@
                 .info-title {
                     display: inline-flex;
                     flex-direction: column;
+                    gap: 4px;
 
                     span {
                         &:first-child {

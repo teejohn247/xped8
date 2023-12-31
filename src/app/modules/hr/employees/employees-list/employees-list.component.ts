@@ -252,18 +252,6 @@ export class EmployeesListComponent implements OnInit {
     });
   }
 
-  // deleteEmployee() {
-  //   const dialogRef = this.dialog.open(DeleteConfirmationComponent, {
-  //     width: '40%',
-  //     height: 'auto',
-  //   });
-  //   // dialogRef.componentInstance.studentId = studentId;
-  //   // dialogRef.afterClosed().subscribe(() => {
-  //   //   this.getStudents();
-  //   //   this.dataSource = new MatTableDataSource<Students>(this.students);
-  //   // });
-  // }
-
   viewEmployee(info: any) {
     this.router.navigateByUrl(`app/human-resources/employees/${info._id}`);
   }

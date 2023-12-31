@@ -235,9 +235,14 @@ export class HumanResourcesService {
     return this.http.get<any>(`${this.path}/fetchCredits`, this.requestOptions);
   }
 
+  //Update Payroll Credit Info
+  public updatePayrollCredits(data: any, payrollCreditId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateCredits/${payrollCreditId}`, data, this.requestOptions);
+  }
+
   //Delete payroll credit
   public deletePayrollCredit(payrollCreditId: any): Observable<any> {
-    return this.http.delete<any>(`${this.path}/deleteCredits/${payrollCreditId}`, this.requestOptions);
+    return this.http.delete<any>(`${this.path}/deleteCredit/${payrollCreditId}`, this.requestOptions);
   }
 
   //Create a new payroll debit
@@ -250,8 +255,33 @@ export class HumanResourcesService {
     return this.http.get<any>(`${this.path}/fetchDebits`, this.requestOptions);
   }
 
+  //Update Payroll Debit Info
+  public updatePayrollDebits(data: any, payrollDebitId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateDebits/${payrollDebitId}`, data, this.requestOptions);
+  }
+
   //Delete payroll debit
   public deletePayrollDebit(payrollDebitId: any): Observable<any> {
-    return this.http.delete<any>(`${this.path}/deleteDebits/${payrollDebitId}`, this.requestOptions);
+    return this.http.delete<any>(`${this.path}/deleteDebit/${payrollDebitId}`, this.requestOptions);
+  }
+
+  //Create a new payroll period
+  public createPayrollPeriod(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createPayrollPeriod`, info, this.requestOptions);
+  }
+
+  //Get the list of all payroll periods
+  public getPayrollPeriods(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchPayrollPeriods`, this.requestOptions);
+  }
+
+  //Update Payroll Period
+  public updatePayrollPeriod(data: any, payrollPeriodId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updatePayrollPeriod/${payrollPeriodId}`, data, this.requestOptions);
+  }
+
+  //Delete payroll period
+  public deletePayrollPeriod(payrollPeriodId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deletePayrollPeriod/${payrollPeriodId}`, this.requestOptions);
   }
 }

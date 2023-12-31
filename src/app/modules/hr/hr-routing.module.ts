@@ -17,6 +17,8 @@ import { SelfServicePortalComponent } from './self-service/self-service-portal/s
 import { SelfServiceReimbursementComponent } from './self-service/self-service-reimbursement/self-service-reimbursement.component';
 import { VisitorsLogComponent } from './visitors-log/visitors-log/visitors-log.component';
 import { ExpenseManagementComponent } from './expense-management/expense-management/expense-management.component';
+import { PayrollDetailsComponent } from './payroll/payroll-details/payroll-details.component';
+import { PayrollPortalComponent } from './payroll/payroll-portal/payroll-portal.component';
 
 
 const routes: Routes = [
@@ -36,7 +38,22 @@ const routes: Routes = [
   },
   {
     path: 'payroll',
-    component: PayrollSummaryComponent
+    component: PayrollPortalComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'overview',
+        pathMatch: 'full'
+      },
+      {
+        path : 'overview',
+        component: PayrollSummaryComponent
+      },
+      {
+        path: 'payroll-details',
+        component: PayrollDetailsComponent
+      },
+    ]
   },
   {
     path: 'self-service',

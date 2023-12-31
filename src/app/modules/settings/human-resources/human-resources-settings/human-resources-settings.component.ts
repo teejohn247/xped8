@@ -393,7 +393,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
     });
   }
 
-   /*************** EXPENSE TYPES RELATED ACTIONS ***************/
+  /*************** EXPENSE TYPES RELATED ACTIONS ***************/
 
   //Create a new expense type
   createExpenseType() {
@@ -543,18 +543,18 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   //Edit a payroll credit type
   editPayrollCredit(details: any) {
-    this.dialog.open(LeaveTypeInfoComponent, {
+    this.dialog.open(PayrollCreditInfoComponent, {
       width: '30%',
       height: 'auto',
       data: {
-        name: details.leaveName,
+        name: details.name,
         id: details._id,
         isExisting: true,
         modalInfo: details
       },
     }).afterClosed().subscribe(() => {
       this.getPageData();
-    });;
+    });
   }
 
   //Delete a payroll credit type
@@ -566,11 +566,11 @@ export class HumanResourcesSettingsComponent implements OnInit {
       cancelText: 'Cancel',
     }).subscribe((confirmed) => {
       if (confirmed) {
-        this.hrService.deleteLeaveType(info._id).subscribe({
+        this.hrService.deletePayrollCredit(info._id).subscribe({
           next: res => {
             // console.log(res);
             if(res.status == 200) {
-              this.notifyService.showInfo('The leave type has been deleted successfully');
+              this.notifyService.showInfo('The payroll credit type has been deleted successfully');
             }
             this.getPageData();
           },
@@ -642,7 +642,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
       width: '30%',
       height: 'auto',
       data: {
-        name: details.leaveName,
+        name: details.name,
         id: details._id,
         isExisting: true,
         modalInfo: details
@@ -655,17 +655,17 @@ export class HumanResourcesSettingsComponent implements OnInit {
   //Delete a payroll debit type
   deletePayrollDebit(info: any) {
     this.notifyService.confirmAction({
-      title: 'Remove ' + info.leaveName + ' Leave Type',
-      message: 'Are you sure you want to remove this leave type?',
+      title: 'Remove ' + info.name,
+      message: 'Are you sure you want to remove this payroll debit type?',
       confirmText: 'Yes, Delete',
       cancelText: 'Cancel',
     }).subscribe((confirmed) => {
       if (confirmed) {
-        this.hrService.deleteLeaveType(info._id).subscribe({
+        this.hrService.deletePayrollDebit(info._id).subscribe({
           next: res => {
             // console.log(res);
             if(res.status == 200) {
-              this.notifyService.showInfo('The leave type has been deleted successfully');
+              this.notifyService.showInfo('This payroll debit type has been deleted successfully');
             }
             this.getPageData();
           },

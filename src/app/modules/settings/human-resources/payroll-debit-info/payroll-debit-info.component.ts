@@ -54,5 +54,46 @@ export class PayrollDebitInfoComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if(this.payrollDebitForm.valid) {
+      let data = {
+        name: this.payrollDebitForm.value.name,
+        description: this.payrollDebitForm.value.description
+      }
+      console.log(this.data);
+      if(this.data.modalInfo?.name) {
+        this.hrService.updatePayrollDebits(data, this.data.id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              if(this.data.isExisting) this.notifyService.showSuccess('This payroll debit has been updated successfully');
+              else this.notifyService.showSuccess('This payroll debit has been created successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+      else {
+        this.hrService.createPayrollDebit(data).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showSuccess('This payroll debit type has been created successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    }
+  }
 }

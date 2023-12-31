@@ -62,12 +62,12 @@ export class PayrollCreditInfoComponent implements OnInit {
       }
       console.log(this.data);
       if(this.data.modalInfo?.name) {
-        this.hrService.updateDepartment(data, this.data.id).subscribe({
+        this.hrService.updatePayrollCredits(data, this.data.id).subscribe({
           next: res => {
             // console.log(res);
             if(res.status == 200) {
-              if(this.data.isExisting) this.notifyService.showSuccess('This department has been updated successfully');
-              else this.notifyService.showSuccess('This department has been created successfully');
+              if(this.data.isExisting) this.notifyService.showSuccess('This payroll credit has been updated successfully');
+              else this.notifyService.showSuccess('This payroll credit has been created successfully');
               this.dialogRef.close();
             }
             //this.getPageData();

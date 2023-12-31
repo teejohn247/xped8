@@ -28,6 +28,14 @@
                                         <span class="text">{{strToDate(employeeDetails?.employmentStartDate, false)}}</span>
                                     </div>
                                     <div class="info duo">
+                                        <span class="label">Designation:</span>
+                                        <span class="text">{{employeeDetails?.designationName}}</span>
+                                    </div>
+                                    <div class="info duo">
+                                        <span class="label">Contract Type:</span>
+                                        <span class="text">{{employeeDetails?.employmentType}}</span>
+                                    </div>
+                                    <div class="info duo">
                                         <span class="label">Email:</span>
                                         <span class="text">{{employeeDetails?.email}}</span>
                                     </div>
@@ -35,7 +43,6 @@
                                         <span class="label">Phone:</span>
                                         <span class="text">{{employeeDetails?.phoneNumber}}</span>
                                     </div>
-                                    
                                 </div>
                             </div>
                             <div (click)="editEmployeeInfo()" class="edit cta quick primary-bkg xs">Edit Info</div>
@@ -48,23 +55,30 @@
                                         <span class="label">Birthday:</span>
                                         <span class="text">{{strToDate(employeeDetails?.dateOfBirth, false)}}</span>
                                     </div>
-                                    <div class="info">
+                                    
+                                    <!-- <div class="info">
+                                        <span class="label">Personal Email:</span>
+                                        <span class="text">{{employeeDetails?.personalEmail}}</span>
+                                    </div> -->
+
+                                    <div class="info duo">
                                         <span class="label">Address:</span>
                                         <span class="text">{{employeeDetails?.address}}</span>
                                     </div>
+    
                                     <div class="info tri">
-                                        <span class="label">Contract Type:</span>
-                                        <span class="text">{{employeeDetails?.employmentType}}</span>
+                                        <span class="label">City:</span>
+                                        <span class="text">{{employeeDetails?.city}}</span>
                                     </div>
     
                                     <div class="info tri">
-                                        <span class="label">Manager:</span>
-                                        <span class="text">{{employeeDetails?.managerName}}</span>
+                                        <span class="label">Country:</span>
+                                        <span class="text">{{employeeDetails?.country}}</span>
                                     </div>
-    
+
                                     <div class="info tri">
-                                        <span class="label">Branch:</span>
-                                        <span class="text">Remote</span>
+                                        <span class="label">Nationality:</span>
+                                        <span class="text">{{employeeDetails?.nationality}}</span>
                                     </div>
     
                                     <div class="info tri">
@@ -72,9 +86,14 @@
                                         <span class="text">{{employeeDetails?.gender}}</span>
                                     </div>
     
-                                    <div class="info duo">
+                                    <div class="info tri">
                                         <span class="label">Next of Kin:</span>
                                         <span class="text">{{employeeDetails?.nextOfKinFullName}}</span>
+                                    </div>
+
+                                    <div class="info">
+                                        <span class="label">Next of Kin Phone:</span>
+                                        <span class="text">{{employeeDetails?.nextOfKinPhoneNumber}}</span>
                                     </div>
                                     
                                 </div>

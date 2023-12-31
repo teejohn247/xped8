@@ -259,7 +259,7 @@ export class PayrollSummaryComponent implements OnInit {
   }
   constructor(
     public dialog: MatDialog,
-    private router: Router,
+    private route: Router,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) { }
@@ -271,16 +271,17 @@ export class PayrollSummaryComponent implements OnInit {
   }
 
   addNewPayrollFile() {
-    let dialogRef = this.dialog.open(PayrollUploadComponent, {
-      width: '35%',
-      height: 'auto',
-      data: {
-        isExisting: false
-      },
-    });
-    dialogRef.afterClosed().subscribe(() => {
-      // this.getPageData();
-    }); 
+    this.route.navigateByUrl('/dashboard/human-resources/payroll/payroll-details');
+    // let dialogRef = this.dialog.open(PayrollUploadComponent, {
+    //   width: '35%',
+    //   height: 'auto',
+    //   data: {
+    //     isExisting: false
+    //   },
+    // });
+    // dialogRef.afterClosed().subscribe(() => {
+    //   // this.getPageData();
+    // }); 
   }
 
 }
