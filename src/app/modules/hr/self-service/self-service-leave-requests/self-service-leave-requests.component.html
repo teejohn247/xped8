@@ -119,7 +119,7 @@
                         <ng-container *ngIf="column.key == 'leaveTypeName'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
                             <td mat-cell *matCellDef="let row">
-                                <span>{{ row[column.key] }}</span>
+                                <span class="icon" *ngIf="row[column.key] != 'Unpaid' || row[column.key] != 'Sick'"><i class="bi bi-cash"></i> {{ row[column.key] }}</span>
                                 <!-- <span class="icon" *ngIf="row[column.key] == 'Paid' || row[column.key] == 'Annual-Leave'"><i class="bi bi-cash"></i> {{ row[column.key] }}</span>
                                 <span class="icon" *ngIf="row[column.key] == 'Unpaid'"><i class="bi bi-exclamation-diamond"></i> {{ row[column.key] }}</span>
                                 <span class="icon" *ngIf="row[column.key] == 'Sick'"><i class="bi bi-bandaid"></i> {{ row[column.key] }}</span> -->
@@ -128,13 +128,12 @@
 
                         <ng-container *ngIf="column.key == 'status'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
-                            <td mat-cell 
-                                *matCellDef="let row">
-                                <span class="status approved" *ngIf="row[column.label] == 'Approved'">{{ row[column.label] }}</span>
-                                <span class="status pending" *ngIf="row['approved'] == false">Pending</span>
-                                <span class="status rejected" *ngIf="row[column.label] == 'Declined'">{{ row[column.label] }}</span>
-                                
+                            <td mat-cell *matCellDef="let row">
+                                <span class="status approved" *ngIf="row[column.key] == 'Approved'">{{ row[column.key] }}</span>
+                                <span class="status pending" *ngIf="row['column.key'] == 'Pending'">{{ row[column.key] }}</span>
+                                <span class="status rejected" *ngIf="row[column.key] == 'Declined'">{{ row[column.key] }}</span>
                             </td>
+
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'actions'">

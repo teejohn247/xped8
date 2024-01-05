@@ -220,7 +220,7 @@ export class HumanResourcesService {
 
   //Approve or Decline a expense request
   public actionExpenseRequest(expenseDetails: any): Observable<any> {
-    return this.http.patch<any>(`${this.path}/approveExpenseRequests`, expenseDetails, this.requestOptions);
+    return this.http.patch<any>(`${this.path}/expenseAction`, expenseDetails, this.requestOptions);
   }
 
   /*************** PAYROLL RELATED ACTIONS ***************/
