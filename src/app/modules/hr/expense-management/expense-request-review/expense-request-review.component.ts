@@ -182,14 +182,16 @@ export class ExpenseRequestReviewComponent implements OnInit {
 
   updateExpenseRequest() {
     if(this.expenseForm.valid) {
-      let data = {
-        // leaveTypeId: this.leaveForm.value.leaveType,
-        // leaveStartDate: this.datePipe.transform(this.leaveForm.value.startDate, 'dd-MM-yyyy'),
-        // leaveEndDate: this.datePipe.transform(this.leaveForm.value.endDate, 'dd-MM-yyyy'),
-        // comments: this.leaveForm.value.message
-      }
-      console.log(data);
-      this.hrService.updateLeaveRequest(data, this.data.id).subscribe({
+      const formData = new FormData();
+
+      formData.append('expenseTypeId', this.expenseForm.value.expenseType);
+      formData.append('expenseDate', this.datePipe.transform(this.expenseForm.value.expenseDate, 'dd-MM-yyyy'));
+      formData.append('amount', this.expenseForm.value.amount);
+      formData.append('description', this.expenseForm.value.description);
+      formData.append('attachment', this.attachmentFile);
+      // console.log(data);
+
+      this.hrService.updateExpenseRequest(formData, this.data.id).subscribe({
         next: res => {
           console.log(res);
           if(res.status == 200) {

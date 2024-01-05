@@ -65,14 +65,14 @@ export class DesignationInfoComponent implements OnInit {
         controlType: 'date',
         controlLabel: 'Expense Card Expiry Date',
         controlWidth: '48%',
-        initialValue: this.data.isExisting ? this.datePipe.transform(this.data.modalInfo.expenseCard[0].cardExpiryDate, 'dd/MM/yyyy') : null,
+        initialValue: this.data.isExisting ? this.data.modalInfo.expenseCard[0].cardExpiryDate : null,
         validators: null,
         order: 4
       },
       {
         controlName: 'expenseCardLimit',
         controlType: 'number',
-        controlLabel: 'Expense Card Limit (Months)',
+        controlLabel: 'Expense Card Limit (Pounds)',
         controlWidth: '48%',
         initialValue: this.data.isExisting ? this.data.modalInfo.expenseCard[0].cardLimit : null,
         validators: null,

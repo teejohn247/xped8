@@ -27,13 +27,15 @@ export class PayrollPeriodDetailsComponent implements OnInit {
   ) {
     this.payrollPeriodForm = this.fb.group({})
 
+    console.log(data);
+
     this.payrollPeriodData = [
       {
         controlName: 'name',
         controlType: 'text',
         controlLabel: 'Name',
         controlWidth: '100%',
-        initialValue: this.data.isExisting ? this.data.modalInfo.periodName : this.data.name,
+        initialValue: this.data.isExisting ? this.data.name : null,
         validators: [Validators.required],
         order: 1
       },
@@ -51,7 +53,7 @@ export class PayrollPeriodDetailsComponent implements OnInit {
         controlType: 'date',
         controlLabel: 'Start Date',
         controlWidth: '48%',
-        initialValue: this.data.isExisting ? this.datePipe.transform(this.data.modalInfo.date, 'dd/MM/yyyy') : null,
+        initialValue: this.data.isExisting ? this.data.modalInfo.startDate : null,
         validators: [Validators.required],
         order: 3
       },
@@ -60,7 +62,7 @@ export class PayrollPeriodDetailsComponent implements OnInit {
         controlType: 'date',
         controlLabel: 'End Date',
         controlWidth: '48%',
-        initialValue: this.data.isExisting ? this.datePipe.transform(this.data.modalInfo.date, 'dd/MM/yyyy') : null,
+        initialValue: this.data.isExisting ? this.data.modalInfo.endDate : null,
         validators: [Validators.required],
         order: 4
       }

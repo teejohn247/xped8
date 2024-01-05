@@ -11,6 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -31,6 +32,7 @@ const SHARED_COMP = [
   MatDialogModule,
   MatFormFieldModule,
   MatInputModule,
+  MatMenuModule,
   MatSelectModule,
   MatDatepickerModule,
   MatNativeDateModule,

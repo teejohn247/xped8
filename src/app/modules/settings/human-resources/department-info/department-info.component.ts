@@ -25,7 +25,9 @@ export class DepartmentInfoComponent implements OnInit {
 
   ) {
     this.employees = this.data.staff;
-    this.departmentForm = this.fb.group({})
+
+    console.log(data);
+    this.departmentForm = this.fb.group({});
 
     this.departmentFieldData = [
       {
@@ -42,7 +44,7 @@ export class DepartmentInfoComponent implements OnInit {
         controlType: 'select',
         controlLabel: 'Manager',
         controlWidth: '100%',
-        initialValue: '',
+        initialValue: this.data.isExisting ? this.data.modalInfo.managerId : null,
         selectOptions: this.arrayToObject(this.employees, 'fullName'),
         validators: null,
         order: 7

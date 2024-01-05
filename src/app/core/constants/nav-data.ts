@@ -46,7 +46,7 @@ export const navbarData = [
                 label: 'Leave Management'
             },
             {
-                routeLink: 'human-resources/self-service/reimbursement',
+                routeLink: 'human-resources/expense-management',
                 icon: 'bi bi-credit-card-fill',
                 label: 'Expense Management',
             },

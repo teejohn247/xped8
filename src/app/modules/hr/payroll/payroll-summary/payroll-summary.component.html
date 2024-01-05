@@ -83,22 +83,17 @@
                     <!-- Table Columns -->
                     <ng-container *ngFor="let column of tableColumns" [matColumnDef]="column.label">
 
-                        <ng-container *ngIf="column.key == 'leaveType'">
+                        <ng-container *ngIf="column.key == 'payPeriod'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
-                            <td mat-cell 
-                                *matCellDef="let row">
-                                <span class="icon" *ngIf="row[column.label] == 'Paid'"><i class="bi bi-cash"></i> {{ row[column.label] }}</span>
-                                <span class="icon" *ngIf="row[column.label] == 'Unpaid'"><i class="bi bi-exclamation-diamond"></i> {{ row[column.label] }}</span>
-                                <span class="icon" *ngIf="row[column.label] == 'Sick'"><i class="bi bi-bandaid"></i> {{ row[column.label] }}</span>
-                            </td>
+                            <td mat-cell *matCellDef="let row"> {{strToDate(row.startDate, 'startDate')}} - {{strToDate(row.endDate, 'endDate')}}</td>
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'status'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
                             <td mat-cell 
                                 *matCellDef="let row">
-                                <span class="status approved" *ngIf="row[column.label] == 'Completed'">{{ row[column.label] }}</span>
-                                <span class="status pending" *ngIf="row[column.label] == 'Processing'">{{ row[column.label] }}</span>
+                                <span class="status approved" *ngIf="row[column.key] == 'Completed'">{{ row[column.key] }}</span>
+                                <span class="status pending" *ngIf="row[column.key] == 'Pending'">{{ row[column.key] }}</span>
                                 
                             </td>
                         </ng-container>
@@ -113,7 +108,7 @@
 
                         <ng-container>
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.key == 'image' || column.key == 'actions' ? "" : column.label }}</th>
-                            <td mat-cell *matCellDef="let row">{{ row[column.label] }}</td>
+                            <td mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
                         </ng-container>
                         
                     </ng-container>

@@ -26,7 +26,7 @@ export class LeaveReviewComponent implements OnInit {
 
   ) {
     this.leaveForm = this.fb.group({})
-    console.log(this.data.leaveTypes);
+    console.log(this.data);
 
     this.leaveRequestFields = [
       {
@@ -98,7 +98,13 @@ export class LeaveReviewComponent implements OnInit {
   arrayToObject(arrayVar, key:string) {
     let reqObj = {}
     reqObj = arrayVar.reduce((agg, item, index) => {
-      agg[item['leaveTypeId']] = item[key];
+      if(this.data.forApproval) {
+        agg[item['_id']] = item[key];
+      }
+      else {
+        agg[item['leaveTypeId']] = item[key];
+      }
+      
       return agg;
     }, {})
     return reqObj;
@@ -143,7 +149,7 @@ export class LeaveReviewComponent implements OnInit {
         leaveTypeId: this.leaveForm.value.leaveType,
         leaveStartDate: this.datePipe.transform(this.leaveForm.value.startDate, 'dd-MM-yyyy'),
         leaveEndDate: this.datePipe.transform(this.leaveForm.value.endDate, 'dd-MM-yyyy'),
-        comments: this.leaveForm.value.message
+        requestMessage: this.leaveForm.value.message
       }
       console.log(data);
       this.hrService.updateLeaveRequest(data, this.data.id).subscribe({

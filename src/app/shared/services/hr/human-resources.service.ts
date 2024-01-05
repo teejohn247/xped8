@@ -208,6 +208,11 @@ export class HumanResourcesService {
     return this.http.get<any>(`${this.path}/fetchApprovalExpenseRequest`, this.requestOptions);
   }
 
+  //Update Expense Request
+  public updateExpenseRequest(data: any, requestId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateExpenseRequest/${requestId}`, data, this.requestOptions);
+  }
+
   //Delete expense request
   public deleteExpenseRequest(requestId: any): Observable<any> {
     return this.http.delete<any>(`${this.path}/deleteExpenseRequest/${requestId}`, this.requestOptions);
@@ -283,5 +288,10 @@ export class HumanResourcesService {
   //Delete payroll period
   public deletePayrollPeriod(payrollPeriodId: any): Observable<any> {
     return this.http.delete<any>(`${this.path}/deletePayrollPeriod/${payrollPeriodId}`, this.requestOptions);
+  }
+
+  //Update Payroll Entry
+  public updatePayrollEntry(data: any, payrollPeriodId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updatePayrollPeriod/${payrollPeriodId}`, data, this.requestOptions);
   }
 }

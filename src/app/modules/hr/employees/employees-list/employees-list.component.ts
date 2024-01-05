@@ -253,7 +253,7 @@ export class EmployeesListComponent implements OnInit {
   }
 
   viewEmployee(info: any) {
-    this.router.navigateByUrl(`app/human-resources/employees/${info._id}`);
+    this.router.navigateByUrl(`dashboard/human-resources/employees/${info._id}`);
   }
 
   getPageData = async () => {

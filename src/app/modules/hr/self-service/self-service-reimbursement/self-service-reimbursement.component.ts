@@ -375,13 +375,13 @@ export class SelfServiceReimbursementComponent implements OnInit {
 
   strToDate(dateVal: string, key:string) {
     if(key == 'dateRequested') {
-      const [day, month, year] = dateVal.split('/');
-      let newFormat = new Date(+year, +month - 1, +day);
+      // const [day, month, year] = dateVal.split('/');
+      let newFormat = new Date(dateVal);
       // console.log(newFormat.toDateString());
       return this.datePipe.transform(newFormat, 'd MMMM, y')
     }
     else {
-      const [day, month, year] = dateVal.split('/');
+      const [day, month, year] = dateVal.split('-');
       let newFormat = new Date(+year, +month - 1, +day);
       // console.log(newFormat.toDateString());
       return this.datePipe.transform(newFormat, 'd MMMM, y')

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe, Location } from '@angular/common';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -7,11 +7,13 @@ import { TableColumn } from 'src/app/shared/models/table-columns';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { PayrollPeriodDetailsComponent } from '../payroll-period-details/payroll-period-details.component';
+import { PayrollCalculatorComponent } from '../payroll-calculator/payroll-calculator.component';
 
 @Component({
   selector: 'app-payroll-details',
   templateUrl: './payroll-details.component.html',
-  styleUrls: ['./payroll-details.component.scss']
+  styleUrls: ['./payroll-details.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class PayrollDetailsComponent implements OnInit {
 
@@ -23,6 +25,9 @@ export class PayrollDetailsComponent implements OnInit {
   payrollCreditList: any[] = [];
   payrollDebitList:any[] = [];
   employees: any[] = [];
+
+  periodInView: any;
+  payrollPeriodName: string;
 
   displayedColumns: any[];
   dataSource: MatTableDataSource<any>;
@@ -48,13 +53,27 @@ export class PayrollDetailsComponent implements OnInit {
   getPageData = async () => {
     this.payrollPeriods = await this.hrService.getPayrollPeriods().toPromise();
     console.log(this.payrollPeriods);
+    this.periodInView = this.payrollPeriods['data'][0];
+    this.payrollPeriodName = this.periodInView.payrollPeriodName;
+    this.tableData = this.payrollPeriods['data'][0]['payrollPeriodData'];
     this.payrollCreditList = await this.hrService.getPayrollCredits().toPromise();
     this.payrollDebitList = await this.hrService.getPayrollDebits().toPromise();
     this.employees = await this.hrService.getEmployees().toPromise();
+    this.generateTableColumns();
 
-    console.log(this.payrollCreditList);
-    console.log(this.payrollDebitList);
-    console.log(this.employees);
+    console.log(this.tableData);
+
+    this.tableColumns.sort((a,b) => (a.order - b.order));
+    this.displayedColumns = this.tableColumns.map(column => column.label);
+    if(this.tableData) {
+      this.dataSource = new MatTableDataSource(this.tableData);
+    }
+    else {
+      this.generateTableData();
+    }
+    // console.log(this.payrollCreditList);
+    // console.log(this.payrollDebitList);
+    // console.log(this.employees);
   }
 
   //Convert string to camel case
@@ -128,14 +147,14 @@ export class PayrollDetailsComponent implements OnInit {
         this.tableColumns.push(columnObject);
       });
 
-      let otherColumns = ['Net Earnings', 'Status', 'Actions'];
+      let otherColumns = ['Net Pay', 'Status', 'Actions'];
       otherColumns.map(item => {
         this.columnsCount = this.columnsCount + 1;
         let columnObject = {
           key: this.toCamelCase(item),
           label: item,
           order: this.columnsCount,
-          columnWidth: item == 'Net Earnings' ? '10%' : '8%',
+          columnWidth: item == 'Status' ? '10%' : '8%',
           cellStyle: "width: 100%",
           sortable: false
         }
@@ -159,14 +178,14 @@ export class PayrollDetailsComponent implements OnInit {
 
       this.tableColumns.map(columnName => {
         if(!(columnName.key == 'select' || columnName.key == 'image' || columnName.key == 'name' || columnName.key == 'status' || columnName.key == 'actions')) {
-          dataEntry[columnName.key] = 8000;
+          dataEntry[columnName.key] = '-';
         }
       })
 
       this.tableData.push(dataEntry);
     });
-
-    console.log(this.tableData);
+    this.dataSource = new MatTableDataSource(this.tableData);
+    // console.log(this.tableData);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -197,28 +216,20 @@ export class PayrollDetailsComponent implements OnInit {
         // modalInfo: details
       },
     }).afterClosed().subscribe(() => {
-      this.generateTableColumns();
-      this.generateTableData();
-
-      if(this.tableColumns) {
-        this.tableColumns.sort((a,b) => (a.order - b.order));
-        this.displayedColumns = this.tableColumns.map(column => column.label);
-        this.dataSource = new MatTableDataSource(this.tableData);
-      }
+      this.getPageData();
     });
   }
 
   //Edit a Payroll Period
-  openEditModal(details: any) {
+  openEditModal() {
     this.dialog.open(PayrollPeriodDetailsComponent, {
       width: '32%',
       height: 'auto',
       data: {
-        name: details.designationName,
-        id: details._id,
-        // leaveTypes: this.leaveTypeList['data'],
+        name: this.periodInView.payrollPeriodName,
+        id: this.periodInView._id,
         isExisting: true,
-        modalInfo: details
+        modalInfo: this.periodInView
       },
     }).afterClosed().subscribe(() => {
       this.getPageData();
@@ -226,19 +237,19 @@ export class PayrollDetailsComponent implements OnInit {
   }
 
   //Delete a Payroll Period
-  deletePayrollPeriod(info: any) {
+  deletePayrollPeriod() {
     this.notifyService.confirmAction({
-      title: 'Remove ' + info.name + ' Designation',
+      title: 'Delete ' + this.periodInView.payrollPeriodName + ' Period',
       message: 'Are you sure you want to remove this payroll period?',
       confirmText: 'Yes, Delete',
       cancelText: 'Cancel',
     }).subscribe((confirmed) => {
       if (confirmed) {
-        this.hrService.deletePayrollPeriod(info._id).subscribe({
+        this.hrService.deletePayrollPeriod(this.periodInView._id).subscribe({
           next: res => {
             // console.log(res);
             if(res.status == 200) {
-              this.notifyService.showInfo('The designation has been deleted successfully');
+              this.notifyService.showInfo('The period has been deleted successfully');
             }
             this.getPageData();
           },
@@ -248,6 +259,30 @@ export class PayrollDetailsComponent implements OnInit {
           } 
         })
       }
+    });
+  }
+
+  //Set the data of the period in view on change of the dropdown option
+  setPayrollData(periodData) {
+    this.periodInView = periodData.payrollPeriodData;
+    this.payrollPeriodName = periodData.payrollPeriodName;
+    this.dataSource = new MatTableDataSource(periodData.payrollPeriodData);
+    console.log(periodData);
+  }
+
+  //Open payroll calculator modal
+  openPayrollCalculator(details) {
+    this.dialog.open(PayrollCalculatorComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        isExisting: false,
+        payrollCredits: this.payrollCreditList['data'],
+        payrollDebits: this.payrollDebitList['data'],
+        modalInfo: details
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
     });
   }
 

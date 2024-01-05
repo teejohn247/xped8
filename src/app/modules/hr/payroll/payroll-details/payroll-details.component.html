@@ -1,18 +1,28 @@
 <div class="content-wrap">
 
     <div class="row-section d-flex justify-content-between align-items-center">
-        <div class="page-header"><span (click)="goBack()" class="back-btn"><i class="bi bi-arrow-left"></i></span> Payroll Period Details</div>
+        <div class="page-header"><span (click)="goBack()" class="back-btn"><i class="bi bi-arrow-left"></i></span> Payroll Details</div>
         <div class="main-actions d-flex justify-content-start align-items-center">
             <div (click)="openPayrollModal()" class="cta primary-bkg icon md"><i class="bi bi-calendar3"></i>Create New Period</div>
-            <!-- <div class="cta trans-bkg icon md ms-lg-3"><i class="bi bi-box-arrow-down"></i> Import Payroll Sheet</div>
-            <div class="cta trans-bkg icon md ms-lg-3"><i class="bi bi-box-arrow-up"></i> Export Payroll Sheet</div> -->
+            <div class="custom-dropdown" [matMenuTriggerFor]="periodMenu"> Select Payroll Period <i class="bi bi-chevron-down"></i> </div>
+            <mat-menu #periodMenu="matMenu">
+                <div *ngFor="let item of payrollPeriods['data']" (click)="setPayrollData(item)" class="menu-item" mat-menu-item>
+                    {{item.payrollPeriodName}}
+                    <!-- <span class="actions">
+                        <i class="bi bi-pen-fill edit"></i>
+                        <i class="bi bi-trash3-fill delete"></i>
+                    </span> -->
+                </div>
+            </mat-menu>
+            <div (click)="openEditModal()" class="cta trans-bkg md rd edit ms-lg-3"><i class="bi bi-pen-fill"></i></div>
+            <div (click)="deletePayrollPeriod()" class="cta trans-bkg md rd delete ms-lg-3"><i class="bi bi-trash3-fill"></i></div>
         </div>
     </div>
 
     <div class="row-section mt-lg-4">
         <div class="table-wrap">
             <div class="inner-row hdr d-flex justify-content-start align-items-center">
-                <div class="card-title">Payroll Period</div>
+                <div class="card-title">{{payrollPeriodName}}</div>
                 <div class="bulk-actions d-flex justify-content-between align-items-center">
                     <div class="dropdown-trigger"> Bulk Actions <i class="bi bi-chevron-down"></i></div>
                     <div class="cta primary-bkg sm ms-lg-2">Apply</div>
@@ -53,32 +63,32 @@
                             <td style="width:1%; white-space: nowrap;" mat-cell 
                                 *matCellDef="let row">
                                 <!-- <span *ngIf="!row.profilePic" class="initials">{{row.firstName[0] + row.lastName[0]}}</span> -->
-                                <span *ngIf="row.image" class="table-img bkg-standard" style="background-image: url('{{row.image}}');"></span>
-                            </td>
-                        </ng-container>
-
-                        <ng-container *ngIf="column.key == 'actions'">
-                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>
-                            </th>
-                            <td style="width:1%; white-space: nowrap;" mat-cell *matCellDef="let element">
-                                <span class="table-icon edit"><i class="bi bi-pen-fill"></i></span>
-                                <span class="table-icon delete ms-lg-2"><i class="bi bi-trash3-fill"></i></span>
+                                <span *ngIf="row.profilePic" class="table-img bkg-standard" style="background-image: url('{{row.profilePic}}');"></span>
                             </td>
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'name'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
                             <td style="white-space: nowrap;" mat-cell *matCellDef="let row">
-                                <div class="major">{{ row.name }}</div>
-                                <div class="minor mt-1">{{ row.designationName }}</div>
+                                <div class="major">{{ row.fullName }}</div>
+                                <div class="minor mt-1">{{ row.designation }}</div>
                             </td>
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'status'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
                             <td style="white-space: nowrap;" mat-cell *matCellDef="let row">
-                                <span class="status approved" *ngIf="row[column.key] == 'Completed'">Active</span>
-                                <span class="status pending" *ngIf="row[column.key] == 'Pending'">Pending</span>
+                                <span class="status approved" *ngIf="row[column.key] == 'Completed'">{{row[column.key]}}</span>
+                                <span class="status pending" *ngIf="row[column.key] == 'Pending'">{{row[column.key]}}</span>
+                            </td>
+                        </ng-container>
+
+                        <ng-container *ngIf="column.key == 'actions'">
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>
+                            </th>
+                            <td style="width:1%; white-space: nowrap; justify-content: flex-end;" mat-cell *matCellDef="let element">
+                                <span (click)="openPayrollCalculator(element)" class="table-icon edit"><i class="bi bi-pen-fill"></i></span>
+                                <!-- <span class="table-icon delete ms-lg-2"><i class="bi bi-trash3-fill"></i></span> -->
                             </td>
                         </ng-container>
 
@@ -103,8 +113,6 @@
                         </td>
                     </tr>
 
-
-                    
                 </table>
             </div>
         </div>

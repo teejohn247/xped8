@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { TableColumn } from 'src/app/shared/models/table-columns';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Highcharts from 'highcharts';
+import { DatePipe } from '@angular/common';
 import { PayrollSummary } from 'src/app/shared/models/payroll-data';
 import { MatDialog } from '@angular/material/dialog';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
@@ -17,38 +18,9 @@ import { PayrollUploadComponent } from '../payroll-upload/payroll-upload.compone
 })
 export class PayrollSummaryComponent implements OnInit {
 
-  payrollSummary: any[] = [
-    {
-      id: 1,
-      value: "132",
-      percentChange: "5%",
-      name: "Employees",
-      colorDark: "rgb(54,171,104)",
-      colorLight: "rgba(54,171,104,0.2)",
-      icon: "bi bi-arrow-up-right",
-      symbol: "bi bi-people-fill"
-    },
-    {
-      id: 2,
-      value: "$24,560.70",
-      percentChange: "21%",
-      name: "Gross Salary",
-      colorDark: "rgb(235, 87, 87)",
-      colorLight: "rgba(235, 87, 87, 0.2)",
-      icon: "bi bi-arrow-down-right",
-      symbol: "bi bi-pie-chart-fill"
-    },
-    {
-      id: 3,
-      value: "$20,360.10",
-      percentChange: "14%",
-      name: "Net Salary",
-      colorDark: "rgb(235, 87, 87)",
-      colorLight: "rgba(235, 87, 87, 0.2)",
-      icon: "bi bi-arrow-down-right",
-      symbol: "bi bi-layers-half"
-    }
-  ]
+  payrollPeriods: any[] = [];
+  periodInView: any;
+  payrollSummary: any[] = [];
 
   displayedColumns: any[];
   dataSource: MatTableDataSource<PayrollSummary>;
@@ -56,7 +28,7 @@ export class PayrollSummaryComponent implements OnInit {
   //Payroll Summary Table Column Names
   tableColumns: TableColumn[] = [
     {
-      key: "paymentReference",
+      key: "reference",
       label: "Reference",
       order: 1,
       columnWidth: "12%",
@@ -64,7 +36,7 @@ export class PayrollSummaryComponent implements OnInit {
       sortable: false
     },
     {
-      key: "payrollName",
+      key: "payrollPeriodName",
       label: "Payroll Name",
       order: 2,
       columnWidth: "12%",
@@ -80,8 +52,8 @@ export class PayrollSummaryComponent implements OnInit {
       sortable: true
     },
     {
-      key: "grossPay",
-      label: "Gross Pay",
+      key: "totalEarnings",
+      label: "Total Earnings",
       order: 6,
       columnWidth: "10%",
       cellStyle: "width: 100%",
@@ -260,14 +232,15 @@ export class PayrollSummaryComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private route: Router,
+    private datePipe: DatePipe,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
-  ) { }
+  ) {
+    this.getPageData();
+  }
 
   ngOnInit(): void {
-    this.tableColumns.sort((a,b) => (a.order - b.order));
-    this.displayedColumns = this.tableColumns.map(column => column.label);
-    this.dataSource = new MatTableDataSource(this.tableData);
+    
   }
 
   addNewPayrollFile() {
@@ -282,6 +255,66 @@ export class PayrollSummaryComponent implements OnInit {
     // dialogRef.afterClosed().subscribe(() => {
     //   // this.getPageData();
     // }); 
+  }
+
+  getPageData = async () => {
+    this.payrollPeriods = await this.hrService.getPayrollPeriods().toPromise();
+    console.log(this.payrollPeriods);
+    this.periodInView = this.payrollPeriods['data'][0];
+
+    this.tableColumns.sort((a,b) => (a.order - b.order));
+    this.displayedColumns = this.tableColumns.map(column => column.label);
+    this.dataSource = new MatTableDataSource(this.payrollPeriods['data']);
+
+    this.payrollSummary = [
+      {
+        id: 1,
+        value: this.periodInView.payrollPeriodData.length,
+        percentChange: "5%",
+        name: "Employees",
+        colorDark: "rgb(54,171,104)",
+        colorLight: "rgba(54,171,104,0.2)",
+        icon: "bi bi-arrow-up-right",
+        symbol: "bi bi-people-fill"
+      },
+      {
+        id: 2,
+        value: `£ ${this.periodInView.totalEarnings}`,
+        percentChange: "21%",
+        name: "Gross Salary",
+        colorDark: "rgb(235, 87, 87)",
+        colorLight: "rgba(235, 87, 87, 0.2)",
+        icon: "bi bi-arrow-down-right",
+        symbol: "bi bi-pie-chart-fill"
+      },
+      {
+        id: 3,
+        value: `£ ${this.periodInView.deductions}`,
+        percentChange: "14%",
+        name: "Net Salary",
+        colorDark: "rgb(235, 87, 87)",
+        colorLight: "rgba(235, 87, 87, 0.2)",
+        icon: "bi bi-arrow-down-right",
+        symbol: "bi bi-layers-half"
+      }
+    ]
+  }
+
+  strToDate(dateVal: string, key:string) {
+    console.log(dateVal);
+    if(key == 'startDate' || key == 'endDate') {
+      let newFormat = new Date(dateVal);
+      // const [month, day, year] = dateVal.split('/');
+      // let newFormat = new Date(+year, +month - 1, +day);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMM, y')
+    }
+    else {
+      const [day, month, year] = dateVal.split('/');
+      let newFormat = new Date(+year, +month - 1, +day);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }    
   }
 
 }
