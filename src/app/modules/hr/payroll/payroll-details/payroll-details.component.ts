@@ -8,6 +8,7 @@ import { NotificationService } from 'src/app/shared/services/utils/notification.
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { PayrollPeriodDetailsComponent } from '../payroll-period-details/payroll-period-details.component';
 import { PayrollCalculatorComponent } from '../payroll-calculator/payroll-calculator.component';
+import { PayrollUploadComponent } from '../payroll-upload/payroll-upload.component';
 
 @Component({
   selector: 'app-payroll-details',
@@ -283,6 +284,20 @@ export class PayrollDetailsComponent implements OnInit {
       },
     }).afterClosed().subscribe(() => {
       this.getPageData();
+    });
+  }
+
+  //Import bulk payroll sheet
+  payrollBulkImport() {
+    let dialogRef = this.dialog.open(PayrollUploadComponent, {
+      width: '35%',
+      height: 'auto',
+      data: {
+        isExisting: false
+      },
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      //this.getPageData();
     });
   }
 
