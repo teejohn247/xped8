@@ -353,7 +353,7 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
         leaveTypeId: this.leaveForm.value.leaveType,
         leaveStartDate: this.datePipe.transform(this.leaveForm.value.startDate, 'dd-MM-yyyy'),
         leaveEndDate: this.datePipe.transform(this.leaveForm.value.endDate, 'dd-MM-yyyy'),
-        comments: this.leaveForm.value.message
+        requestMessage: this.leaveForm.value.message
       }
       console.log(data);
       this.hrService.createLeaveRequest(data).subscribe({
