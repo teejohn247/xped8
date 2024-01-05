@@ -66,7 +66,7 @@ export class LeaveReviewComponent implements OnInit {
         controlLabel: 'Message',
         controlWidth: '100%',
         readonly: this.data.forApproval,
-        initialValue: this.data.modalInfo.comments,
+        initialValue: this.data.modalInfo.requestMessage,
         validators: [Validators.required],
         order: 4
       },

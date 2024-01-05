@@ -350,17 +350,17 @@ export class EditEmployeeComponent implements OnInit {
     formData.append('employmentType', this.officialInfoForm.value.employmentType);
     formData.append('designationId', this.officialInfoForm.value.designation);
 
-    formData.append('personalEmail', this.personalInfoForm.value.personalEmail);
-    formData.append('personalPhone', this.personalInfoForm.value.personalPhoneNo);
-    formData.append('address', this.personalInfoForm.value.address);
-    formData.append('city', this.personalInfoForm.value.city);
-    formData.append('country', this.personalInfoForm.value.country);
-    formData.append('maritalStatus', this.personalInfoForm.value.maritalStatus);
-    formData.append('nationality', this.personalInfoForm.value.nationality);
-    formData.append('nextOfKinFullName', this.personalInfoForm.value.nextOfKinName);
-    formData.append('nextOfKinRelationship', this.personalInfoForm.value.nextOfKinRelationship);
-    formData.append('nextOfKinPhoneNumber', this.personalInfoForm.value.nextOfKinPhoneNo);
-    formData.append('nextOfKinAddress', this.personalInfoForm.value.nextOfKinAddress);
+    formData.append('personalEmail', this.personalInfoForm.value.personalEmail ? this.personalInfoForm.value.personalEmail : '');
+    formData.append('personalPhone', this.personalInfoForm.value.personalPhoneNo ? this.personalInfoForm.value.personalPhoneNo : '');
+    formData.append('address', this.personalInfoForm.value.address ? this.personalInfoForm.value.address : '');
+    formData.append('city', this.personalInfoForm.value.city ? this.personalInfoForm.value.city : '');
+    formData.append('country', this.personalInfoForm.value.country ? this.personalInfoForm.value.country : '');
+    formData.append('maritalStatus', this.personalInfoForm.value.maritalStatus ? this.personalInfoForm.value.maritalStatus : '');
+    formData.append('nationality', this.personalInfoForm.value.nationality ? this.personalInfoForm.value.nationality : '');
+    formData.append('nextOfKinFullName', this.personalInfoForm.value.nextOfKinName ? this.personalInfoForm.value.nextOfKinName : '');
+    formData.append('nextOfKinRelationship', this.personalInfoForm.value.nextOfKinRelationship ? this.personalInfoForm.value.nextOfKinRelationship : '');
+    formData.append('nextOfKinPhoneNumber', this.personalInfoForm.value.nextOfKinPhoneNo ? this.personalInfoForm.value.nextOfKinPhoneNo : '');
+    formData.append('nextOfKinAddress', this.personalInfoForm.value.nextOfKinAddress ? this.personalInfoForm.value.nextOfKinAddress : '');
 
     // formData.forEach((value,key) => {
     //   console.log(key+" "+value)

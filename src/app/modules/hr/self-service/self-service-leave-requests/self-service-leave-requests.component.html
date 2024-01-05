@@ -118,11 +118,11 @@
 
                         <ng-container *ngIf="column.key == 'leaveTypeName'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
-                            <td mat-cell 
-                                *matCellDef="let row">
-                                <span class="icon" *ngIf="row[column.key] == 'Paid' || row[column.key] == 'Annual-Leave'"><i class="bi bi-cash"></i> {{ row[column.key] }}</span>
+                            <td mat-cell *matCellDef="let row">
+                                <span>{{ row[column.key] }}</span>
+                                <!-- <span class="icon" *ngIf="row[column.key] == 'Paid' || row[column.key] == 'Annual-Leave'"><i class="bi bi-cash"></i> {{ row[column.key] }}</span>
                                 <span class="icon" *ngIf="row[column.key] == 'Unpaid'"><i class="bi bi-exclamation-diamond"></i> {{ row[column.key] }}</span>
-                                <span class="icon" *ngIf="row[column.key] == 'Sick'"><i class="bi bi-bandaid"></i> {{ row[column.key] }}</span>
+                                <span class="icon" *ngIf="row[column.key] == 'Sick'"><i class="bi bi-bandaid"></i> {{ row[column.key] }}</span> -->
                             </td>
                         </ng-container>
 
