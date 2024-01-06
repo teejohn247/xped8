@@ -292,6 +292,6 @@ export class HumanResourcesService {
 
   //Update Payroll Entry
   public updatePayrollEntry(data: any, entryId: any): Observable<any> {
-    return this.http.patch<any>(`${this.path}/updatePayrollPeriod/${entryId}`, data, this.requestOptions);
+    return this.http.patch<any>(`${this.path}/updatePayrollEntry/${entryId}`, data, this.requestOptions);
   }
 }
