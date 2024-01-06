@@ -1,14 +1,18 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DatePipe, Location } from '@angular/common';
+import { ActivatedRoute, Router } from "@angular/router";
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableColumn } from 'src/app/shared/models/table-columns';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { SharedService } from 'src/app/shared/services/utils/shared.service';
 import { PayrollPeriodDetailsComponent } from '../payroll-period-details/payroll-period-details.component';
 import { PayrollCalculatorComponent } from '../payroll-calculator/payroll-calculator.component';
 import { PayrollUploadComponent } from '../payroll-upload/payroll-upload.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-payroll-details',
@@ -34,17 +38,29 @@ export class PayrollDetailsComponent implements OnInit {
   dataSource: MatTableDataSource<any>;
   selection = new SelectionModel<any>(true, []);
 
+  private unsubscribe = new Subject<void>();
+
   constructor(
     public dialog: MatDialog,
     private location: Location,
+    private router: Router,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
+    private sharedService: SharedService,
   ) {
+    this.sharedService.getData$().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+      this.periodInView = data;
+    });
     this.getPageData();
   }
 
   ngOnInit(): void {
-    this.openPayrollModal();
+    
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   goBack() {
@@ -53,24 +69,34 @@ export class PayrollDetailsComponent implements OnInit {
 
   getPageData = async () => {
     this.payrollPeriods = await this.hrService.getPayrollPeriods().toPromise();
-    console.log(this.payrollPeriods);
-    this.periodInView = this.payrollPeriods['data'][0];
-    this.payrollPeriodName = this.periodInView.payrollPeriodName;
-    this.tableData = this.payrollPeriods['data'][0]['payrollPeriodData'];
+    this.employees = await this.hrService.getEmployees().toPromise();
     this.payrollCreditList = await this.hrService.getPayrollCredits().toPromise();
     this.payrollDebitList = await this.hrService.getPayrollDebits().toPromise();
-    this.employees = await this.hrService.getEmployees().toPromise();
+
     this.generateTableColumns();
+    console.log(this.periodInView);
 
-    console.log(this.tableData);
+    if(!this.periodInView) {
+      this.periodInView = this.payrollPeriods['data'][0];
+      this.payrollPeriodName = this.periodInView.payrollPeriodName;
+      this.tableData = this.payrollPeriods['data'][0]['payrollPeriodData'];
+      this.openPayrollModal();
 
-    this.tableColumns.sort((a,b) => (a.order - b.order));
-    this.displayedColumns = this.tableColumns.map(column => column.label);
-    if(this.tableData) {
-      this.dataSource = new MatTableDataSource(this.tableData);
+      this.tableColumns.sort((a,b) => (a.order - b.order));
+      this.displayedColumns = this.tableColumns.map(column => column.label);
+      if(this.tableData) {
+        this.dataSource = new MatTableDataSource(this.tableData);
+      }
+      else {
+        this.generateTableData();
+      }
     }
     else {
-      this.generateTableData();
+      this.tableColumns.sort((a,b) => (a.order - b.order));
+      this.displayedColumns = this.tableColumns.map(column => column.label);
+      this.payrollPeriodName = this.periodInView.payrollPeriodName;
+      this.dataSource = this.periodInView.payrollPeriodData;
+      // this.dataSource = new MatTableDataSource(this.tableData);
     }
     // console.log(this.payrollCreditList);
     // console.log(this.payrollDebitList);
@@ -113,7 +139,7 @@ export class PayrollDetailsComponent implements OnInit {
         order: 3,
         columnWidth: "12%",
         cellStyle: "width: 100%",
-        sortable: true
+        sortable: false
       },
     ];
 
@@ -127,7 +153,7 @@ export class PayrollDetailsComponent implements OnInit {
           // columnWidth: 'auto',
           columnWidth: String((100-45)/(this.payrollCreditList['data'].length + this.payrollDebitList['data'].length)) + '%',
           cellStyle: "green",
-          sortable: false
+          sortable: true
         }
         this.tableColumns.push(columnObject);
       })
@@ -143,12 +169,12 @@ export class PayrollDetailsComponent implements OnInit {
           // columnWidth: 'auto',
           columnWidth: String((100-45)/(this.payrollCreditList['data'].length + this.payrollDebitList['data'].length)) + '%',
           cellStyle: "red",
-          sortable: false
+          sortable: true
         }
         this.tableColumns.push(columnObject);
       });
 
-      let otherColumns = ['Net Pay', 'Status', 'Actions'];
+      let otherColumns = ['Net Earnings', 'Status', 'Actions'];
       otherColumns.map(item => {
         this.columnsCount = this.columnsCount + 1;
         let columnObject = {
@@ -161,8 +187,9 @@ export class PayrollDetailsComponent implements OnInit {
         }
         this.tableColumns.push(columnObject);
       })
+
+      console.log(this.tableColumns);
     }
-    console.log(this.tableColumns);
   }
 
   generateTableData() {
@@ -191,16 +218,17 @@ export class PayrollDetailsComponent implements OnInit {
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+    if(this.dataSource) {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.dataSource.data.length;
+      return numSelected === numRows;
+    }
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
   }
-
 
   /*************** PAYROLL PERIOD RELATED ACTIONS ***************/
 
@@ -239,8 +267,9 @@ export class PayrollDetailsComponent implements OnInit {
 
   //Delete a Payroll Period
   deletePayrollPeriod() {
+    console.log(this.periodInView);
     this.notifyService.confirmAction({
-      title: 'Delete ' + this.periodInView.payrollPeriodName + ' Period',
+      title: 'Delete ' + this.periodInView.payrollPeriodName,
       message: 'Are you sure you want to remove this payroll period?',
       confirmText: 'Yes, Delete',
       cancelText: 'Cancel',
@@ -268,7 +297,7 @@ export class PayrollDetailsComponent implements OnInit {
     this.periodInView = periodData.payrollPeriodData;
     this.payrollPeriodName = periodData.payrollPeriodName;
     this.dataSource = new MatTableDataSource(periodData.payrollPeriodData);
-    console.log(periodData);
+    // console.log(periodData);
   }
 
   //Open payroll calculator modal

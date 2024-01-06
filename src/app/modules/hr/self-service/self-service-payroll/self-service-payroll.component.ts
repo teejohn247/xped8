@@ -2,7 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { TableColumn } from 'src/app/shared/models/table-columns';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Highcharts from 'highcharts';
+import { DatePipe } from '@angular/common';
 import { PayrollSummary } from 'src/app/shared/models/payroll-data';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { SharedService } from 'src/app/shared/services/utils/shared.service';
+
 
 @Component({
   selector: 'app-self-service-payroll',
@@ -11,6 +16,7 @@ import { PayrollSummary } from 'src/app/shared/models/payroll-data';
 })
 export class SelfServicePayrollComponent implements OnInit {
 
+  payrollPeriods: any[] = [];
   displayedColumns: any[];
   dataSource: MatTableDataSource<PayrollSummary>;
 
@@ -174,12 +180,24 @@ export class SelfServicePayrollComponent implements OnInit {
     ],
   };
 
-  constructor() { }
+  constructor(
+    private datePipe: DatePipe,
+    private hrService: HumanResourcesService,     
+    private notifyService: NotificationService,
+    private sharedService: SharedService,
+  ) {
+    this.getPageData();
+  }
 
   ngOnInit(): void {
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
     this.dataSource = new MatTableDataSource(this.tableData);
+  }
+
+  getPageData = async () => {
+    this.payrollPeriods = await this.hrService.getPayrollPeriods().toPromise();
+    console.log(this.payrollPeriods);
   }
 
 }

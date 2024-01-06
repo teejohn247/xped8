@@ -32,11 +32,7 @@
             </div>
 
             <div class="inner-row">
-                <table 
-                    mat-table
-                    [dataSource]="dataSource"
-                    class="dataTable lg mat-elevation-z0"
-                >
+                <table mat-table [dataSource]="dataSource" class="dataTable lg mat-elevation-z0">
                     <!-- Table Columns -->
                     <ng-container *ngFor="let column of tableColumns; let row" [matColumnDef]="column.label">
                         <ng-container *ngIf="column.key == 'select'">
@@ -83,6 +79,13 @@
                             </td>
                         </ng-container>
 
+                        <ng-container *ngIf="column.key == 'netEarnings'">
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>Net Pay</th>
+                            <td style="white-space: nowrap;" mat-cell *matCellDef="let row">
+                                <span>{{row[column.key]}}</span>
+                            </td>
+                        </ng-container>
+
                         <ng-container *ngIf="column.key == 'actions'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>
                             </th>
@@ -94,7 +97,10 @@
 
                         <ng-container>
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.key == 'image' || column.key == 'actions' ? "" : column.label }}</th>
-                            <td [style.color]="column['cellStyle']" mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
+                            <td [style.color]="column['cellStyle']" mat-cell *matCellDef="let row">
+                                <span *ngIf="!column.sortable" >{{row[column.key]}}</span>
+                                <span *ngIf="column.sortable">{{row['dynamicFields'][column.key]}}</span>
+                            </td>
                         </ng-container>
                         
                     </ng-container>

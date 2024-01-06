@@ -59,14 +59,14 @@ export class PayrollCalculatorComponent implements OnInit {
       this.fieldsCount = 0;
       this.payrollCredits.map(item => {
         this.fieldsCount = this.fieldsCount + 1;
-        this.totalEarnings = this.totalEarnings + this.dialogData.modalInfo[this.toCamelCase(item.name)];
+        this.totalEarnings = this.totalEarnings + this.dialogData.modalInfo.dynamicFields[this.toCamelCase(item.name)];
         let fieldObject = {
           controlName: this.toCamelCase(item.name),
           controlType: 'credit',
           controlLabel: item.name,
           controlWidth: '48%',
           readonly: this.dialogData.modalInfo.status == 'Completed',
-          initialValue: this.dialogData.modalInfo[this.toCamelCase(item.name)],
+          initialValue: this.dialogData.modalInfo.dynamicFields[this.toCamelCase(item.name)],
           validators: [Validators.required],
           order: this.fieldsCount,
         }
@@ -77,14 +77,14 @@ export class PayrollCalculatorComponent implements OnInit {
     if(this.payrollDebits) {
       this.payrollDebits.map(item => {
         this.fieldsCount = this.fieldsCount + 1;
-        this.deductions = this.deductions + this.dialogData.modalInfo[this.toCamelCase(item.name)];
+        this.deductions = this.deductions + this.dialogData.modalInfo.dynamicFields[this.toCamelCase(item.name)];
         let fieldObject = {
           controlName: this.toCamelCase(item.name),
           controlType: 'debit',
           controlLabel: item.name,
           controlWidth: '48%',
           readonly: this.dialogData.modalInfo.status == 'Completed',
-          initialValue: this.dialogData.modalInfo[this.toCamelCase(item.name)],
+          initialValue: this.dialogData.modalInfo.dynamicFields[this.toCamelCase(item.name)],
           validators: [Validators.required],
           order: this.fieldsCount,
         }
@@ -116,7 +116,7 @@ export class PayrollCalculatorComponent implements OnInit {
   }
 
   payCalculation(earningType: string, controlName: string) {
-    console.log( earningType + ':' + this.payrollCalculatorForm.value[controlName])
+    // console.log( earningType + ':' + this.payrollCalculatorForm.value[controlName])
     if(earningType == 'credit') {
       let creditSum = 0;
       this.payrollCredits.map(val => {
@@ -136,4 +136,35 @@ export class PayrollCalculatorComponent implements OnInit {
     }
   }
 
+  onSubmit() {
+    console.log(this.payrollCalculatorForm.controls);
+    let dynamicFields = {};
+    Object.keys(this.payrollCalculatorForm.controls).forEach((key: string) => {
+      dynamicFields[key] = this.payrollCalculatorForm.value[key];
+    });
+    console.log(dynamicFields);
+    if(this.payrollCalculatorForm.valid) {
+      let data = {
+        dynamicFields: dynamicFields,
+        totalEarnings: this.totalEarnings,
+        deductions: this.deductions,
+        netEarnings: this.netEarnings,
+      }
+      console.log(data);
+      this.hrService.updatePayrollEntry(data, this.dialogData.modalInfo._id).subscribe({
+        next: res => {
+          // console.log(res);
+          if(res.status == 200) {
+            this.notifyService.showSuccess('This payroll entry has been updated successfully');
+            this.dialogRef.close();
+          }
+          //this.getPageData();
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+  }
 }

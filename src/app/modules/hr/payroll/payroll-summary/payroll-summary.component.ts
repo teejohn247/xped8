@@ -8,6 +8,7 @@ import { PayrollSummary } from 'src/app/shared/models/payroll-data';
 import { MatDialog } from '@angular/material/dialog';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { SharedService } from 'src/app/shared/services/utils/shared.service';
 import { PayrollUploadComponent } from '../payroll-upload/payroll-upload.component';
 
 
@@ -68,8 +69,8 @@ export class PayrollSummaryComponent implements OnInit {
       sortable: true
     },
     {
-      key: "netPay",
-      label: "Net Pay",
+      key: "netEarnings",
+      label: "Net Earnings",
       order: 10,
       columnWidth: "10%",
       cellStyle: "width: 100%",
@@ -235,6 +236,7 @@ export class PayrollSummaryComponent implements OnInit {
     private datePipe: DatePipe,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
+    private sharedService: SharedService,
   ) {
     this.getPageData();
   }
@@ -245,16 +247,6 @@ export class PayrollSummaryComponent implements OnInit {
 
   addNewPayrollFile() {
     this.route.navigateByUrl('/dashboard/human-resources/payroll/payroll-details');
-    // let dialogRef = this.dialog.open(PayrollUploadComponent, {
-    //   width: '35%',
-    //   height: 'auto',
-    //   data: {
-    //     isExisting: false
-    //   },
-    // });
-    // dialogRef.afterClosed().subscribe(() => {
-    //   // this.getPageData();
-    // }); 
   }
 
   getPageData = async () => {
@@ -301,7 +293,7 @@ export class PayrollSummaryComponent implements OnInit {
   }
 
   strToDate(dateVal: string, key:string) {
-    console.log(dateVal);
+    // console.log(dateVal);
     if(key == 'startDate' || key == 'endDate') {
       let newFormat = new Date(dateVal);
       // const [month, day, year] = dateVal.split('/');
@@ -317,4 +309,36 @@ export class PayrollSummaryComponent implements OnInit {
     }    
   }
 
+  viewPayrollDetails(info: any) {
+    this.route.navigateByUrl('/dashboard/human-resources/payroll/payroll-details');
+    this.sharedService.setData(info);
+  }
+
+  //Delete a Payroll Period
+  deletePayrollPeriod(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Delete ' + info.payrollPeriodName,
+      message: 'Are you sure you want to remove this payroll period?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deletePayrollPeriod(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('The period has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    });
+  }
+
 }
+

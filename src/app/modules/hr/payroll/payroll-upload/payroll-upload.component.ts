@@ -35,7 +35,7 @@ export class PayrollUploadComponent implements OnInit {
     const formData = new FormData();
     formData.append("file", this.payrollFile);
 
-    console.log(formData.getAll('file'));
+    // console.log(formData.getAll('file'));
     this.hrService.payrollFileUpload(formData).subscribe({
       next:(res) => {
         this.notifyService.showSuccess('The payroll file has been uploaded successfully');

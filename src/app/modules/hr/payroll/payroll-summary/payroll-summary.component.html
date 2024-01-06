@@ -101,8 +101,9 @@
                         <ng-container *ngIf="column.key == 'actions'">
                             <th style="width:5%" mat-header-cell *matHeaderCellDef>
                             </th>
-                            <td style="width:1%; white-space: nowrap;" mat-cell *matCellDef="let element">
-                                <span class="table-icon edit" style="font-size: 1rem;"><i class="bi bi-folder-symlink"></i></span>
+                            <td style="width:1%; white-space: nowrap; align-items: center;" mat-cell *matCellDef="let element">
+                                <span (click)="viewPayrollDetails(element)" class="table-icon edit" style="font-size: 1rem;"><i class="bi bi-eye-fill"></i></span>
+                                <span *ngIf="element.status == 'Pending'" (click)="deletePayrollPeriod(element)" class="table-icon delete ms-lg-3"><i class="bi bi-trash3-fill"></i></span>
                             </td>
                         </ng-container>
 
