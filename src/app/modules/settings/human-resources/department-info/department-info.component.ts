@@ -22,7 +22,6 @@ export class DepartmentInfoComponent implements OnInit {
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
     private fb: FormBuilder
-
   ) {
     this.employees = this.data.staff;
 

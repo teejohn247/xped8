@@ -150,8 +150,8 @@
                             <td mat-cell 
                                 *matCellDef="let row">
                                 <div class="major">{{ row[column.key] }}</div>
-                                <div class="minor">{{row.expenseDate}}</div>
-                                <!-- <div class="minor">{{strToDate(row.expenseDate, 'expenseTypeName')}}</div> -->
+                                <!-- <div class="minor">{{row.expenseDate}}</div> -->
+                                <div class="minor">{{strToDate(row.expenseDate, 'expenseTypeName')}}</div>
                             </td>
                         </ng-container>
 
@@ -165,8 +165,8 @@
 
                         <ng-container *ngIf="column.key == 'dateRequested'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
-                            <!-- <td mat-cell *matCellDef="let row">{{ strToDate(row[column.key], 'dateRequested') }}</td> -->
-                            <td mat-cell *matCellDef="let row">{{ row[column.key]}}</td>
+                            <td mat-cell *matCellDef="let row">{{ strToDate(row[column.key], 'dateRequested') }}</td>
+                            <!-- <td mat-cell *matCellDef="let row">{{ row[column.key]}}</td> -->
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'approver'">

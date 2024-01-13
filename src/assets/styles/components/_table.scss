@@ -35,6 +35,11 @@
             &.delete {
                 color: red;
             }
+
+            &.more {
+                font-size: 0.9rem;
+                font-weight: 700;
+            }
         }
     }
 
@@ -97,8 +102,9 @@
             margin-left: auto;
 
             .dropdown-trigger {
+                width: 10rem;
                 display: inline-flex;
-                justify-content: center;
+                justify-content: space-between;
                 align-items: center;
                 font-size: 0.75rem;
                 letter-spacing: 0.03rem;

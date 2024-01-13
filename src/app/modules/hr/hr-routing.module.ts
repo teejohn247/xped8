@@ -53,6 +53,10 @@ const routes: Routes = [
         path: 'payroll-details',
         component: PayrollDetailsComponent
       },
+      {
+        path: 'payroll-details/:id',
+        component: PayrollDetailsComponent
+      },
     ]
   },
   {

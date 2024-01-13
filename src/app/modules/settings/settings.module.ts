@@ -11,6 +11,7 @@ import { DepartmentInfoComponent } from './human-resources/department-info/depar
 import { PayrollDebitInfoComponent } from './human-resources/payroll-debit-info/payroll-debit-info.component';
 import { PayrollCreditInfoComponent } from './human-resources/payroll-credit-info/payroll-credit-info.component';
 import { ExpenseTypeInfoComponent } from './human-resources/expense-type-info/expense-type-info.component';
+import { PublicHolidayInfoComponent } from './human-resources/public-holiday-info/public-holiday-info.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { ExpenseTypeInfoComponent } from './human-resources/expense-type-info/ex
     DepartmentInfoComponent,
     PayrollDebitInfoComponent,
     PayrollCreditInfoComponent,
-    ExpenseTypeInfoComponent
+    ExpenseTypeInfoComponent,
+    PublicHolidayInfoComponent
   ],
   imports: [
     CommonModule,

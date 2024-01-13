@@ -198,7 +198,7 @@ export class VisitorsLogComponent implements OnInit {
 
   addNewVisitor() {
     const dialogRef = this.dialog.open(RegisterGuestComponent, {
-      width: '35%',
+      width: '30%',
       height: 'auto',
     });
   }

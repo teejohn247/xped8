@@ -48,6 +48,14 @@
 
                         <div class="sec-hld d-flex align-items-end mt-lg-3 mb-lg-2" style="width: 48%">
                             <div class="form-hld" style="flex: 1;">
+                                <label class="mb-lg-2">Create New Public Holiday</label>
+                                <input type="text" formControlName="holidayName" class="form-control form-control-md" id="holidayName" placeholder="Enter public holiday name">    
+                            </div>
+                            <div (click)="createPublicHoliday()" class="cta"><i class="bi bi-plus"></i></div>
+                        </div>
+
+                        <div class="sec-hld d-flex align-items-end mt-lg-3 mb-lg-2" style="width: 48%">
+                            <div class="form-hld" style="flex: 1;">
                                 <label class="mb-lg-2">Create New Expense Type</label>
                                 <input type="text" formControlName="expenseType" class="form-control form-control-md" id="expenseType" placeholder="Enter expense type">    
                             </div>
@@ -92,6 +100,7 @@
                                         <!-- <div *ngIf="designationList.length > 0 && item.label == 'Company Roles' " class="name">{{entity.roleName}}</div> -->
                                         <div *ngIf="item.label == 'Designations' " class="name">{{entity.designationName}}</div>
                                         <div *ngIf="item.label == 'Leave Types' " class="name">{{entity.leaveName}} Leave</div>
+                                        <div *ngIf="item.label == 'Holidays' " class="name">{{entity.holidayName}} Leave</div>
                                         <div *ngIf="item.label == 'Expense Types' " class="name">{{entity.expenseType}}</div>
                                         <div *ngIf="item.label == 'Departments'" class="actions">
                                             <i (click)="editDepartment(entity)" class="bi bi-pen-fill"></i>
@@ -100,6 +109,10 @@
                                         <div *ngIf="item.label == 'Leave Types'" class="actions">
                                             <i (click)="editLeaveType(entity)" class="bi bi-pen-fill"></i>
                                             <i (click)="deleteLeaveType(entity)" class="bi bi-trash3-fill"></i>
+                                        </div>
+                                        <div *ngIf="item.label == 'Holidays'" class="actions">
+                                            <i (click)="editPublicHoliday(entity)" class="bi bi-pen-fill"></i>
+                                            <i (click)="deletePublicHoliday(entity)" class="bi bi-trash3-fill"></i>
                                         </div>
                                         <div *ngIf="item.label == 'Expense Types'" class="actions">
                                             <i (click)="editExpenseType(entity)" class="bi bi-pen-fill"></i>

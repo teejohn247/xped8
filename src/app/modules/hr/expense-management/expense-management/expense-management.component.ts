@@ -243,12 +243,11 @@ export class ExpenseManagementComponent implements OnInit {
     console.log(this.requestedApprovals);
   }
 
+
   strToDate(dateVal: string, key:string) {
-    console.log(dateVal);
     if(key == 'dateRequested') {
-      // let newFormat = new Date(dateVal);
-      const [month, day, year] = dateVal.split('/');
-      let newFormat = new Date(+year, +month - 1, +day);
+      // const [day, month, year] = dateVal.split('/');
+      let newFormat = new Date(dateVal);
       // console.log(newFormat.toDateString());
       return this.datePipe.transform(newFormat, 'd MMMM, y')
     }

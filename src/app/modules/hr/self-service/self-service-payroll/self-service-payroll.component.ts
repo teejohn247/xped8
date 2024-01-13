@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { TableColumn } from 'src/app/shared/models/table-columns';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Highcharts from 'highcharts';
 import { DatePipe } from '@angular/common';
 import { PayrollSummary } from 'src/app/shared/models/payroll-data';
+import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { SharedService } from 'src/app/shared/services/utils/shared.service';
+import { PaymentInfoComponent } from 'src/app/shared/components/payment-info/payment-info.component';
 
 
 @Component({
@@ -15,6 +18,9 @@ import { SharedService } from 'src/app/shared/services/utils/shared.service';
   styleUrls: ['./self-service-payroll.component.scss']
 })
 export class SelfServicePayrollComponent implements OnInit {
+
+  employeeId: string;
+  employeeDetails: any;
 
   payrollPeriods: any[] = [];
   displayedColumns: any[];
@@ -182,6 +188,8 @@ export class SelfServicePayrollComponent implements OnInit {
 
   constructor(
     private datePipe: DatePipe,
+    public dialog: MatDialog,
+    private authService: AuthenticationService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
     private sharedService: SharedService,
@@ -196,8 +204,26 @@ export class SelfServicePayrollComponent implements OnInit {
   }
 
   getPageData = async () => {
+    this.employeeDetails = this.authService.loggedInUser.data;
+    console.log(this.employeeDetails);
     this.payrollPeriods = await this.hrService.getPayrollPeriods().toPromise();
     console.log(this.payrollPeriods);
+  }
+
+  //Open payment info modal
+  editPaymentInfo() {
+    this.dialog.open(PaymentInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        // name: details.name,
+        // id: details._id,
+        isExisting: true,
+        modalInfo: this.employeeDetails
+      },
+    }).afterClosed().subscribe(() => {
+      this.employeeDetails = this.authService.loggedInUser.data;
+    });
   }
 
 }

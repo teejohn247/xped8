@@ -22,6 +22,7 @@ import { RegisterGuestComponent } from './components/register-guest/register-gue
 import { LoginComponent } from './components/login/login.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { LeaveReviewComponent } from './components/leave-review/leave-review.component';
+import { PaymentInfoComponent } from './components/payment-info/payment-info.component';
 
 const SHARED_COMP = [
   MatIconModule,
@@ -41,7 +42,7 @@ const SHARED_COMP = [
 ];
 
 @NgModule({
-  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent, LeaveReviewComponent],
+  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent, LeaveReviewComponent, PaymentInfoComponent],
 
   exports: [
     ...SHARED_COMP,

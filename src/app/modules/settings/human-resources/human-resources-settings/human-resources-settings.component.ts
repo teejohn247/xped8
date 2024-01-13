@@ -10,6 +10,7 @@ import { DepartmentInfoComponent } from '../department-info/department-info.comp
 import { PayrollCreditInfoComponent } from '../payroll-credit-info/payroll-credit-info.component';
 import { PayrollDebitInfoComponent } from '../payroll-debit-info/payroll-debit-info.component';
 import { ExpenseTypeInfoComponent } from '../expense-type-info/expense-type-info.component';
+import { PublicHolidayInfoComponent } from '../public-holiday-info/public-holiday-info.component';
 
 @Component({
   selector: 'app-human-resources-settings',
@@ -26,6 +27,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
   companyRoles: any[] = [];
   designationList: any[] = [];
   leaveTypeList: any[] = [];
+  publicHolidayList: any[] = [];
   expenseTypeList: any[] = [];
   payrollCreditList: any[] = [];
   payrollDebitList:any[] = [];
@@ -44,6 +46,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
       designation: [''],
       companyRole: [''],
       leaveType: [''],
+      holidayName: [''],
       expenseType: [''],
       payrollCredit: [''],
       payrollDebit: ['']
@@ -62,6 +65,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
     this.employees = await this.hrService.getEmployees().toPromise();
     this.designationList = await this.hrService.getDesignations().toPromise();
     this.leaveTypeList = await this.hrService.getLeaveTypes().toPromise();
+    this.publicHolidayList = await this.hrService.getPublicHolidays().toPromise();
     this.expenseTypeList = await this.hrService.getExpenseTypes().toPromise();
     this.accordionItems = [
       {
@@ -83,6 +87,11 @@ export class HumanResourcesSettingsComponent implements OnInit {
         label: "Leave Types",
         key: "leaveTypes",
         list: this.leaveTypeList['data']
+      },
+      {
+        label: "Holidays",
+        key: "holidayTypes",
+        list: this.publicHolidayList['data']
       },
       {
         label: "Expense Types",
@@ -381,6 +390,101 @@ export class HumanResourcesSettingsComponent implements OnInit {
             // console.log(res);
             if(res.status == 200) {
               this.notifyService.showInfo('The leave type has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    });
+  }
+
+  /*************** PUBLIC HOLIDAYS RELATED ACTIONS ***************/
+
+  //Create a new public holiday
+  createPublicHoliday() {
+    let data = {
+      holidayName: this.hrSettingsForm.value.holidayName ? this.hrSettingsForm.value.holidayName : ""
+    }
+    if(this.hrSettingsForm.value.holidayName) {
+      this.hrService.createPublicHoliday(data).subscribe({
+        next: res => {
+          console.log(res);
+          if(res.status == 200) {
+            this.getPageData();
+            // this.notifyService.showSuccess('This leave type has been created successfully');
+            this.dialog.open(PublicHolidayInfoComponent, {
+              width: '30%',
+              height: 'auto',
+              data: {
+                name: data.holidayName,
+                isExisting: false
+              },
+            }).afterClosed().subscribe(() => {
+              this.getPageData();
+            });
+          }
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+    else {
+      this.dialog.open(PublicHolidayInfoComponent, {
+        width: '30%',
+        height: 'auto',
+        data: {
+          name: data.holidayName,
+          isExisting: false
+        },
+      }).afterClosed().subscribe(() => {
+        this.getPageData();
+      });
+    }
+    
+    // console.log(data);
+    // this.hrService.createDesignation(data).subscribe(res => {
+    //   if(res.status == 200) {
+    //     location.reload();
+    //   }
+    // })
+  }
+
+  //Edit a public holiday
+  editPublicHoliday(details: any) {
+    this.dialog.open(PublicHolidayInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: details.holidayName,
+        id: details._id,
+        isExisting: true,
+        modalInfo: details
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });;
+  }
+
+  //Delete a public holiday
+  deletePublicHoliday(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Remove ' + info.holidayName + ' Holiday',
+      message: 'Are you sure you want to remove this public holiday?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deletePublicHoliday(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('The public holiday has been deleted successfully');
             }
             this.getPageData();
           },

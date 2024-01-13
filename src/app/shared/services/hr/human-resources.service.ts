@@ -39,7 +39,7 @@ export class HumanResourcesService {
   }
 
   //Get an employee details
-   public getEmployeeDetails(employeeId: string): Observable<any> {
+  public getEmployeeDetails(employeeId: string): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchEmployee/${employeeId}`, this.requestOptions);
   }
 
@@ -56,6 +56,21 @@ export class HumanResourcesService {
   //Update Employee by Admin
   public updateEmployeeByAdmin(data: any, employeeId: any): Observable<any> {
     return this.http.patch<any>(`${this.path}/adminUpdateEmployee/${employeeId}`, data, this.requestOptions);
+  }
+
+  //Edit employee payment info
+  public updatePaymentInfo(info: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/addPayment`, info, this.requestOptions);
+  }
+
+  //Assign Manager
+  public assignManager(data: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/assignManager`, data, this.requestOptions);
+  }
+
+  //Assign Manager
+  public assignApprover(data: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/assignApprover`, data, this.requestOptions);
   }
 
   /*************** DEPARTMENT RELATED ACTIONS ***************/
@@ -169,6 +184,28 @@ export class HumanResourcesService {
     return this.http.patch<any>(`${this.path}/leaveAction`, leaveDetails, this.requestOptions);
   }
 
+  /*************** PUBLIC HOLIDAYS RELATED ACTIONS ***************/
+
+  //Create a new public holiday
+  public createPublicHoliday(holidayName: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createHoliday`, holidayName, this.requestOptions);
+  }
+
+  //Get the list of all public holidays
+  public getPublicHolidays(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchHolidays`, this.requestOptions);
+  }
+
+  //Update public holiday
+  public updatePublicHoliday(data: any, holidayId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateHoliday/${holidayId}`, data, this.requestOptions);
+  }
+
+  //Delete public holiday
+  public deletePublicHoliday(holidayId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteHoliday/${holidayId}`, this.requestOptions);
+  }
+
   /*************** EXPENSE TYPES RELATED ACTIONS ***************/
 
   //Create a new expense type
@@ -278,6 +315,11 @@ export class HumanResourcesService {
   //Get the list of all payroll periods
   public getPayrollPeriods(): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchPayrollPeriods`, this.requestOptions);
+  }
+
+  //Get a payroll period details
+  public getPayrollDetails(perioId: string): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchPayrollPeriodDetails/${perioId}`, this.requestOptions);
   }
 
   //Update Payroll Period

@@ -1,6 +1,4 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { SafeUrl, DomSanitizer } from "@angular/platform-browser";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
@@ -28,12 +26,10 @@ export class PayrollCalculatorComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
-    private datePipe: DatePipe,
     public dialogRef: MatDialogRef<PayrollCalculatorComponent>,
     private hrService: HumanResourcesService,
     private authService: AuthenticationService,     
     private notifyService: NotificationService,
-    private sanitizer: DomSanitizer,
     private fb: FormBuilder
 
   ) {

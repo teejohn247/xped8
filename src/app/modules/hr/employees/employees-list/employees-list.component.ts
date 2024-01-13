@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { SelectionModel } from '@angular/cdk/collections';
 import { EmployeeData, EmployeeTable } from 'src/app/shared/models/employee-data';
@@ -11,12 +11,14 @@ import { NotificationService } from 'src/app/shared/services/utils/notification.
 import { DeleteConfirmationComponent } from 'src/app/shared/components/delete-confirmation/delete-confirmation.component';
 import { CreateSingleInfoComponent } from 'src/app/shared/components/create-single-info/create-single-info.component';
 import { BulkUploadComponent } from '../bulk-upload/bulk-upload.component';
+import { AssignManagerApproversComponent } from '../assign-manager-approvers/assign-manager-approvers.component';
 
 
 @Component({
   selector: 'app-employees-list',
   templateUrl: './employees-list.component.html',
-  styleUrls: ['./employees-list.component.scss']
+  styleUrls: ['./employees-list.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class EmployeesListComponent implements OnInit {
 
@@ -264,6 +266,25 @@ export class EmployeesListComponent implements OnInit {
     console.log(this.employeeList);
     this.dataSource = new MatTableDataSource(this.employeeList['data']);
     this.dataSource.sort = this.sort;
+  }
+
+  assignManager(assignType: string, count: string, row?: any) {
+    if(row) this.selection.select(row);
+    console.log(this.selection.selected);
+    let dialogRef = this.dialog.open(AssignManagerApproversComponent, {
+      width: '25%',
+      height: 'auto',
+      data: {
+        assignmentType: assignType,
+        employeeList: this.employeeList['data'],
+        selections: this.selection['selected'],
+        isExisting: false
+      },
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.selection.clear()
+      this.getPageData();
+    }); 
   }
 
 

@@ -32,6 +32,7 @@ export class PayrollDetailsComponent implements OnInit {
   employees: any[] = [];
 
   periodInView: any;
+  currentPeriodId: string;
   payrollPeriodName: string;
 
   displayedColumns: any[];
@@ -41,6 +42,7 @@ export class PayrollDetailsComponent implements OnInit {
   private unsubscribe = new Subject<void>();
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     public dialog: MatDialog,
     private location: Location,
     private router: Router,
@@ -48,9 +50,10 @@ export class PayrollDetailsComponent implements OnInit {
     private notifyService: NotificationService,
     private sharedService: SharedService,
   ) {
-    this.sharedService.getData$().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
-      this.periodInView = data;
-    });
+    this.currentPeriodId = this.activatedRoute.snapshot.params["id"];
+    // this.sharedService.getData$().pipe(takeUntil(this.unsubscribe)).subscribe(data => {
+    //   this.periodInView = data;
+    // });
     this.getPageData();
   }
 
@@ -69,6 +72,11 @@ export class PayrollDetailsComponent implements OnInit {
 
   getPageData = async () => {
     this.payrollPeriods = await this.hrService.getPayrollPeriods().toPromise();
+    if(this.currentPeriodId) {
+      this.periodInView = await this.hrService.getPayrollDetails(this.currentPeriodId).toPromise();
+      this.periodInView = this.periodInView['data'][0];
+      console.log(this.periodInView);
+    }    
     this.employees = await this.hrService.getEmployees().toPromise();
     this.payrollCreditList = await this.hrService.getPayrollCredits().toPromise();
     this.payrollDebitList = await this.hrService.getPayrollDebits().toPromise();
@@ -78,6 +86,7 @@ export class PayrollDetailsComponent implements OnInit {
 
     if(!this.periodInView) {
       this.periodInView = this.payrollPeriods['data'][0];
+      this.currentPeriodId = this.periodInView._id;
       this.payrollPeriodName = this.periodInView.payrollPeriodName;
       this.tableData = this.payrollPeriods['data'][0]['payrollPeriodData'];
       this.openPayrollModal();
@@ -294,7 +303,9 @@ export class PayrollDetailsComponent implements OnInit {
 
   //Set the data of the period in view on change of the dropdown option
   setPayrollData(periodData) {
+    console.log(periodData);
     this.periodInView = periodData.payrollPeriodData;
+    this.currentPeriodId = periodData._id;
     this.payrollPeriodName = periodData.payrollPeriodName;
     this.dataSource = new MatTableDataSource(periodData.payrollPeriodData);
     // console.log(periodData);

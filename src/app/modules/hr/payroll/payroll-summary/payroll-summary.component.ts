@@ -310,8 +310,8 @@ export class PayrollSummaryComponent implements OnInit {
   }
 
   viewPayrollDetails(info: any) {
-    this.route.navigateByUrl('/dashboard/human-resources/payroll/payroll-details');
-    this.sharedService.setData(info);
+    this.route.navigateByUrl(`/dashboard/human-resources/payroll/payroll-details/${info._id}`);
+    // this.sharedService.setData(info);
   }
 
   //Delete a Payroll Period
