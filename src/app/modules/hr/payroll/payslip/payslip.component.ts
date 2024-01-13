@@ -2,6 +2,9 @@ import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
+import { jsPDF } from 'jspdf';
+import htmltocanvas from 'html2canvas';
+import { Scale } from 'chart.js';
 
 @Component({
   selector: 'app-payslip',
@@ -41,6 +44,23 @@ export class PayslipComponent implements OnInit {
   strToDate(dateVal: string) {
     let newFormat = new Date(dateVal);
     return this.datePipe.transform(newFormat, 'd MMMM, y')    
+  }
+
+  generatePdf() {
+    const elementToPrint = document.getElementById('payslip');
+    htmltocanvas(elementToPrint, {scale: 2}).then((canvas) => {
+      const pdf = new jsPDF();
+      // pdf.addImage();
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 300, 500);
+
+      pdf.setProperties({
+        title: this.dialogData.modalInfo[0].payrollPeriodName,
+      })
+
+      pdf.setFontSize(8);
+
+      pdf.save('payslip.pdf');
+    })
   }
 
 }

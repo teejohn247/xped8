@@ -1,6 +1,6 @@
 <div class="payslip-wrap">
 
-    <div class="payslip-hld">
+    <div id="payslip" class="payslip-hld">
 
         <div class="hdr-section">
             <div class="logo-container flex-center">
@@ -35,7 +35,7 @@
     
         <div class="body-section">
             <div class="row-sec">
-                <div class="hdr">Gross Earnings <span>£ 5,000</span></div>
+                <div class="hdr">Gross Earnings <span>£ {{dialogData.modalInfo[0].payrollPeriodData[0].totalEarnings}}</span></div>
                 <div class="sec-list">
                     <div *ngFor="let item of dialogData.payrollCredits" class="row-content">
                         <div class="label">{{item.name}}</div>
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="row-sec">
-                <div class="hdr">Deductions <span>£ 1,200</span></div>
+                <div class="hdr">Deductions <span>£ {{dialogData.modalInfo[0].payrollPeriodData[0].deductions}}</span></div>
                 <div class="sec-list">
                     <div *ngFor="let item of dialogData.payrollDebits" class="row-content">
                         <div class="label">{{item.name}}</div>
@@ -53,14 +53,14 @@
                 </div>
             </div>
             <div class="row-sec">
-                <div class="hdr">Net Earnings <span>£ 3,800</span></div>
+                <div class="hdr">Net Earnings <span>£ {{dialogData.modalInfo[0].payrollPeriodData[0].netEarnings}}</span></div>
             </div>
         </div>
 
     </div>
 
     <div class="actions d-flex justify-content-center">
-        <div class="cta w-100 lg primary-bkg full my-lg-2">Download Payslip</div>
+        <div (click)="generatePdf()" class="cta w-100 lg primary-bkg full my-lg-2">Download Payslip</div>
     </div>
 
 </div>
