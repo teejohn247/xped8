@@ -254,6 +254,11 @@ export class PayrollSummaryComponent implements OnInit {
     console.log(this.payrollPeriods);
     this.periodInView = this.payrollPeriods['data'][0];
 
+    this.periodInView = await this.hrService.getPayrollDetails(this.periodInView._id).toPromise();
+    this.periodInView = this.periodInView['data'][0];
+
+    console.log(this.periodInView);
+
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
     this.dataSource = new MatTableDataSource(this.payrollPeriods['data']);
@@ -281,7 +286,7 @@ export class PayrollSummaryComponent implements OnInit {
       },
       {
         id: 3,
-        value: `£ ${this.periodInView.deductions}`,
+        value: `£ ${this.periodInView.netEarnings}`,
         percentChange: "14%",
         name: "Net Salary",
         colorDark: "rgb(235, 87, 87)",
@@ -339,6 +344,8 @@ export class PayrollSummaryComponent implements OnInit {
       }
     });
   }
+
+
 
 }
 
