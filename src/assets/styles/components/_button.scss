@@ -74,15 +74,15 @@
     }
 
     &.primary-light-bkg {
-        border: 1px solid var(--black-tint-md);
+        //border: 1px solid var(--primary-light);
         background-color: var(--primary-light);
         color: var(--darkest);
 
-        &:hover {
-            border: 1px solid var(--primary);
-            background-color: var(--primary);
-            color: var(--white);
-        }
+        // &:hover {
+        //     //border: 1px solid var(--primary);
+        //     background-color: var(--primary);
+        //     color: var(--white);
+        // }
     }
 
     &.trans-bkg {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from "@angular/router";
 import { CreateKpiGroupComponent } from '../create-kpi-group/create-kpi-group.component';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
@@ -16,7 +17,12 @@ import { CreateRatingScaleComponent } from '../create-rating-scale/create-rating
 export class GeneralAppraisalComponent implements OnInit {
 
   departmentList: any[] = [];
+  appraisalPeriods: any[] = [];
+  kpiGroups: any[] = [];
   sideModalOpened: boolean = false;
+
+  appraisalKpis: any[] = [];
+
 
   matrixItems = [
     {
@@ -122,7 +128,7 @@ export class GeneralAppraisalComponent implements OnInit {
     }
   ]
 
-  accordionItems = [
+  ratingAccordionItems = [
     {
       name: "Excellent",
       description: "Highest quality of delivery and professionalism",
@@ -152,9 +158,48 @@ export class GeneralAppraisalComponent implements OnInit {
 
   constructor(    
     public dialog: MatDialog,
+    private router: Router,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
-  ) { }
+  ) {
+    this.appraisalKpis = [
+      {
+        groupName: 'General',
+        groupKpis: [
+          {
+            kpiName: 'Company Values',
+            kpiDescription: 'How well do you keep the values of the company?'
+          }
+        ]
+      },
+      {
+        groupName: 'Development',
+        groupKpis: [
+          {
+            kpiName: 'Excellence',
+            kpiDescription: 'How well do you pay attention to details?'
+          },
+          {
+            kpiName: 'Technical Knowledge',
+            kpiDescription: 'How well do you know about technical functionalities?'
+          }
+        ]
+      },
+      {
+        groupName: 'Sales',
+        groupKpis: [
+          {
+            kpiName: 'Return on investment',
+            kpiDescription: 'How effective was your sales reach?'
+          },
+          {
+            kpiName: 'Customer Conversion',
+            kpiDescription: 'How many customers are you able to reach out to?'
+          }
+        ]
+      }
+    ]
+  }
 
   ngOnInit(): void {
     this.matrixItems.sort((a,b) => (a.order - b.order));
@@ -163,14 +208,28 @@ export class GeneralAppraisalComponent implements OnInit {
 
   getPageData = async () => {
     this.departmentList = await this.hrService.getDepartments().toPromise();
+    this.ratingAccordionItems = await this.hrService.getKpiRatings().toPromise();
+    this.kpiGroups = await this.hrService.getKpiGroups().toPromise();
+    this.appraisalPeriods = await this.hrService.getAppraisalPeriods().toPromise();
+    console.log(this.kpiGroups);
   }
 
+  convertToNum(val) {
+    return Number(val);
+  }
+
+  viewAppraisalInfo(info: any) {
+    this.router.navigateByUrl(`dashboard/human-resources/appraisals/${info}`);
+  }
+
+  /* KPI Group Functions */
+
+  // Create a KPI Group
   addKpiGroup() {
     this.dialog.open(CreateKpiGroupComponent, {
       width: '30%',
       height: 'auto',
       data: {
-        name: '',
         departments: this.departmentList['data'],
         isExisting: false
       },
@@ -179,15 +238,101 @@ export class GeneralAppraisalComponent implements OnInit {
     });
   }
 
-  addKpi() {
+  // Update a KPI Rating
+  updateKpiGroup(details) {
+    this.dialog.open(CreateKpiGroupComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        isExisting: true,
+        departments: this.departmentList['data'],
+        modalInfo: details
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });
+  }
+
+  //Delete a KPI Rating
+  deleteKpiGroup(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Remove ' + info.groupName + ' KPI Group',
+      message: 'Are you sure you want to remove this kpi group?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteKpiGroup(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('This KPI rating has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    });
+  }
+
+  /* KPI Functions */
+
+  // Create a KPI
+  addKpi(groupId: string) {
     this.dialog.open(CreateKpiComponent, {
       width: '30%',
       height: 'auto',
       data: {
+        groupId: groupId,
         isExisting: false
       },
     }).afterClosed().subscribe(() => {
       this.getPageData();
+    });
+  }
+
+  // Update a KPI
+  updateKpi(details) {
+    this.dialog.open(CreateKpiComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        groupId: details.kpiGroupId,
+        isExisting: true,
+        modalInfo: details
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });
+  }
+
+  //Delete a KPI Rating
+  deleteKpi(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Remove ' + info.kpiName + ' KPI',
+      message: 'Are you sure you want to remove this kpi?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteKpi(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('This KPI has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
     });
   }
 
@@ -203,6 +348,9 @@ export class GeneralAppraisalComponent implements OnInit {
     });
   }
 
+  /* KPI Rating Functions*/
+
+  // Create a KPI Rating
   addRating() {
     this.dialog.open(CreateRatingScaleComponent, {
       width: '30%',
@@ -213,6 +361,51 @@ export class GeneralAppraisalComponent implements OnInit {
     }).afterClosed().subscribe(() => {
       this.getPageData();
     });
+  }
+
+  // Update a KPI Rating
+  updateKpiRating(details) {
+    this.dialog.open(CreateRatingScaleComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        isExisting: true,
+        modalInfo: details
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });
+  }
+
+  //Delete a KPI Rating
+  deleteKpiRating(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Remove ' + info.ratingName + ' Rating',
+      message: 'Are you sure you want to remove this kpi rating?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteKpiRating(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('This KPI rating has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    });
+  }
+
+
+  setAppraisalData(details) {
+
   }
 
 }

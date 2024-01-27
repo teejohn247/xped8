@@ -1,7 +1,8 @@
 .appraisal-wrap {
     width: 100%;
     height: 100%;
-    padding: 1.5rem 5%;
+    overflow: scroll;
+    padding: 1.5rem 3%;
 
     .inner-wrap {
 
@@ -115,7 +116,7 @@
         }
 
         .appraisal-info {
-            padding: 1rem 4%;
+            padding: 1.5rem 4% 1rem;
             background-color: var(--darker);
             border-radius: var(--radius-sm);
 
@@ -138,13 +139,49 @@
                     .field-wrap {
                         width: 100%;
                         display: flex;
-                        justify-content: space-between;
+                        flex-wrap: wrap;
+                        gap: 0.35rem 3%;
 
                         mat-form-field {
                             width: 31%;
                         }
                     }
                 }
+            }
+        }
+    }
+
+    .kpi-ratings {
+
+        .table-wrap {
+            margin-top: 1.5rem;
+        }
+    }
+
+    .page-header {
+        display: inline-flex;
+        align-items: center;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        letter-spacing: 0.04rem;
+        color: var(--primary);
+
+        .back-btn {
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            margin-right: 0.8rem;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            background-color: var(--bkg-light);
+            border: 1px solid var(--border-grey);
+            color: var(--black-tint-md);
+            padding: 0.1rem 0.3rem;
+
+            &:hover {
+                background-color: var(--bkg-light);
             }
         }
     }

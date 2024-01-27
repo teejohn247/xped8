@@ -19,6 +19,7 @@ import { VisitorsLogComponent } from './visitors-log/visitors-log/visitors-log.c
 import { ExpenseManagementComponent } from './expense-management/expense-management/expense-management.component';
 import { PayrollDetailsComponent } from './payroll/payroll-details/payroll-details.component';
 import { PayrollPortalComponent } from './payroll/payroll-portal/payroll-portal.component';
+import { AppraisalFormComponent } from './appraisals/appraisal-form/appraisal-form.component';
 
 
 const routes: Routes = [
@@ -124,6 +125,10 @@ const routes: Routes = [
   {
     path: 'appraisals',
     component: GeneralAppraisalComponent
+  },
+  {
+    path: 'appraisals/:id',
+    component: AppraisalFormComponent
   },
   {
     path: 'visitors-log',

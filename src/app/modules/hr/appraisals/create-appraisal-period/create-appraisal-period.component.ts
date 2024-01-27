@@ -93,7 +93,50 @@ export class CreateAppraisalPeriodComponent implements OnInit {
   }
 
   onSubmit() {
-    
+    if(this.appraisalPeriodForm.valid) {
+      let data = {
+        name: this.appraisalPeriodForm.value.name,
+        description: this.appraisalPeriodForm.value.description,
+        startDate: this.appraisalPeriodForm.value.startDate,
+        endDate: this.appraisalPeriodForm.value.endDate,
+        activeDate: this.appraisalPeriodForm.value.startDate,
+        inactiveDate: this.appraisalPeriodForm.value.endDate
+      }
+      console.log(data);
+      if(this.data.modalInfo?.name) {
+        this.hrService.updateAppraisalPeriod(data, this.data.id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              if(this.data.isExisting) this.notifyService.showSuccess('This appraisal period has been updated successfully');
+              else this.notifyService.showSuccess('This appraisal period has been created successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+      else {
+        this.hrService.createAppraisalPeriod(data).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showSuccess('The appraisal period has been created successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    }
   }
 
 }

@@ -30,7 +30,7 @@ export class CreateRatingScaleComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Name',
         controlWidth: '48%',
-        initialValue: this.data.isExisting ? this.data.modalInfo.name : '',
+        initialValue: this.data.isExisting ? this.data.modalInfo.ratingName : '',
         validators: [Validators.required],
         order: 1
       },
@@ -39,7 +39,7 @@ export class CreateRatingScaleComponent implements OnInit {
         controlType: 'number',
         controlLabel: 'Rating Value',
         controlWidth: '48%',
-        initialValue: this.data.isExisting ? this.data.modalInfo.ratingValue : '',
+        initialValue: this.data.isExisting ? this.data.modalInfo.value : '',
         validators: [Validators.required],
         order: 2
       },
@@ -64,7 +64,46 @@ export class CreateRatingScaleComponent implements OnInit {
   }
 
   onSubmit() {
-    
+    if(this.ratingScaleForm.valid) {
+      let data = {
+        name: this.ratingScaleForm.value.name,
+        description: this.ratingScaleForm.value.description,
+        value: this.ratingScaleForm.value.ratingValue
+      }
+      console.log(this.data);
+      if(this.data.isExisting) {
+        this.hrService.updateKpiRating(data, this.data.modalInfo._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showSuccess('This KPI rating has been updated successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+      else {
+        this.hrService.createKpiRating(data).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showSuccess('This KPI rating has been created successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    }
   }
   
 }

@@ -30,7 +30,7 @@ export class CreateKpiComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Name',
         controlWidth: '100%',
-        initialValue: this.data.isExisting ? this.data.modalInfo.kpiGroupName : '',
+        initialValue: this.data.isExisting ? this.data.modalInfo.kpiName : '',
         validators: [Validators.required],
         order: 1
       },
@@ -39,7 +39,7 @@ export class CreateKpiComponent implements OnInit {
         controlType: 'textarea',
         controlLabel: 'Description',
         controlWidth: '100%',
-        initialValue: this.data.isExisting ? this.data.modalInfo.description : null,
+        initialValue: this.data.isExisting ? this.data.modalInfo.kpiDescription : null,
         validators: null,
         order: 2
       }
@@ -56,6 +56,45 @@ export class CreateKpiComponent implements OnInit {
   }
 
   onSubmit() {
-    
+    if(this.kpiForm.valid) {
+      let data = {
+        name: this.kpiForm.value.name,
+        description: this.kpiForm.value.description,
+        group: this.data.groupId
+      }
+      console.log(this.data);
+      if(this.data.isExisting) {
+        this.hrService.updateKpi(data, this.data.modalInfo._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showSuccess('This KPI has been updated successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+      else {
+        this.hrService.createKpi(data).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showSuccess('This KPI has been created successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    }
   }
 }

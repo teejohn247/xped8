@@ -45,6 +45,12 @@
 
     .inner-row {
 
+        &.kpi {
+            &:first-child {
+                padding: 0.7rem 2.5%;
+            }
+        }
+
         &:first-child {
             padding: 1rem 2.5%;
         }
@@ -175,12 +181,21 @@
             font-size: 0.8rem;
             font-weight: 600;
             line-height: 1;
+
+            &.kpi {
+                font-size: 0.75rem;
+                font-weight: 400;
+            }
         }
 
         .minor {
             font-size: 0.6rem;
             line-height: 1;
             color: var(--black-tint);
+
+            &.kpi {
+                font-size: 0.65rem;
+            }
         }
 
         .status {

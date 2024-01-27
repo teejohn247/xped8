@@ -1,5 +1,10 @@
 <div class="appraisal-wrap">
     <div class="inner-wrap">
+
+        <div class="row-section d-flex justify-content-between align-items-center">
+            <div (click)="goBack()" class="page-header mb-4"><span class="back-btn"><i class="bi bi-arrow-left"></i></span> Go Back</div>
+        </div>
+
         <div class="employee-info">
             <div class="details">
                 <div class="image bkg-standard" style="background-image: url('../../../../../assets/images/illustrations/staff2.jpg');"></div>
@@ -33,7 +38,7 @@
         <div class="appraisal-hdr">
             <div class="detail">
                 <!-- <i class="bi bi-flag-fill"></i> -->
-                <span>Appraisal Period Ratings</span>
+                <span>Appraisal Period Details</span>
             </div>
             <div class="info-list mt-lg-2">
                 <div class="info tri">
@@ -51,6 +56,57 @@
             </div>
         </div>
 
+        <div class="kpi-ratings">
+
+            <div *ngFor="let group of kpiCriteria; let i = index" class="table-wrap">
+
+                <div class="inner-row hdr kpi d-flex justify-content-start align-items-center">
+                    <div class="card-title">{{group.groupName}} Kpis</div>
+                </div>
+    
+                <div class="inner-row">
+                    <table 
+                        mat-table
+                        [dataSource]="group.groupKpis"
+                        class="dataTable mat-elevation-z0"
+                        matSort
+                    >
+                        <!-- Table Columns -->
+                        <ng-container *ngFor="let column of tableColumns" [matColumnDef]="column.label">
+    
+                            <ng-container *ngIf="column.key == 'image'">
+                                <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>
+                                </th>
+                                <td style="white-space: nowrap;" mat-cell 
+                                    *matCellDef="let row">
+                                    <span *ngIf="!row.employeeImage" class="initials">{{row.fullName[0]}}</span>
+                                </td>
+                            </ng-container>
+
+                            <ng-container *ngIf="column.key == 'kpiDescription'">
+                                <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+                                <td style="white-space: nowrap; padding-right: 0.5rem;" mat-cell *matCellDef="let row">
+                                    <div class="major kpi">{{ row['kpiName'] }}</div>
+                                    <div class="minor kpi mt-1">{{ row['kpiDescription'] }}</div>
+                                </td>
+                            </ng-container>
+            
+                            <ng-container>
+                                <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+                                <td mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
+                            </ng-container>
+                            
+                        </ng-container>
+    
+    
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let emprow; columns: displayedColumns"></tr>
+                        
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <div class="appraisal-info mt-lg-4 mt-2">
             <form [formGroup]="appraisalForm">
 
@@ -60,52 +116,72 @@
                         <div class="field-wrap">
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
                                 <mat-label class="text-capitalize">Employee Name</mat-label>
-                                <input matInput formControlName="employeeName">
-                                <mat-error *ngIf="appraisalForm.get('employeeName')?.hasError('required')">Your name is required</mat-error>
+                                <input readonly matInput formControlName="employeeName">
                             </mat-form-field>
 
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
                                 <mat-label class="text-capitalize">Employee Signature</mat-label>
-                                <input matInput formControlName="employeeSignature">
-                                <mat-error *ngIf="appraisalForm.get('employeeSignature')?.hasError('required')">Employee signature is required</mat-error>
+                                <input readonly matInput formControlName="employeeSignature">
                             </mat-form-field>
 
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
-                                <mat-label>Signature Date</mat-label>
-                                <input matInput [matDatepicker]="picker" readonly formControlName="employeeSignDate">
-                                <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker color="accent" disabled="false"></mat-datepicker>
-                                <mat-error *ngIf="appraisalForm.get('employeeSignDate')?.hasError('required')">Signature date is required</mat-error>
-                                <mat-error *ngIf="appraisalForm.get('employeeSignDate')?.hasError('date')">Signature date is invalid</mat-error>
+                                <mat-label class="text-capitalize">Employee Signature Date</mat-label>
+                                <input readonly matInput formControlName="employeeSignDate">
                             </mat-form-field>
+
                         </div>
                     </div>
 
                     <div class="validation">
                         <div class="hdr">For Managers:</div>
                         <div class="field-wrap">
+                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'40%'" appearance="fill">
+                                <mat-label>Employee Potential</mat-label>
+                                <mat-select
+                                    class="selectField"
+                                    disableOptionCentering
+                                    panelClass="matDropdown"
+                                    formControlName="employeePotential"
+                                >
+                                    <mat-option *ngFor="let option of matrixSelectOptions | keyvalue" [value]="option.key">{{option.value}}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="appraisalForm.get('employeePotential')?.hasError('required')">Employee potential is required</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'40%'" appearance="fill">
+                                <mat-label>Employee Performance</mat-label>
+                                <mat-select
+                                    class="selectField"
+                                    disableOptionCentering
+                                    panelClass="matDropdown"
+                                    formControlName="employeePerformance"
+                                >
+                                    <mat-option *ngFor="let option of matrixSelectOptions | keyvalue" [value]="option.key">{{option.value}}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="appraisalForm.get('employeePerformance')?.hasError('required')">Employee performance is required</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'100%'" appearance="fill">
+                                <mat-label class="text-capitalize">Manager Summary</mat-label>
+                                <input matInput formControlName="managerSummary">
+                                <mat-error *ngIf="appraisalForm.get('managerSummary')?.hasError('required')">Manager Sunmmary is required</mat-error>
+                            </mat-form-field>
+
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
                                 <mat-label class="text-capitalize">Manager Name</mat-label>
-                                <input matInput formControlName="managerName">
-                                <mat-error *ngIf="appraisalForm.get('managerName')?.hasError('required')">Your name is required</mat-error>
+                                <input readonly matInput formControlName="managerName">
                             </mat-form-field>
 
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
                                 <mat-label class="text-capitalize">Manager Signature</mat-label>
-                                <input matInput formControlName="managerSignature">
-                                <mat-error *ngIf="appraisalForm.get('managerSignature')?.hasError('required')">Manager signature is required</mat-error>
+                                <input readonly matInput formControlName="managerSignature">
                             </mat-form-field>
 
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
-                                <mat-label>Signature Date</mat-label>
-                                <input matInput [matDatepicker]="picker" readonly formControlName="managerSignDate">
-                                <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
-                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                                <mat-datepicker #picker color="accent" disabled="false"></mat-datepicker>
-                                <mat-error *ngIf="appraisalForm.get('managerSignDate')?.hasError('required')">Signature date is required</mat-error>
-                                <mat-error *ngIf="appraisalForm.get('managerSignDate')?.hasError('date')">Signature date is invalid</mat-error>
+                                <mat-label class="text-capitalize">Manager Signature Date</mat-label>
+                                <input matInput formControlName="managerSignDate">
                             </mat-form-field>
+
                         </div>
                     </div>
                 </div>    

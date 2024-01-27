@@ -51,7 +51,7 @@ export class PayslipComponent implements OnInit {
     htmltocanvas(elementToPrint, {scale: 2}).then((canvas) => {
       const pdf = new jsPDF();
       // pdf.addImage();
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 300, 500);
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 250, 100);
 
       pdf.setProperties({
         title: this.dialogData.modalInfo[0].payrollPeriodName,

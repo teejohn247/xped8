@@ -19,6 +19,7 @@ export class LeaveManagementOverviewComponent implements OnInit {
 
   displayedColumns: any[];
   requestedApprovals: any[] = [];
+  approvedRequests: any[] = [];
   leaveTypeList: any[] = [];
   dataSource: MatTableDataSource<LeaveRequestTable>;
   selection = new SelectionModel<LeaveRequestTable>(true, []);
@@ -257,60 +258,7 @@ export class LeaveManagementOverviewComponent implements OnInit {
 
   ]
 
-  tableData: LeaveRequestTable[] = [
-    // {
-    //   id: 1,
-    //   "Image": "staff1.jpg",
-    //   "Employee ID": "EMP-2021-MB45",
-    //   "Leave Type": "Paid",
-    //   "First Name": "Mellie",
-    //   "Last Name": "Gabbott",
-    //   "Date Submitted": "Jan 10, 2023",
-    //   "Start Date": "Feb 11, 2023",
-    //   "End Date": "Feb 27, 2023",
-    //   "Approver": "Simon Dowen",
-    //   "Status": "Approved"
-    // },
-    // {
-    //   id: 2,
-    //   "Image": "staff2.jpg",
-    //   "Employee ID": "EMP-2021-MB45",
-    //   "Leave Type": "Paid",
-    //   "First Name": "Richard",
-    //   "Last Name": "Wayne",
-    //   "Date Submitted": "Feb 4, 2023",
-    //   "Start Date": "Mar 24, 2023",
-    //   "End Date": "April 27, 2023",
-    //   "Approver": "Simon Dowen",
-    //   "Status": "Pending"
-    // },
-    // {
-    //   id: 3,
-    //   "Image": "staff3.jpg",
-    //   "Employee ID": "EMP-2021-MB45",
-    //   "Leave Type": "Sick",
-    //   "First Name": "Harry",
-    //   "Last Name": "Mettle",
-    //   "Date Submitted": "Mar 5, 2023",
-    //   "Start Date": "July 11, 2023",
-    //   "End Date": "July 15, 2023",
-    //   "Approver": "Simon Dowen",
-    //   "Status": "Approved"
-    // },
-    // {
-    //   id: 4,
-    //   "Image": "profile-img.jpg",
-    //   "Employee ID": "EMP-2021-MB45",
-    //   "Leave Type": "Unpaid",
-    //   "First Name": "Kate",
-    //   "Last Name": "Kripsy",
-    //   "Date Submitted": "April 20, 2023",
-    //   "Start Date": "Sep 12, 2023",
-    //   "End Date": "Sep 14, 2023",
-    //   "Approver": "Simon Dowen",
-    //   "Status": "Declined"
-    // },
-  ]
+  tableData: LeaveRequestTable[] = []
 
   constructor(
     private hrService: HumanResourcesService,
@@ -345,6 +293,10 @@ export class LeaveManagementOverviewComponent implements OnInit {
     // console.log(this.leaveTypeList);
     this.dataSource = new MatTableDataSource(this.requestedApprovals['data']);
     console.log(this.requestedApprovals);
+    this.approvedRequests = this.requestedApprovals['data'].filter(item => {
+      return item.status === 'Approved';
+    })    
+    console.log(this.approvedRequests);
   }
 
   strToDate(dateVal: string, key:string) {
@@ -352,6 +304,12 @@ export class LeaveManagementOverviewComponent implements OnInit {
       let newFormat = new Date(dateVal);
       // console.log(newFormat.toDateString());
       return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }
+    else if(key = 'summary') {
+      const [day, month, year] = dateVal.split('-');
+      let newFormat = new Date(+year, +month - 1, +day);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'MMM d')
     }
     else {
       const [day, month, year] = dateVal.split('-');

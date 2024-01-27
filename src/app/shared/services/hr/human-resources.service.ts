@@ -336,4 +336,97 @@ export class HumanResourcesService {
   public updatePayrollEntry(data: any, entryId: any): Observable<any> {
     return this.http.patch<any>(`${this.path}/updatePayrollEntry/${entryId}`, data, this.requestOptions);
   }
+
+  /*************** APPRAISAL PERIODS RELATED ACTIONS ***************/
+
+  //Create a new appraisal period
+  public createAppraisalPeriod(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createAppraisalPeriod`, info, this.requestOptions);
+  }
+
+  //Get the list of all appraisal periods
+  public getAppraisalPeriods(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchPeriod`, this.requestOptions);
+  }
+
+  // //Get a payroll period details
+  // public getPayrollDetails(perioId: string): Observable<any> {
+  //   return this.http.get<any>(`${this.path}/fetchPayrollPeriodDetails/${perioId}`, this.requestOptions);
+  // }
+
+  //Update Appraisal Period
+  public updateAppraisalPeriod(data: any, periodId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updatePeriod/${periodId}`, data, this.requestOptions);
+  }
+
+  //Delete Appraisal period
+  public deleteAppraisalPeriod(periodId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deletePayrollPeriod/${periodId}`, this.requestOptions);
+  }
+
+  /*************** APPRAISAL KPI GROUPS RELATED ACTIONS ***************/
+
+  //Create a new kpi group
+  public createKpiGroup(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createKpiGroups`, info, this.requestOptions);
+  }
+
+  //Get the list of all kpi groups
+  public getKpiGroups(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchAppraisalGroups`, this.requestOptions);
+  }
+
+  //Update kpi group
+  public updateKpiGroup(data: any, groupId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateGroup/${groupId}`, data, this.requestOptions);
+  }
+
+  //Delete kpi group
+  public deleteKpiGroup(groupId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteGroup/${groupId}`, this.requestOptions);
+  }
+
+  /*************** APPRAISAL KPI RELATED ACTIONS ***************/
+
+  //Create a new kpi
+  public createKpi(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createKpis`, info, this.requestOptions);
+  }
+
+  //Get the list of all kpis
+  // public getKpi(): Observable<any> {
+  //   return this.http.get<any>(`${this.path}/fetchAppraisalGroups`, this.requestOptions);
+  // }
+
+  //Update kpi
+  public updateKpi(data: any, kpiId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateKPIs/${kpiId}`, data, this.requestOptions);
+  }
+
+  //Delete kpi 
+  public deleteKpi(kpiId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteKPI/${kpiId}`, this.requestOptions);
+  }
+
+  /*************** APPRAISAL KPI RATING RELATED ACTIONS ***************/
+
+  //Create a new kpi rating
+  public createKpiRating(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createRating`, info, this.requestOptions);
+  }
+
+  //Get the list of all kpi ratings
+  public getKpiRatings(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchRatings`, this.requestOptions);
+  }
+
+  //Update kpi rating
+  public updateKpiRating(data: any, ratingId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/updateRating/${ratingId}`, data, this.requestOptions);
+  }
+
+  //Delete kpi rating
+  public deleteKpiRating(ratingId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteRating/${ratingId}`, this.requestOptions);
+  }
 }

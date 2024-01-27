@@ -34,7 +34,7 @@ export class CreateKpiGroupComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Name',
         controlWidth: '100%',
-        initialValue: this.data.isExisting ? this.data.modalInfo.kpiGroupName : '',
+        initialValue: this.data.isExisting ? this.data.modalInfo.groupName : '',
         validators: [Validators.required],
         order: 1
       },
@@ -69,7 +69,46 @@ export class CreateKpiGroupComponent implements OnInit {
   }
 
   onSubmit() {
-
+    if(this.kpiGroupForm.valid) {
+      let data = {
+        name: this.kpiGroupForm.value.name,
+        description: this.kpiGroupForm.value.description,
+        departments: this.kpiGroupForm.value.departmentIds
+      }
+      console.log(this.data);
+      if(this.data.isExisting) {
+        this.hrService.updateKpiGroup(data, this.data.modalInfo._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showSuccess('This KPI group has been updated successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+      else {
+        this.hrService.createKpiGroup(data).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showSuccess('This KPI group has been created successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    }
   }
 
   removeDept(deptName: string) {
