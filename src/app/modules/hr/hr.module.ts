@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
-
 import { HrRoutingModule } from './hr-routing.module';
+import { AutosizeModule } from 'ngx-autosize';
 import { EmployeesListComponent } from './employees/employees-list/employees-list.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { EmployeeDetailsComponent } from './employees/employee-details/employee-details.component';
@@ -51,7 +51,8 @@ import { PayslipComponent } from './payroll/payslip/payslip.component';
     CommonModule,
     HrRoutingModule,
     SharedModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    AutosizeModule
   ]
 })
 export class HrModule { }

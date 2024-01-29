@@ -211,7 +211,7 @@ export class GeneralAppraisalComponent implements OnInit {
     this.ratingAccordionItems = await this.hrService.getKpiRatings().toPromise();
     this.kpiGroups = await this.hrService.getKpiGroups().toPromise();
     this.appraisalPeriods = await this.hrService.getAppraisalPeriods().toPromise();
-    console.log(this.kpiGroups);
+    console.log(this.appraisalPeriods);
   }
 
   convertToNum(val) {

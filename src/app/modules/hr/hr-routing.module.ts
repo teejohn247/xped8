@@ -78,6 +78,10 @@ const routes: Routes = [
         component: SelfServiceLeaveRequestsComponent
       },
       {
+        path: 'appraisals',
+        component: AppraisalFormComponent
+      },
+      {
         path: 'payroll',
         component: SelfServicePayrollComponent
       },

@@ -7,28 +7,36 @@
 
         <div class="employee-info">
             <div class="details">
-                <div class="image bkg-standard" style="background-image: url('../../../../../assets/images/illustrations/staff2.jpg');"></div>
+                <div class="image bkg-standard" style="background-image: url('https://res.cloudinary.com/dtb2cdr2q/image/upload/v1703802503/xlqxlfxfehttonpyux4a.png');"></div>
                 <div class="info-wrap">
                     <div class="info-title">
                         <span>Aghogho Etibo</span>
                         <!-- <span></span> -->
                     </div>
                     <div class="info-list mt-lg-3">
-                        <div class="info duo">
+                        <div class="info tri">
                             <span class="label">Department:</span>
                             <span class="text">Technology</span>
                         </div>
-                        <div class="info duo">
+                        <div class="info tri">
                             <span class="label">Designation:</span>
                             <span class="text">Senior Level</span>
                         </div>
-                        <div class="info duo">
-                            <span class="label">Email:</span>
-                            <span class="text">aghogho.etibo@silo-inc.com</span>
+                        <div class="info tri">
+                            <span class="label">Company Role:</span>
+                            <span class="text">Technology Manager</span>
                         </div>
-                        <div class="info duo">
-                            <span class="label">Phone:</span>
-                            <span class="text"></span>
+                        <div class="info tri">
+                            <span class="label">Review Period:</span>
+                            <span class="text">1st Quarter</span>
+                        </div>
+                        <div class="info tri">
+                            <span class="label">Start Date:</span>
+                            <span class="text">1 January, 2023</span>
+                        </div>
+                        <div class="info tri">
+                            <span class="label">End Date:</span>
+                            <span class="text">31 March, 2023</span>
                         </div>
                     </div>
                 </div>
@@ -40,7 +48,7 @@
                 <!-- <i class="bi bi-flag-fill"></i> -->
                 <span>Appraisal Period Details</span>
             </div>
-            <div class="info-list mt-lg-2">
+            <!-- <div class="info-list mt-lg-2">
                 <div class="info tri">
                     <span class="label">Review Period:</span>
                     <span class="text">1st Quarter</span>
@@ -53,59 +61,131 @@
                     <span class="label">End Date:</span>
                     <span class="text">31 March, 2023</span>
                 </div>
-            </div>
+            </div> -->
         </div>
 
-        <div class="kpi-ratings">
+        <form *ngIf="periodInView" [formGroup]="kpiRatingForm" class="kpi-ratings">
 
-            <div *ngFor="let group of kpiCriteria; let i = index" class="table-wrap">
+            <ng-container formArrayName="kpiGroups">
 
-                <div class="inner-row hdr kpi d-flex justify-content-start align-items-center">
-                    <div class="card-title">{{group.groupName}} Kpis</div>
-                </div>
-    
-                <div class="inner-row">
-                    <table 
-                        mat-table
-                        [dataSource]="group.groupKpis"
-                        class="dataTable mat-elevation-z0"
-                        matSort
-                    >
-                        <!-- Table Columns -->
-                        <ng-container *ngFor="let column of tableColumns" [matColumnDef]="column.label">
-    
-                            <ng-container *ngIf="column.key == 'image'">
-                                <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>
-                                </th>
-                                <td style="white-space: nowrap;" mat-cell 
-                                    *matCellDef="let row">
-                                    <span *ngIf="!row.employeeImage" class="initials">{{row.fullName[0]}}</span>
-                                </td>
-                            </ng-container>
+                <div *ngFor="let grp of groups().controls; let i=index" class="table-wrap">
 
-                            <ng-container *ngIf="column.key == 'kpiDescription'">
-                                <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
-                                <td style="white-space: nowrap; padding-right: 0.5rem;" mat-cell *matCellDef="let row">
-                                    <div class="major kpi">{{ row['kpiName'] }}</div>
-                                    <div class="minor kpi mt-1">{{ row['kpiDescription'] }}</div>
-                                </td>
-                            </ng-container>
+                    <ng-container [formGroupName]="i">
+
+                        <div class="inner-row hdr kpi d-flex justify-content-start align-items-center">
+                            <div class="card-title">{{kpiCriteria[i].groupName}} Kpis</div>
+                        </div>
             
-                            <ng-container>
-                                <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
-                                <td mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
-                            </ng-container>
-                            
-                        </ng-container>
-    
-    
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let emprow; columns: displayedColumns"></tr>
-                        
-                    </table>
+                        <div class="inner-row">
+
+                            <table class="dataTable align-middle mb-0 bg-white">
+                                <thead class="">
+                                    <tr>
+                                        <ng-container *ngFor="let col of tableColumns">
+                                            <th [ngStyle]="{'width': col.columnWidth}">{{col.label}}</th>
+                                        </ng-container>
+                                    </tr>
+                                </thead>
+
+                                <tbody [formArrayName]="kpiCriteria[i].groupName">
+                                    <ng-container *ngFor="let kpi of grpKpis(i, kpiCriteria[i].groupName).controls; let j = index">
+                                        <ng-container [formGroupName]="j">
+                                            <tr [formGroupName]="kpiCriteria[i].groupKpis[j].kpiName">
+                                                <td>
+                                                    <span class="major">{{kpiCriteria[i].groupKpis[j].kpiName}}</span>
+                                                    <span class="minor">{{kpiCriteria[i].groupKpis[j].description}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-capitalize">
+                                                        <input 
+                                                            type="text" 
+                                                            formControlName="employeeRating" 
+                                                            class="form-control form-control-sm" 
+                                                            placeholder="Enter rating"
+                                                        >
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-capitalize">
+                                                        <textarea 
+                                                            autosize
+                                                            rows="1"
+                                                            formControlName="employeeComments" 
+                                                            class="form-control form-control-sm" 
+                                                            placeholder="Enter comments"
+                                                        >
+                                                        </textarea>
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-capitalize">
+                                                        <input 
+                                                            type="text" 
+                                                            formControlName="managerRating" 
+                                                            class="form-control form-control-sm" 
+                                                            placeholder="Enter rating"
+                                                        >
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span class="text-capitalize">
+                                                        <textarea
+                                                            autosize
+                                                            rows="1"
+                                                            formControlName="managerComments" 
+                                                            class="form-control form-control-sm" 
+                                                            placeholder="Enter comments"
+                                                        >
+                                                        </textarea>
+                                                    </span>
+                                                </td> 
+                                            </tr>
+                                        </ng-container>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                            <!-- <table 
+                                mat-table
+                                [dataSource]="kpiCriteria[i].groupKpis"
+                                class="dataTable mat-elevation-z0"
+                                matSort
+                            >
+                                <ng-container *ngFor="let column of tableColumns" [matColumnDef]="column.label">
+            
+                                    <ng-container *ngIf="column.key == 'employeeRating' || column.key == 'managerRating'">
+                                        <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+                                        <td style="white-space: nowrap;" mat-cell *matCellDef="let row">
+                                            <span class="rating-icon pe-lg-1" *ngFor="let f of [].constructor(5); let j = index"><i (click)="rateEmployee(j)" class="bi bi-star-fill"></i></span>
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="column.key == 'kpiDescription'">
+                                        <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+                                        <td style="white-space: nowrap; padding-right: 0.5rem;" mat-cell *matCellDef="let row">
+                                            <div class="major kpi">{{ row['kpiName'] }}</div>
+                                            <div class="minor kpi mt-1 pe-lg-2">{{ row['kpiDescription'] }}</div>
+                                        </td>
+                                    </ng-container>
+                    
+                                    <ng-container>
+                                        <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+                                        <td mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
+                                    </ng-container>
+                                    
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let emprow; columns: displayedColumns"></tr>
+                                
+                            </table> -->
+                        </div> 
+
+                    </ng-container>
                 </div>
-            </div>
-        </div>
+
+            </ng-container>
+        </form>
+
 
         <div class="appraisal-info mt-lg-4 mt-2">
             <form [formGroup]="appraisalForm">
@@ -135,7 +215,7 @@
                     <div class="validation">
                         <div class="hdr">For Managers:</div>
                         <div class="field-wrap">
-                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'40%'" appearance="fill">
+                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'23%'" appearance="fill">
                                 <mat-label>Employee Potential</mat-label>
                                 <mat-select
                                     class="selectField"
@@ -148,7 +228,7 @@
                                 <mat-error *ngIf="appraisalForm.get('employeePotential')?.hasError('required')">Employee potential is required</mat-error>
                             </mat-form-field>
 
-                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'40%'" appearance="fill">
+                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'23%'" appearance="fill">
                                 <mat-label>Employee Performance</mat-label>
                                 <mat-select
                                     class="selectField"
@@ -161,7 +241,7 @@
                                 <mat-error *ngIf="appraisalForm.get('employeePerformance')?.hasError('required')">Employee performance is required</mat-error>
                             </mat-form-field>
 
-                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'100%'" appearance="fill">
+                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'48%'" appearance="fill">
                                 <mat-label class="text-capitalize">Manager Summary</mat-label>
                                 <input matInput formControlName="managerSummary">
                                 <mat-error *ngIf="appraisalForm.get('managerSummary')?.hasError('required')">Manager Sunmmary is required</mat-error>

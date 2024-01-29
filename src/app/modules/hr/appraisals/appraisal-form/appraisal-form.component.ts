@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, FormArray, Validators } from '@angular/forms';
 import { FormFields } from 'src/app/shared/models/form-fields';
 import { MatTableDataSource } from '@angular/material/table';
 import { TableColumn } from 'src/app/shared/models/table-columns';
+import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 
@@ -14,50 +15,61 @@ import { NotificationService } from 'src/app/shared/services/utils/notification.
 })
 export class AppraisalFormComponent implements OnInit {
 
+  @ViewChild('commentsField') myDiv: ElementRef;
+
+  employeeDetails: any;
   appraisalFormFields: FormFields[];
+  kpiRatingFormFields: FormFields[];
   appraisalForm!: FormGroup;
+  kpiRatingForm!: FormGroup;
   matrixSelectOptions: any;
+
+  appraisalPeriods: any[] = [];
+  currentPeriodId: string;
+  periodInView: any;
+
+  kpiCriteria: any[] = [];
 
   displayedColumns: any[];
   dataSource: MatTableDataSource<any>;
 
-  kpiCriteria = [
-    {
-      groupName: 'General',
-      groupKpis: [
-        {
-          kpiName: 'Company Values',
-          kpiDescription: 'How well do you keep the values of the company?'
-        }
-      ]
-    },
-    {
-      groupName: 'Development',
-      groupKpis: [
-        {
-          kpiName: 'Excellence',
-          kpiDescription: 'How well do you pay attention to details?'
-        },
-        {
-          kpiName: 'Technical Knowledge',
-          kpiDescription: 'How well do you know about technical functionalities?'
-        }
-      ]
-    },
-    {
-      groupName: 'Sales',
-      groupKpis: [
-        {
-          kpiName: 'Return on investment',
-          kpiDescription: 'How effective was your sales reach?'
-        },
-        {
-          kpiName: 'Customer Conversion',
-          kpiDescription: 'How many customers are you able to reach out to?'
-        }
-      ]
-    }
-  ]
+  // kpiCriteria = [
+  //   {
+  //     groupName: 'General',
+  //     groupKpis: [
+  //       {
+  //         kpiName: 'Company Values',
+  //         kpiDescription: 'How well do you keep the values of the company?'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     groupName: 'Development',
+  //     groupKpis: [
+  //       {
+  //         kpiName: 'Excellence',
+  //         kpiDescription: 'How well do you pay attention to details?'
+  //       },
+  //       {
+  //         kpiName: 'Technical Knowledge',
+  //         kpiDescription: 'How well do you know about technical functionalities?'
+  //       }
+  //     ]
+  //   },
+  //   {
+  //     groupName: 'Sales Dept',
+  //     groupKpis: [
+  //       {
+  //         kpiName: 'Return on investment',
+  //         kpiDescription: 'How effective was your sales reach?'
+  //       },
+  //       {
+  //         kpiName: 'Customer Conversion',
+  //         kpiDescription: 'How many customers are you able to reach out to?'
+  //       }
+  //     ]
+  //   }
+  // ]
 
   //KPI Ratings Table Column Names
   tableColumns: TableColumn[] = [
@@ -73,7 +85,7 @@ export class AppraisalFormComponent implements OnInit {
       key: "kpiDescription",
       label: "KPI Description",
       order: 2,
-      columnWidth: "24%",
+      columnWidth: "20%",
       cellStyle: "width: 100%",
       sortable: true
     },
@@ -89,7 +101,7 @@ export class AppraisalFormComponent implements OnInit {
       key: "employeeComments",
       label: "Employee Comments",
       order: 4,
-      columnWidth: "20%",
+      columnWidth: "22%",
       cellStyle: "width: 100%",
       sortable: true
     },
@@ -105,7 +117,7 @@ export class AppraisalFormComponent implements OnInit {
       key: "managerComments",
       label: "Manager Comments",
       order: 6,
-      columnWidth: "20%",
+      columnWidth: "22%",
       cellStyle: "width: 100%",
       sortable: true
     },
@@ -115,10 +127,13 @@ export class AppraisalFormComponent implements OnInit {
   constructor(
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
+    private authService: AuthenticationService,
     private location: Location,
     private fb: FormBuilder
   ) {
-    this.appraisalForm = this.fb.group({})
+    this.getPageData();
+    this.appraisalForm = this.fb.group({});
+
     this.matrixSelectOptions = {
       Low: 'Low',
       Moderate: 'Moderate',
@@ -219,10 +234,51 @@ export class AppraisalFormComponent implements OnInit {
       }
     ]
 
+    this.kpiRatingFormFields = [
+      {
+        controlName: 'employeeRating',
+        controlType: 'text',
+        controlLabel: 'Employee Rating',
+        controlWidth: '100%',
+        initialValue: '',
+        validators: null,
+        order: 1
+      },
+      {
+        controlName: 'employeeComments',
+        controlType: 'text',
+        controlLabel: 'Employee Comments',
+        controlWidth: '100%',
+        initialValue: '',
+        validators: null,
+        order: 2
+      },
+      {
+        controlName: 'managerRating',
+        controlType: 'text',
+        controlLabel: 'Manager Rating',
+        controlWidth: '100%',
+        initialValue: '',
+        validators: [Validators.required],
+        order: 3
+      },
+      {
+        controlName: 'managerComments',
+        controlType: 'text',
+        controlLabel: 'Manager Comments',
+        controlWidth: '100%',
+        initialValue: '',
+        validators: null,
+        order: 4
+      },
+    ]
+
+    //Final form details fields generation
     this.appraisalFormFields.forEach(field => {
       const formControl = this.fb.control(field.initialValue, field.validators)
       this.appraisalForm.addControl(field.controlName, formControl)
     })
+
   }
 
   goBack() {
@@ -234,5 +290,93 @@ export class AppraisalFormComponent implements OnInit {
     this.displayedColumns = this.tableColumns.map(column => column.label);
   }
 
+  getPageData = async () => {
+    this.employeeDetails = this.authService.loggedInUser.data;
+    // this.kpiGroups = await this.hrService.getKpiGroups().toPromise();
+    this.appraisalPeriods = await this.hrService.getAppraisalPeriods().toPromise();
+    console.log(this.appraisalPeriods);
+    this.currentPeriodId = this.appraisalPeriods['data'][0]['_id'];
+    this.periodInView = await this.hrService.getEmployeeAppraisalDetails(this.employeeDetails._id, this.currentPeriodId).toPromise();
+    this.periodInView = this.periodInView['data'][0];
+    console.log(this.periodInView);
+    this.kpiCriteria = this.periodInView.kpiGroups;
 
-}
+    // KPI Rating Form Declaration
+    this.kpiRatingForm = this.fb.group({
+      kpiGroups: this.fb.array([])
+    });
+    
+    this.displayKpiRatings();
+    this.populateGrps();
+  }
+
+  populateGrps() {
+    this.kpiCriteria.forEach((item, index) => {
+      item.groupKpis.forEach(kpi => {
+        this.createKpis(item.groupName, index, kpi);
+      })
+    })
+  }
+
+  // Get form controls of KPI Rating Form
+  // get kpiGroupsArray() {
+  //   return <FormArray>this.kpiRatingForm.get('kpiGroups');
+  // }
+  groups(): FormArray {
+    return <FormArray>this.kpiRatingForm.get('kpiGroups');
+    // return this.kpiRatingForm.get("kpiGroups") as FormArray
+  }
+
+  // Generate form view with initial values from KPI Group array
+  displayKpiRatings() {
+    let kpiInfo = this.kpiCriteria.map((grp: any, grpIndex: number) =>
+      this.initKpiGroups(grp, grpIndex)
+    );
+    this.kpiRatingForm.setControl('kpiGroups', this.fb.array(kpiInfo));
+  }
+
+  // Initialize form group for each KPI Group
+  initKpiGroups(kpiGroup: any, grpIndex:number): FormGroup {
+    return this.fb.group({
+      [kpiGroup.groupName]: this.fb.array([])
+    })
+  }
+
+  // Generate dynamic kpi arrays for each kpi group 
+  // generateKpisArray(grpName: string, grpIndex: number, grpKpis: any) {
+  //   return grpKpis.map(kpi => {
+  //     this.initKpis(kpi);
+  //   });
+  // }
+
+  // Set kpi rating controls after form group generation
+  grpKpis(grpIndex:number, grpName: string,) : FormArray {
+    return this.groups().at(grpIndex).get(grpName) as FormArray
+  }
+
+  // Initialize form group of each KPI entry
+  initKpis(kpi: any) {
+    return this.fb.group({
+      [kpi.kpiName]: this.fb.group({
+        employeeRating: [kpi.remarks.employeeRating, Validators.required],
+        employeeComments: [kpi.remarks.employeeComment, Validators.required],
+        managerRating: [kpi.remarks.managerRating, Validators.required],
+        managerComments: [kpi.remarks.managerComment, Validators.required]
+      })
+    })
+  }
+
+  // Push each created form group into the kpi array
+  createKpis(groupName: string, groupIndex:number, kpi: any) {
+    this.grpKpis(groupIndex, groupName).push(this.initKpis(kpi));
+  }
+
+  rateEmployee(val) {
+    console.log(val);
+  }
+
+  submit() {
+    console.log(this.kpiRatingForm.value);
+  }
+
+} 

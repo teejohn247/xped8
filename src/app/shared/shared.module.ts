@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
+import { HighchartsChartModule } from 'highcharts-angular';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule }  from '@angular/material/table';
-import {MatChipsModule} from '@angular/material/chips';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSortModule } from '@angular/material/sort';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -23,6 +24,7 @@ import { LoginComponent } from './components/login/login.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { LeaveReviewComponent } from './components/leave-review/leave-review.component';
 import { PaymentInfoComponent } from './components/payment-info/payment-info.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const SHARED_COMP = [
   MatIconModule,
@@ -42,7 +44,7 @@ const SHARED_COMP = [
 ];
 
 @NgModule({
-  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent, LeaveReviewComponent, PaymentInfoComponent],
+  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent, LeaveReviewComponent, PaymentInfoComponent, DashboardComponent],
 
   exports: [
     ...SHARED_COMP,
@@ -56,6 +58,7 @@ const SHARED_COMP = [
     ReactiveFormsModule,
     FormsModule,
     NgChartsModule,
+    HighchartsChartModule
   ],
   providers : [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

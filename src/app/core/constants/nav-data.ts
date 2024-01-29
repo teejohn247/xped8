@@ -16,11 +16,6 @@ export const navbarData = [
                 label: 'Employees',
             },
             {
-                routeLink: 'human-resources/recruitment',
-                icon: 'bi bi-briefcase-fill',
-                label: 'Recruitment',
-            },
-            {
                 routeLink: 'human-resources/payroll',
                 icon: 'bi bi-layers-fill',
                 label: 'Payroll',
@@ -31,16 +26,6 @@ export const navbarData = [
             //     label: 'Self-Service'
             // },
             {
-                routeLink: 'human-resources/document-management',
-                icon: 'bi bi-file-earmark-text-fill',
-                label: 'Attendance'
-            },
-            {
-                routeLink: 'human-resources/appraisals',
-                icon: 'bi bi-award-fill',
-                label: 'Performance Appraisal'
-            },
-            {
                 routeLink: 'human-resources/leave-management',
                 icon: 'bi bi-calendar2-x-fill',
                 label: 'Leave Management'
@@ -49,6 +34,21 @@ export const navbarData = [
                 routeLink: 'human-resources/expense-management',
                 icon: 'bi bi-credit-card-fill',
                 label: 'Expense Management',
+            },
+            {
+                routeLink: 'human-resources/appraisals',
+                icon: 'bi bi-award-fill',
+                label: 'Appraisal Management'
+            },
+            {
+                routeLink: 'human-resources/recruitment',
+                icon: 'bi bi-briefcase-fill',
+                label: 'Recruitment',
+            },
+            {
+                routeLink: 'human-resources/document-management',
+                icon: 'bi bi-file-earmark-text-fill',
+                label: 'Attendance'
             },
             {
                 routeLink: 'human-resources/visitors-log',
@@ -199,7 +199,7 @@ export const navbarDataManager = [
         label: 'Expense Management',
     },
     {
-        routeLink: 'human-resources/appraisal-requests',
+        routeLink: 'human-resources/self-service/appraisals',
         icon: 'bi bi-journal-x',
         label: 'Appraisal Requests',
     },

@@ -349,10 +349,10 @@ export class HumanResourcesService {
     return this.http.get<any>(`${this.path}/fetchPeriod`, this.requestOptions);
   }
 
-  // //Get a payroll period details
-  // public getPayrollDetails(perioId: string): Observable<any> {
-  //   return this.http.get<any>(`${this.path}/fetchPayrollPeriodDetails/${perioId}`, this.requestOptions);
-  // }
+  //Get an appraisal period details
+  public getEmployeeAppraisalDetails(employeeId: string, periodId: string): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchGroupDetails/${employeeId}/${periodId}`, this.requestOptions);
+  }
 
   //Update Appraisal Period
   public updateAppraisalPeriod(data: any, periodId: any): Observable<any> {

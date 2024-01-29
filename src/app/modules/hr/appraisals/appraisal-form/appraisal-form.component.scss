@@ -76,7 +76,7 @@
                 }
 
                 &.tri {
-                    width: 30%;
+                    width: 24%;
                 }
 
                 .label {
@@ -155,6 +155,85 @@
 
         .table-wrap {
             margin-top: 1.5rem;
+
+            .dataTable {
+
+                thead {
+                    height: 56px;
+                    background-color: var(--primary-light);
+
+                    tr {
+
+                        th {
+                            font-size: 0.7rem;
+                            font-weight: 500;
+                            border: none;
+                            padding: 0 12px;
+                            letter-spacing: 0.03rem;
+                            text-transform: uppercase;
+                            color: var(--darkest);
+
+                            &:first-child {
+                                padding-left: 2.5%;
+                            }
+
+                            &:last-child {
+                                padding-right: 2.5%;
+                            }
+                        }
+                    }
+                }
+
+                tbody {
+                    height: auto;
+
+                    tr {
+
+                        td {
+                            max-height: 100px;
+                            font-size: 0.755rem;
+                            padding: 0.4rem 12px;
+                            letter-spacing: 0.03rem;
+                            border: none;
+                            color: var(--darkest);
+
+                            &:first-child {
+                                padding-left: 2.5%;
+                            }
+
+                            &:last-child {
+                                padding-right: 2.5%;
+                            }
+
+                            &.major {
+                                font-size: 0.8rem;
+                            }
+
+                            &.minor {
+                                font-size: 0.6rem;
+                            }
+
+                            input, textarea {
+                                font-size: 0.755rem;
+                                color: var(--black-tint);
+                                box-shadow: none;
+                                border: none;
+                                padding: 0;
+
+                                &::placeholder {
+                                    font-size: 0.75rem;
+                                    color: var(--black-tint);
+                                }
+                            }
+
+                            textarea {
+                                //height: auto;
+                                padding: 0.3rem 0;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
