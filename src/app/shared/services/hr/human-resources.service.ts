@@ -349,9 +349,14 @@ export class HumanResourcesService {
     return this.http.get<any>(`${this.path}/fetchPeriod`, this.requestOptions);
   }
 
-  //Get an appraisal period details
+  //Get appraisal period details for an employee
   public getEmployeeAppraisalDetails(employeeId: string, periodId: string): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchGroupDetails/${employeeId}/${periodId}`, this.requestOptions);
+  }
+
+  //Get appraisal period details for all employees
+  public getAppraisalDetails(periodId: string): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchAppraisalPeriod/${periodId}`, this.requestOptions);
   }
 
   //Update Appraisal Period

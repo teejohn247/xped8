@@ -21,10 +21,10 @@
     width: 14rem;
     max-width: 18rem;
     margin-top: 0.3rem;
-    //border: 1px solid var(--black-tint-sm);
+    border: 1px solid var(--black-tint-sm);
     box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
-    background-color: var(--dark-bkg) !important;
-    color: white;
+    background-color: white !important;
+    color: var(--darker);
 
     &.more {
         width: 10rem;
@@ -42,7 +42,7 @@
         align-items: center;
         font-size: 0.8rem;
         letter-spacing: 0.03rem;
-        color: white;
+        color: var(--darker);
         transition: all 0.4s ease-in;
 
         &:hover {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from "@angular/router";
 import { CreateKpiGroupComponent } from '../create-kpi-group/create-kpi-group.component';
@@ -12,7 +12,8 @@ import { CreateRatingScaleComponent } from '../create-rating-scale/create-rating
 @Component({
   selector: 'app-general-appraisal',
   templateUrl: './general-appraisal.component.html',
-  styleUrls: ['./general-appraisal.component.scss']
+  styleUrls: ['./general-appraisal.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class GeneralAppraisalComponent implements OnInit {
 
@@ -22,7 +23,11 @@ export class GeneralAppraisalComponent implements OnInit {
   sideModalOpened: boolean = false;
 
   appraisalKpis: any[] = [];
+  periodInView: any;
+  currentPeriodId: string;
+  appraisalPeriodName: string;
 
+  employees: any[] = [];
 
   matrixItems = [
     {
@@ -208,10 +213,16 @@ export class GeneralAppraisalComponent implements OnInit {
 
   getPageData = async () => {
     this.departmentList = await this.hrService.getDepartments().toPromise();
+    this.employees = await this.hrService.getEmployees().toPromise();
     this.ratingAccordionItems = await this.hrService.getKpiRatings().toPromise();
     this.kpiGroups = await this.hrService.getKpiGroups().toPromise();
     this.appraisalPeriods = await this.hrService.getAppraisalPeriods().toPromise();
-    console.log(this.appraisalPeriods);
+    console.log(this.kpiGroups);
+    // this.periodInView = this.appraisalPeriods['data'][0];
+    this.currentPeriodId = this.appraisalPeriods['data'][0]._id;
+    this.periodInView = await this.hrService.getAppraisalDetails(this.currentPeriodId).toPromise();
+    this.periodInView = this.periodInView['data'];
+    console.log(this.periodInView);
   }
 
   convertToNum(val) {
@@ -336,6 +347,10 @@ export class GeneralAppraisalComponent implements OnInit {
     });
   }
 
+
+  /* Appraisal Period Functions */
+
+  //Create an Appraisal Period
   addAppraisalPeriod() {
     this.dialog.open(CreateAppraisalPeriodComponent, {
       width: '30%',
@@ -345,6 +360,48 @@ export class GeneralAppraisalComponent implements OnInit {
       },
     }).afterClosed().subscribe(() => {
       this.getPageData();
+    });
+  }
+
+  //Edit an Appraisal Period
+  openEditModal() {
+    this.dialog.open(CreateAppraisalPeriodComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: this.periodInView.appraisalPeriodName,
+        id: this.periodInView._id,
+        isExisting: true,
+        modalInfo: this.periodInView
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });;
+  }
+
+  //Delete a Appraisal Period
+  deleteAppraisalPeriod(info?: any) {
+    this.notifyService.confirmAction({
+      title: 'Remove ' + info.appraisalPeriodName + ' Period',
+      message: 'Are you sure you want to remove this period?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteAppraisalPeriod(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('This Appraisal period has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
     });
   }
 

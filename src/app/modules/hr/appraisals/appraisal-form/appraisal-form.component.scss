@@ -217,8 +217,8 @@
                                 font-size: 0.755rem;
                                 color: var(--black-tint);
                                 box-shadow: none;
-                                border: none;
-                                padding: 0;
+                                // border: none;
+                                // padding: 0;
 
                                 &::placeholder {
                                     font-size: 0.75rem;
@@ -228,7 +228,11 @@
 
                             textarea {
                                 //height: auto;
-                                padding: 0.3rem 0;
+                                // padding: 0.3rem 0;
+                            }
+
+                            .rating-icon {
+                                color: var(--black-tint-mmd);
                             }
                         }
                     }

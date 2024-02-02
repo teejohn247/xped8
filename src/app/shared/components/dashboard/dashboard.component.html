@@ -78,7 +78,7 @@
                         <div class="appraisal">
                             <div class="card-title">Appraisal Reviews</div>
                             <div class="listed-items mt-lg-3">
-                                <div *ngFor="let employee of employeeList['data']; let i = index" class="item">
+                                <div *ngFor="let employee of employeeList['data'] | slice:0:3; let i = index" class="item">
                                     <div class="content">
                                         <div class="det d-flex align-items-end gap-1">
                                             <div class="image rd bkg-standard" style="background-image: url('{{employee.profilePic}}');"></div>

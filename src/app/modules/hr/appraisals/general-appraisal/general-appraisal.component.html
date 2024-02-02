@@ -5,11 +5,16 @@
             <!-- <div class="cta trans-bkg filter-trigger"><i class="bi bi-filter"></i> Filter</div> -->
             <div class="custom-dropdown" [matMenuTriggerFor]="periodMenu"> Select Appraisal Period <i class="bi bi-chevron-down"></i> </div>
             <mat-menu #periodMenu="matMenu">
-                <div *ngFor="let item of appraisalPeriods['data']" (click)="setAppraisalData(item)" class="menu-item" mat-menu-item>
-                    {{item.periodName}}
+                <div *ngFor="let item of appraisalPeriods['data']" (click)="setAppraisalData(item)" class="menu-item d-flex justify-content-between" mat-menu-item>
+                    {{item.appraisalPeriodName}}
+                    <span class="actions">
+                        <i (click)="deleteAppraisalPeriod(item)" class="bi bi-trash3-fill delete"></i>
+                    </span>
                 </div>
             </mat-menu>
             <div (click)="addAppraisalPeriod()" class="cta primary-bkg icon md ms-lg-3"><i class="bi bi-calendar4-week"></i>New Appraisal Period</div>
+            <div (click)="openEditModal()" class="cta trans-bkg md rd edit ms-lg-3"><i class="bi bi-pen-fill"></i></div>
+            <div (click)="deleteAppraisalPeriod()" class="cta trans-bkg md rd delete ms-lg-3"><i class="bi bi-trash3-fill"></i></div>
         </div>
     </div>
 
@@ -25,39 +30,80 @@
     </div> -->
 
     <div class="row-section mt-lg-4">
+
         <div class="appraisal-container card-yxl">
+    
             <div class="col-card card-ylg d-flex justify-content-between align-items-start">
-                <div class="row-card card-xxl matrix-container d-flex justify-content-end">
-                    <div class="arrow vertical">
-                        <div class="line"><span>Potential</span></div>
-                        <div class="point"></div>
+
+                <div class="row-card card-xxl matrix-container d-flex flex-column justify-content-between">
+                    <div class="card-cont">
+                        <div class="inner-col card-xxl" style="overflow-x: hidden;">
+                            <div class="request-wrap">
+                                <div *ngFor="let employee of periodInView[0]?.appraisalData; let i = index" class="request-hld">
+                                    <div class="view"><i class="bi bi-arrow-up-right-circle-fill"></i></div>
+                                    <div (click)="viewAppraisalInfo('3443889')" class="cont">
+                                        <div class="det d-flex align-items-center gap-2">
+                                            <div class="image rd bkg-standard" style="background-image: url('{{employee.profilePic}}');"></div>
+                                            <div class="info">
+                                                <div class="title">{{employee.fullName}}</div>
+                                                <div class="date">
+                                                    <!-- <span><i class="bi bi-calendar2-week"></i></span> -->
+                                                    <span>{{employee.designation}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="det">
+                                            <div class="count">
+                                                <span class="rating-icon pe-lg-1" *ngFor="let f of [].constructor(i+2)"><i class="bi bi-star-fill"></i></span>
+                                            </div>
+                                            <div class="dept">{{employee.department}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="arrow horizontal">
-                        <div class="line"><span>Performance</span></div>
-                        <div class="point"></div>
+
+                    <div class="card-cont mb-lg-4">
+                        <div class="appraisal-hdr">
+                            <div class="detail">
+                                <span>Appraisal Matrix</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="rating horizontal">
-                        <div class="name">Low</div>
-                        <div class="name">Moderate</div>
-                        <div class="name">High</div>
-                    </div>
-                    <div class="rating vertical">
-                        <div class="name">Low</div>
-                        <div class="name">Moderate</div>
-                        <div class="name">High</div>
-                    </div>
-                    <div class="matrix-wrap">
-                        <div *ngFor="let item of matrixItems" class="cont matrix-hld">
-                            <div class="stacked-items lg">
-                                <div class="stack fill">
-                                    <!-- <span (click)="sideModalOpened = !sideModalOpened" *ngFor="let staff of item.staff" style="background-image: url('../../../../../assets/images/illustrations/{{staff.image}}');"></span> -->
-                                    <span (click)="viewAppraisalInfo('3443889')" *ngFor="let staff of item.staff" style="background-image: url('../../../../../assets/images/illustrations/{{staff.image}}');"></span>
-                                    <!-- <span style="background-image: url('../../../../../assets/images/illustrations/staff1.jpg');"></span>
-                                    <span style="background-image: url('../../../../../assets/images/illustrations/staff3.jpg');"></span>
-                                    <span style="background-image: url('../../../../../assets/images/illustrations/staff2.jpg');"></span>
-                                    <span style="background-image: url('../../../../../assets/images/illustrations/profile-img.jpg');"></span>
-                                    <span style="background-image: url('../../../../../assets/images/illustrations/staff1.jpg');"></span>
-                                    <span style="background-image: url('../../../../../assets/images/illustrations/staff3.jpg');"></span> -->
+
+                    <div class="card-cont d-flex justify-content-end">
+                        <div class="arrow vertical">
+                            <div class="line"><span>Potential</span></div>
+                            <div class="point"></div>
+                        </div>
+                        <div class="arrow horizontal">
+                            <div class="line"><span>Performance</span></div>
+                            <div class="point"></div>
+                        </div>
+                        <div class="rating horizontal">
+                            <div class="name">Low</div>
+                            <div class="name">Moderate</div>
+                            <div class="name">High</div>
+                        </div>
+                        <div class="rating vertical">
+                            <div class="name">Low</div>
+                            <div class="name">Moderate</div>
+                            <div class="name">High</div>
+                        </div>
+                        <div class="matrix-wrap">
+                            <div *ngFor="let item of matrixItems" class="cont matrix-hld" style="height: 15.2vh;">
+                                <div class="stacked-items lg">
+                                    <div class="stack fill">
+                                        <!-- <span (click)="sideModalOpened = !sideModalOpened" *ngFor="let staff of item.staff" style="background-image: url('../../../../../assets/images/illustrations/{{staff.image}}');"></span> -->
+                                        <span (click)="viewAppraisalInfo('3443889')" *ngFor="let staff of item.staff" style="background-image: url('../../../../../assets/images/illustrations/{{staff.image}}');"></span>
+                                        <!-- <span style="background-image: url('../../../../../assets/images/illustrations/staff1.jpg');"></span>
+                                        <span style="background-image: url('../../../../../assets/images/illustrations/staff3.jpg');"></span>
+                                        <span style="background-image: url('../../../../../assets/images/illustrations/staff2.jpg');"></span>
+                                        <span style="background-image: url('../../../../../assets/images/illustrations/profile-img.jpg');"></span>
+                                        <span style="background-image: url('../../../../../assets/images/illustrations/staff1.jpg');"></span>
+                                        <span style="background-image: url('../../../../../assets/images/illustrations/staff3.jpg');"></span> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>

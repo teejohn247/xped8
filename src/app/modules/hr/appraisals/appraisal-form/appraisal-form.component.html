@@ -97,12 +97,13 @@
                                                 </td>
                                                 <td>
                                                     <span class="text-capitalize">
-                                                        <input 
+                                                        <span class="rating-icon pe-lg-1" *ngFor="let f of [].constructor(5); let j = index"><i (click)="rateEmployee(j)" class="bi bi-star-fill"></i></span>
+                                                        <!-- <input 
                                                             type="text" 
                                                             formControlName="employeeRating" 
                                                             class="form-control form-control-sm" 
                                                             placeholder="Enter rating"
-                                                        >
+                                                        > -->
                                                     </span>
                                                 </td>
                                                 <td>
