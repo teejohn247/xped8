@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Location, DatePipe } from '@angular/common';
 import { FormGroup, FormBuilder, FormControl, FormArray, Validators } from '@angular/forms';
 import { FormFields } from 'src/app/shared/models/form-fields';
 import { MatTableDataSource } from '@angular/material/table';
@@ -7,17 +7,23 @@ import { TableColumn } from 'src/app/shared/models/table-columns';
 import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-appraisal-form',
   templateUrl: './appraisal-form.component.html',
-  styleUrls: ['./appraisal-form.component.scss']
+  styleUrls: ['./appraisal-form.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class AppraisalFormComponent implements OnInit {
 
   @ViewChild('commentsField') myDiv: ElementRef;
 
+  appraisalPending: boolean = true;
   employeeDetails: any;
+  employeeInViewId: string;
+  appraisalInfo: any = {};
+  ratingScale: any[] = [];
   appraisalFormFields: FormFields[];
   kpiRatingFormFields: FormFields[];
   appraisalForm!: FormGroup;
@@ -125,13 +131,15 @@ export class AppraisalFormComponent implements OnInit {
   ]
 
   constructor(
+    private datePipe: DatePipe,
+    private activatedRoute: ActivatedRoute,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
     private authService: AuthenticationService,
     private location: Location,
     private fb: FormBuilder
   ) {
-    this.getPageData();
+    this.getInitialData();
     this.appraisalForm = this.fb.group({});
 
     this.matrixSelectOptions = {
@@ -146,7 +154,7 @@ export class AppraisalFormComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Employee Name',
         controlWidth: '100%',
-        initialValue: '',
+        initialValue: 'Aghogho Etibo',
         validators: null,
         order: 1
       },
@@ -155,7 +163,7 @@ export class AppraisalFormComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Employee Signature',
         controlWidth: '100%',
-        initialValue: '',
+        initialValue: 'Aghogho Etibo',
         validators: null,
         order: 1
       },
@@ -164,7 +172,7 @@ export class AppraisalFormComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Employee Signature Date',
         controlWidth: '100%',
-        initialValue: '',
+        initialValue: 'January 1, 2024',
         validators: null,
         order: 2
       },
@@ -290,13 +298,26 @@ export class AppraisalFormComponent implements OnInit {
     this.displayedColumns = this.tableColumns.map(column => column.label);
   }
 
-  getPageData = async () => {
-    this.employeeDetails = this.authService.loggedInUser.data;
+  getInitialData = async () => {
+    this.employeeInViewId = this.activatedRoute.snapshot.params["id"];
+    console.log(this.employeeInViewId);
+    if(this.employeeInViewId) {
+      this.appraisalPending = false;
+    }
+    else {
+      this.employeeDetails = this.authService.loggedInUser.data;
+      this.employeeInViewId = this.employeeDetails._id;
+    }
     // this.kpiGroups = await this.hrService.getKpiGroups().toPromise();
+    this.ratingScale = await this.hrService.getKpiRatings().toPromise();
     this.appraisalPeriods = await this.hrService.getAppraisalPeriods().toPromise();
     console.log(this.appraisalPeriods);
     this.currentPeriodId = this.appraisalPeriods['data'][0]['_id'];
-    this.periodInView = await this.hrService.getEmployeeAppraisalDetails(this.employeeDetails._id, this.currentPeriodId).toPromise();
+    this.getPageData();
+  }
+
+  getPageData = async () => {
+    this.periodInView = await this.hrService.getEmployeeAppraisalDetails(this.employeeInViewId, this.currentPeriodId).toPromise();
     this.periodInView = this.periodInView['data'][0];
     console.log(this.periodInView);
     this.kpiCriteria = this.periodInView.kpiGroups;
@@ -358,10 +379,10 @@ export class AppraisalFormComponent implements OnInit {
   initKpis(kpi: any) {
     return this.fb.group({
       [kpi.kpiName]: this.fb.group({
-        employeeRating: [kpi.remarks.employeeRating, Validators.required],
-        employeeComments: [kpi.remarks.employeeComment, Validators.required],
-        managerRating: [kpi.remarks.managerRating, Validators.required],
-        managerComments: [kpi.remarks.managerComment, Validators.required]
+        employeeRating: [kpi.remarks?.employeeRating, Validators.required],
+        employeeComments: [kpi.remarks?.employeeComment, Validators.required],
+        managerRating: [kpi.remarks?.managerRating, Validators.required],
+        managerComments: [kpi.remarks?.managerComment, Validators.required]
       })
     })
   }
@@ -377,6 +398,37 @@ export class AppraisalFormComponent implements OnInit {
 
   submit() {
     console.log(this.kpiRatingForm.value);
+  }
+
+  setAppraisalData = async (details) => {
+    console.log(details);
+    this.periodInView = details;
+    this.currentPeriodId = details._id;
+    this.getPageData();
+  }
+
+  ratingByEmployee(i, grpName, j, kpiName, ratingVal) {
+    let employeeCtrl = this.kpiRatingForm.get(['kpiGroups', i, grpName, j, kpiName]) as FormGroup;
+    employeeCtrl.get('employeeRating').setValue(ratingVal);
+  }
+
+  ratingByManager(i, grpName, j, kpiName, ratingVal) {
+    let employeeCtrl = this.kpiRatingForm.get(['kpiGroups', i, grpName, j, kpiName]) as FormGroup;
+    employeeCtrl.get('managerRating').setValue(ratingVal);
+  }
+
+  strToDate(dateVal: string, key:string) {
+    // console.log(dateVal);
+    if(key == 'startDate' || key == 'endDate') {
+      let newFormat = new Date(dateVal);
+      return this.datePipe.transform(newFormat, 'd MMM, y')
+    }
+    else {
+      const [day, month, year] = dateVal.split('/');
+      let newFormat = new Date(+year, +month - 1, +day);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }    
   }
 
 } 

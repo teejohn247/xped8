@@ -1,42 +1,51 @@
 <div class="appraisal-wrap">
     <div class="inner-wrap">
-
         <div class="row-section d-flex justify-content-between align-items-center">
-            <div (click)="goBack()" class="page-header mb-4"><span class="back-btn"><i class="bi bi-arrow-left"></i></span> Go Back</div>
+            <!-- <div (click)="goBack()" class="page-header mb-4"><span class="back-btn"><i class="bi bi-arrow-left"></i></span> Go Back</div> -->
+            <div class="page-header title">Performance Management</div>
+            <div class="main-actions d-flex justify-content-start align-items-center">
+                <div class="custom-dropdown" [matMenuTriggerFor]="periodMenu"> Select Appraisal Period <i class="bi bi-chevron-down"></i> </div>
+                <mat-menu #periodMenu="matMenu">
+                    <div *ngFor="let item of appraisalPeriods['data']" (click)="setAppraisalData(item)" class="menu-item d-flex justify-content-between" mat-menu-item>
+                        {{item.appraisalPeriodName}}
+                    </div>
+                </mat-menu>
+                <div class="cta primary-bkg icon md ms-lg-3"><i class="bi bi-hdd"></i> Save Changes & Continue</div>
+            </div>
         </div>
 
-        <div class="employee-info">
+        <div class="employee-info mt-lg-4">
             <div class="details">
-                <div class="image bkg-standard" style="background-image: url('https://res.cloudinary.com/dtb2cdr2q/image/upload/v1703802503/xlqxlfxfehttonpyux4a.png');"></div>
+                <div class="image bkg-standard" style="background-image: url('{{periodInView?.profilePic}}');"></div>
                 <div class="info-wrap">
                     <div class="info-title">
-                        <span>Aghogho Etibo</span>
+                        <span>{{periodInView?.fullName}}</span>
                         <!-- <span></span> -->
                     </div>
                     <div class="info-list mt-lg-3">
                         <div class="info tri">
                             <span class="label">Department:</span>
-                            <span class="text">Technology</span>
+                            <span class="text">{{periodInView?.department}}</span>
                         </div>
                         <div class="info tri">
                             <span class="label">Designation:</span>
-                            <span class="text">Senior Level</span>
+                            <span class="text">{{periodInView?.designation}}</span>
                         </div>
                         <div class="info tri">
                             <span class="label">Company Role:</span>
-                            <span class="text">Technology Manager</span>
+                            <span class="text">{{periodInView?.companyRole}}</span>
                         </div>
                         <div class="info tri">
                             <span class="label">Review Period:</span>
-                            <span class="text">1st Quarter</span>
+                            <span class="text">{{periodInView?.appraisalPeriodName}}</span>
                         </div>
                         <div class="info tri">
                             <span class="label">Start Date:</span>
-                            <span class="text">1 January, 2023</span>
+                            <span class="text">{{strToDate(periodInView?.startDate, 'startDate')}}</span>
                         </div>
                         <div class="info tri">
                             <span class="label">End Date:</span>
-                            <span class="text">31 March, 2023</span>
+                            <span class="text">{{strToDate(periodInView?.endDate, 'endDate')}}</span>
                         </div>
                     </div>
                 </div>
@@ -46,7 +55,7 @@
         <div class="appraisal-hdr">
             <div class="detail">
                 <!-- <i class="bi bi-flag-fill"></i> -->
-                <span>Appraisal Period Details</span>
+                <span>Appraisal Period KPIs</span>
             </div>
             <!-- <div class="info-list mt-lg-2">
                 <div class="info tri">
@@ -93,17 +102,24 @@
                                             <tr [formGroupName]="kpiCriteria[i].groupKpis[j].kpiName">
                                                 <td>
                                                     <span class="major">{{kpiCriteria[i].groupKpis[j].kpiName}}</span>
-                                                    <span class="minor">{{kpiCriteria[i].groupKpis[j].description}}</span>
+                                                    <span class="minor">{{kpiCriteria[i].groupKpis[j].kpiDescription}}</span>
                                                 </td>
                                                 <td>
                                                     <span class="text-capitalize">
-                                                        <span class="rating-icon pe-lg-1" *ngFor="let f of [].constructor(5); let j = index"><i (click)="rateEmployee(j)" class="bi bi-star-fill"></i></span>
-                                                        <!-- <input 
+                                                        <!-- <span class="rating-icon pe-lg-1" *ngFor="let f of [].constructor(5); let j = index"><i (click)="rateEmployee(j)" class="bi bi-star-fill"></i></span> -->
+                                                        <input 
+                                                            [matMenuTriggerFor]="employeeRatingMenu"
                                                             type="text" 
+                                                            readonly
                                                             formControlName="employeeRating" 
                                                             class="form-control form-control-sm" 
-                                                            placeholder="Enter rating"
-                                                        > -->
+                                                            placeholder="Select rating"
+                                                        >
+                                                        <mat-menu class="rd" #employeeRatingMenu="matMenu">
+                                                            <div (click)="ratingByEmployee(i, kpiCriteria[i].groupName, j, kpiCriteria[i].groupKpis[j].kpiName, item.ratingName)" *ngFor="let item of ratingScale['data']" class="menu-item d-flex justify-content-between" mat-menu-item>
+                                                                {{item.ratingName}} - {{item.value}} <i class="bi bi-star-fill"></i>
+                                                            </div>
+                                                        </mat-menu>
                                                     </span>
                                                 </td>
                                                 <td>
@@ -118,14 +134,22 @@
                                                         </textarea>
                                                     </span>
                                                 </td>
+                                                
                                                 <td>
                                                     <span class="text-capitalize">
                                                         <input 
-                                                            type="text" 
+                                                            type="text"
+                                                            readonly
+                                                            [matMenuTriggerFor]="managerRatingMenu"
                                                             formControlName="managerRating" 
                                                             class="form-control form-control-sm" 
-                                                            placeholder="Enter rating"
+                                                            placeholder="Select rating"
                                                         >
+                                                        <mat-menu class="rd" #managerRatingMenu="matMenu">
+                                                            <div (click)="ratingByManager(i, kpiCriteria[i].groupName, j, kpiCriteria[i].groupKpis[j].kpiName, item.ratingName)" *ngFor="let item of ratingScale['data']" class="menu-item d-flex justify-content-between" mat-menu-item>
+                                                                {{item.ratingName}} - {{item.value}} <i class="bi bi-star-fill"></i>
+                                                            </div>
+                                                        </mat-menu>
                                                     </span>
                                                 </td>
                                                 <td>
@@ -194,29 +218,30 @@
                 <div class="appraisal-validation">
                     <div class="validation">
                         <div class="hdr">For Employees:</div>
-                        <div class="field-wrap">
+                        <div class="field-wrap align-items-start">
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
                                 <mat-label class="text-capitalize">Employee Name</mat-label>
-                                <input readonly matInput formControlName="employeeName">
+                                <input readonly matInput formControlName="employeeName" style="font-size: 1rem; color: greenyellow;">
                             </mat-form-field>
 
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
                                 <mat-label class="text-capitalize">Employee Signature</mat-label>
-                                <input readonly matInput formControlName="employeeSignature">
+                                <input readonly matInput formControlName="employeeSignature" style="font-family:'Rouge Script'; font-size: 1.3rem; color: greenyellow;">
                             </mat-form-field>
 
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
                                 <mat-label class="text-capitalize">Employee Signature Date</mat-label>
-                                <input readonly matInput formControlName="employeeSignDate">
+                                <input readonly matInput formControlName="employeeSignDate" style="font-size: 1rem; color: greenyellow;">
                             </mat-form-field>
 
+                            <div class="cta primary-bkg icon lg" style="width: fit-content;"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Entry</div>
                         </div>
                     </div>
 
-                    <div class="validation">
+                    <div class="validation mt-4">
                         <div class="hdr">For Managers:</div>
-                        <div class="field-wrap">
-                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'23%'" appearance="fill">
+                        <div class="field-wrap align-items-start">
+                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'22%'" appearance="fill">
                                 <mat-label>Employee Potential</mat-label>
                                 <mat-select
                                     class="selectField"
@@ -229,7 +254,7 @@
                                 <mat-error *ngIf="appraisalForm.get('employeePotential')?.hasError('required')">Employee potential is required</mat-error>
                             </mat-form-field>
 
-                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'23%'" appearance="fill">
+                            <mat-form-field color="accent" class="mb-lg-2" [style.width]="'22%'" appearance="fill">
                                 <mat-label>Employee Performance</mat-label>
                                 <mat-select
                                     class="selectField"
@@ -250,20 +275,22 @@
 
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
                                 <mat-label class="text-capitalize">Manager Name</mat-label>
-                                <input readonly matInput formControlName="managerName">
+                                <input readonly matInput formControlName="managerName" style="font-size: 1rem; color: greenyellow;">
                             </mat-form-field>
 
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
                                 <mat-label class="text-capitalize">Manager Signature</mat-label>
-                                <input readonly matInput formControlName="managerSignature">
+                                <input readonly matInput formControlName="managerSignature" style="font-family:'Rouge Script'; font-size: 1.3rem; color: greenyellow;">
                             </mat-form-field>
 
                             <mat-form-field color="accent" class="mb-lg-2" appearance="fill">
                                 <mat-label class="text-capitalize">Manager Signature Date</mat-label>
-                                <input matInput formControlName="managerSignDate">
+                                <input matInput formControlName="managerSignDate" style="font-size: 1rem; color: greenyellow;">
                             </mat-form-field>
 
+                            <div class="cta primary-bkg icon lg"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Review</div>
                         </div>
+
                     </div>
                 </div>    
 
