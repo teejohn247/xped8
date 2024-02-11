@@ -61,10 +61,10 @@
                     <div class="cont card-xmmd d-flex flex-column justify-content-between">
                         <div class="card-title">Payroll Information</div>
                         <div class="payroll-info mb-lg-2">
-                            <div class="info">{{payrollPeriods['data'][0].payrollPeriodName}}</div>
-                            <div class="info">Gross Pay: <span>£ {{payrollPeriods['data'][0].totalEarnings}}</span></div>
-                            <div class="info">Deductions: <span>£ {{payrollPeriods['data'][0].deductions}}</span></div>
-                            <div class="info">Net Pay: <span>£ {{payrollPeriods['data'][0].netEarnings}}</span></div>
+                            <div class="info">{{payrollPeriods['data'][0]?.payrollPeriodName}}</div>
+                            <div class="info">Gross Pay: <span>£ {{payrollPeriods['data'][0]?.totalEarnings}}</span></div>
+                            <div class="info">Deductions: <span>£ {{payrollPeriods['data'][0]?.deductions}}</span></div>
+                            <div class="info">Net Pay: <span>£ {{payrollPeriods['data'][0]?.netEarnings}}</span></div>
                         </div>
                         <highcharts-chart
                                 [Highcharts]="AreaHighcharts"
