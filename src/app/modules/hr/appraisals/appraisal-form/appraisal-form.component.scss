@@ -239,6 +239,11 @@
                                     font-size: 0.75rem;
                                     color: var(--black-tint);
                                 }
+
+                                &.disabled {
+                                    pointer-events: none;
+                                    background-color: var(--border-black-lightest);
+                                }
                             }
 
                             textarea {

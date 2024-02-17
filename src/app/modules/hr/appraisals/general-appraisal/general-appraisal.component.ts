@@ -19,6 +19,7 @@ export class GeneralAppraisalComponent implements OnInit {
 
   departmentList: any[] = [];
   appraisalPeriods: any[] = [];
+  appraisalRequests: any[] = [];
   kpiGroups: any[] = [];
   sideModalOpened: boolean = false;
 
@@ -217,7 +218,8 @@ export class GeneralAppraisalComponent implements OnInit {
     this.ratingAccordionItems = await this.hrService.getKpiRatings().toPromise();
     this.kpiGroups = await this.hrService.getKpiGroups().toPromise();
     this.appraisalPeriods = await this.hrService.getAppraisalPeriods().toPromise();
-    console.log(this.kpiGroups);
+    this.appraisalRequests = await this.hrService.getAppraisalRequests().toPromise();
+    console.log(this.appraisalRequests);
     // this.periodInView = this.appraisalPeriods['data'][0];
     this.currentPeriodId = this.appraisalPeriods['data'][0]._id;
     this.periodInView = await this.hrService.getAppraisalDetails(this.currentPeriodId).toPromise();

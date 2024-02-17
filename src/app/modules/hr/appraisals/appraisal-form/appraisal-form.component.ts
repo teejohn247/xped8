@@ -154,7 +154,7 @@ export class AppraisalFormComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Employee Name',
         controlWidth: '100%',
-        initialValue: 'Aghogho Etibo',
+        initialValue: '',
         validators: null,
         order: 1
       },
@@ -163,7 +163,7 @@ export class AppraisalFormComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Employee Signature',
         controlWidth: '100%',
-        initialValue: 'Aghogho Etibo',
+        initialValue: '',
         validators: null,
         order: 1
       },
@@ -172,7 +172,7 @@ export class AppraisalFormComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Employee Signature Date',
         controlWidth: '100%',
-        initialValue: 'January 1, 2024',
+        initialValue: '',
         validators: null,
         order: 2
       },
@@ -308,6 +308,7 @@ export class AppraisalFormComponent implements OnInit {
       this.employeeDetails = this.authService.loggedInUser.data;
       this.employeeInViewId = this.employeeDetails._id;
     }
+    // console.log(this.appraisalPending);
     // this.kpiGroups = await this.hrService.getKpiGroups().toPromise();
     this.ratingScale = await this.hrService.getKpiRatings().toPromise();
     this.appraisalPeriods = await this.hrService.getAppraisalPeriods().toPromise();
@@ -321,6 +322,12 @@ export class AppraisalFormComponent implements OnInit {
     this.periodInView = this.periodInView['data'][0];
     console.log(this.periodInView);
     this.kpiCriteria = this.periodInView.kpiGroups;
+
+    if(this.periodInView.status != 'Pending') {
+      this.appraisalForm.get('employeeName').setValue(this.periodInView.fullName);
+      this.appraisalForm.get('employeeSignature').setValue(this.periodInView.fullName);
+      this.appraisalForm.get('employeeSignDate').setValue(this.strToDate(this.periodInView.employeeSubmissionDate, 'startDate'));
+    }
 
     // KPI Rating Form Declaration
     this.kpiRatingForm = this.fb.group({
@@ -379,10 +386,10 @@ export class AppraisalFormComponent implements OnInit {
   initKpis(kpi: any) {
     return this.fb.group({
       [kpi.kpiName]: this.fb.group({
-        employeeRating: [kpi.remarks?.employeeRating, Validators.required],
-        employeeComments: [kpi.remarks?.employeeComment, Validators.required],
-        managerRating: [kpi.remarks?.managerRating, Validators.required],
-        managerComments: [kpi.remarks?.managerComment, Validators.required]
+        employeeRating: [kpi.remarks?.employeeRating, this.appraisalPending ? Validators.required : ''],
+        employeeComments: [kpi.remarks?.employeeComment],
+        managerRating: [kpi.remarks?.managerRating, this.appraisalPending ? '' : Validators.required],
+        managerComments: [kpi.remarks?.managerComment]
       })
     })
   }
@@ -421,7 +428,7 @@ export class AppraisalFormComponent implements OnInit {
     // console.log(dateVal);
     if(key == 'startDate' || key == 'endDate') {
       let newFormat = new Date(dateVal);
-      return this.datePipe.transform(newFormat, 'd MMM, y')
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
     }
     else {
       const [day, month, year] = dateVal.split('/');
@@ -429,6 +436,62 @@ export class AppraisalFormComponent implements OnInit {
       // console.log(newFormat.toDateString());
       return this.datePipe.transform(newFormat, 'd MMMM, y')
     }    
+  }
+
+  submitAppraisalEntry() {
+    console.log(this.kpiCriteria);
+    console.log(this.kpiRatingForm.valid);
+
+    if(this.kpiRatingForm.valid) {
+      let data = {
+        appraisalPeriodId: this.currentPeriodId,
+        employeeSignStatus: true,
+        kpiGroups: this.generateKpiGrpValues()
+      }
+      console.log(data);
+      this.hrService.submitAppraisalEntry(data).subscribe({
+        next: res => {
+          console.log(res);
+          if(res.status == 200) {
+            this.notifyService.showSuccess('Your appraisal entry has been sent successfully');
+            this.getPageData();
+          }
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+
+  }
+
+  generateKpiGrpValues() {
+    let grpRatings = [];
+    this.kpiCriteria.map((kpiGrp, i) => {
+      let grpValues = {};
+      let kpiRatings = [];
+
+      grpValues['groupId'] = kpiGrp.groupId;
+      grpValues['groupName'] = kpiGrp.groupName;
+      grpValues['description'] = kpiGrp.description;
+      kpiGrp.groupKpis.map((kpi, j) => {
+        let kpiValues = {};
+        let remarksObj = {}
+        let formCtrl = this.kpiRatingForm.get(['kpiGroups', i, kpiGrp.groupName, j, kpi.kpiName]) as FormGroup;
+        kpiValues['kpiId'] = kpi.kpiId;
+        kpiValues['kpiName'] = kpi.kpiName;
+        remarksObj['employeeComment'] = formCtrl.controls['employeeComments'].value;
+        remarksObj['employeeRating'] = formCtrl.controls['employeeRating'].value;
+        kpiValues['remarks'] = remarksObj;
+        kpiRatings.push(kpiValues);
+      })
+      grpValues['groupKpis'] = kpiRatings;
+      grpRatings.push(grpValues);
+    })
+    console.log(grpRatings);
+
+    return grpRatings;
   }
 
 } 

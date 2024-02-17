@@ -1,8 +1,8 @@
 <div class="appraisal-wrap">
     <div class="inner-wrap">
         <div class="row-section d-flex justify-content-between align-items-center">
-            <!-- <div (click)="goBack()" class="page-header mb-4"><span class="back-btn"><i class="bi bi-arrow-left"></i></span> Go Back</div> -->
-            <div class="page-header title">Performance Management</div>
+            <div *ngIf="!appraisalPending" (click)="goBack()" class="page-header"><span class="back-btn"><i class="bi bi-arrow-left"></i></span> Go Back</div>
+            <div *ngIf="appraisalPending" class="page-header title">Performance Management</div>
             <div class="main-actions d-flex justify-content-start align-items-center">
                 <div class="custom-dropdown" [matMenuTriggerFor]="periodMenu"> Select Appraisal Period <i class="bi bi-chevron-down"></i> </div>
                 <mat-menu #periodMenu="matMenu">
@@ -110,7 +110,7 @@
                                                         <input 
                                                             [matMenuTriggerFor]="employeeRatingMenu"
                                                             type="text" 
-                                                            readonly
+                                                            [ngClass]="{'disabled': !appraisalPending}"
                                                             formControlName="employeeRating" 
                                                             class="form-control form-control-sm" 
                                                             placeholder="Select rating"
@@ -127,6 +127,8 @@
                                                         <textarea 
                                                             autosize
                                                             rows="1"
+                                                            [ngClass]="{'disabled': !appraisalPending}"
+                                                            [readonly] = "!appraisalPending"
                                                             formControlName="employeeComments" 
                                                             class="form-control form-control-sm" 
                                                             placeholder="Enter comments"
@@ -139,7 +141,7 @@
                                                     <span class="text-capitalize">
                                                         <input 
                                                             type="text"
-                                                            readonly
+                                                            [ngClass]="{'disabled': appraisalPending}"
                                                             [matMenuTriggerFor]="managerRatingMenu"
                                                             formControlName="managerRating" 
                                                             class="form-control form-control-sm" 
@@ -157,6 +159,8 @@
                                                         <textarea
                                                             autosize
                                                             rows="1"
+                                                            [ngClass]="{'disabled': appraisalPending}"
+                                                            [readonly] = "appraisalPending"
                                                             formControlName="managerComments" 
                                                             class="form-control form-control-sm" 
                                                             placeholder="Enter comments"
@@ -234,11 +238,11 @@
                                 <input readonly matInput formControlName="employeeSignDate" style="font-size: 1rem; color: greenyellow;">
                             </mat-form-field>
 
-                            <div class="cta primary-bkg icon lg" style="width: fit-content;"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Entry</div>
+                            <div (click)="submitAppraisalEntry()" class="cta primary-bkg icon lg" style="width: fit-content;"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Entry</div>
                         </div>
                     </div>
 
-                    <div class="validation mt-4">
+                    <div *ngIf="!appraisalPending" class="validation mt-4">
                         <div class="hdr">For Managers:</div>
                         <div class="field-wrap align-items-start">
                             <mat-form-field color="accent" class="mb-lg-2" [style.width]="'22%'" appearance="fill">

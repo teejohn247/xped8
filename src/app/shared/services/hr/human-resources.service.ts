@@ -434,4 +434,22 @@ export class HumanResourcesService {
   public deleteKpiRating(ratingId: any): Observable<any> {
     return this.http.delete<any>(`${this.path}/deleteRating/${ratingId}`, this.requestOptions);
   }
+
+  /*************** APPRAISAL SUBMISSION AND REVIEW RELATED ACTIONS ***************/
+
+  //Submit Appraisal Entry
+  public submitAppraisalEntry(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/employeeRequestAppraisal`, info, this.requestOptions);
+  }
+
+  //Submit Appraisal Review
+  public submitAppraisalReview(info: any, employeeId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/managerRateKpi/${employeeId}`, info, this.requestOptions);
+  }
+
+  //Get the list of all appraisal requests
+  public getAppraisalRequests(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchAppraisalRequests`, this.requestOptions);
+  }
+
 }

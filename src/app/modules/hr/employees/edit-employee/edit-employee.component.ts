@@ -42,7 +42,7 @@ export class EditEmployeeComponent implements OnInit {
   ) {
     this.loggedInUser = authService.loggedInUser.data;
     this.employeeDetails = this.dialogData.employeeDetails;
-    console.log(this.loggedInUser);
+    console.log(this.employeeDetails);
     this.officialInfoForm = this.fb.group({})
     this.personalInfoForm = this.fb.group({})
     this.setUpForm();
@@ -301,7 +301,6 @@ export class EditEmployeeComponent implements OnInit {
       },
     ]
 
-    console.log(this.officialInfoFields);
     this.officialInfoFields.sort((a,b) => (a.order - b.order));
     this.personalInfoFields.sort((a,b) => (a.order - b.order));
 
