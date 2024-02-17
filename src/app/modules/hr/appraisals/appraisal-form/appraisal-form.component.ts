@@ -321,6 +321,7 @@ export class AppraisalFormComponent implements OnInit {
     this.periodInView = await this.hrService.getEmployeeAppraisalDetails(this.employeeInViewId, this.currentPeriodId).toPromise();
     this.periodInView = this.periodInView['data'][0];
     console.log(this.periodInView);
+    if(this.periodInView.status == 'Pending') this.appraisalPending = true;
     this.kpiCriteria = this.periodInView.kpiGroups;
 
     if(this.periodInView.status != 'Pending') {

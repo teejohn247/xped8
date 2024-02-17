@@ -232,7 +232,12 @@ export class GeneralAppraisalComponent implements OnInit {
   }
 
   viewAppraisalInfo(info: any) {
-    this.router.navigateByUrl(`dashboard/human-resources/appraisals/${info}`);
+    if(info.status == 'Pending') {
+      this.notifyService.showInfo('This employee has not yet filled in their appraisal request.')
+    }
+    else {
+      this.router.navigateByUrl(`dashboard/human-resources/appraisals/${info.employeeId}`);
+    }
   }
 
   /* KPI Group Functions */
