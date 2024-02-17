@@ -10,7 +10,7 @@
                         {{item.appraisalPeriodName}}
                     </div>
                 </mat-menu>
-                <div class="cta primary-bkg icon md ms-lg-3"><i class="bi bi-hdd"></i> Save Changes & Continue</div>
+                <div (click)="submitAppraisalEntry(false)" class="cta primary-bkg icon md ms-lg-3"><i class="bi bi-hdd"></i> Save Changes & Continue</div>
             </div>
         </div>
 
@@ -238,7 +238,7 @@
                                 <input readonly matInput formControlName="employeeSignDate" style="font-size: 1rem; color: greenyellow;">
                             </mat-form-field>
 
-                            <div (click)="submitAppraisalEntry()" class="cta primary-bkg icon lg" style="width: fit-content;"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Entry</div>
+                            <div *ngIf="appraisalPending" (click)="submitAppraisalEntry(true)" class="cta primary-bkg icon lg" style="width: fit-content;"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Entry</div>
                         </div>
                     </div>
 
@@ -292,7 +292,7 @@
                                 <input matInput formControlName="managerSignDate" style="font-size: 1rem; color: greenyellow;">
                             </mat-form-field>
 
-                            <div class="cta primary-bkg icon lg"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Review</div>
+                            <div (click)="submitAppraisalReview(true)" class="cta primary-bkg icon lg"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Review</div>
                         </div>
 
                     </div>

@@ -143,9 +143,9 @@ export class AppraisalFormComponent implements OnInit {
     this.appraisalForm = this.fb.group({});
 
     this.matrixSelectOptions = {
-      Low: 'Low',
-      Moderate: 'Moderate',
-      High: 'High'
+      0: 'Low',
+      1: 'Moderate',
+      2: 'High'
     }
 
     this.appraisalFormFields = [
@@ -183,9 +183,9 @@ export class AppraisalFormComponent implements OnInit {
         controlWidth: '48%',
         initialValue: '',
         selectOptions: {
-          Low: 'Low',
-          Moderate: 'Moderate',
-          High: 'High'
+          0: 'Low',
+          1: 'Moderate',
+          2: 'High'
         },
         validators: [Validators.required],
         order: 6
@@ -197,9 +197,9 @@ export class AppraisalFormComponent implements OnInit {
         controlWidth: '48%',
         initialValue: '',
         selectOptions: {
-          Low: 'Low',
-          Moderate: 'Moderate',
-          High: 'High'
+          0: 'Low',
+          1: 'Moderate',
+          2: 'High'
         },
         validators: [Validators.required],
         order: 6
@@ -329,6 +329,11 @@ export class AppraisalFormComponent implements OnInit {
       this.appraisalForm.get('employeeSignature').setValue(this.periodInView.fullName);
       this.appraisalForm.get('employeeSignDate').setValue(this.strToDate(this.periodInView.employeeSubmissionDate, 'startDate'));
     }
+    else if(this.periodInView.status != 'Pending' && this.periodInView.status != 'Awaiting Manager Review') {
+      this.appraisalForm.get('managerName').setValue(this.periodInView.managerName);
+      this.appraisalForm.get('managerSignature').setValue(this.periodInView.managerName);
+      this.appraisalForm.get('managerSignDate').setValue(this.strToDate(this.periodInView.managerSubmissionDate, 'endDate'));
+    }
 
     // KPI Rating Form Declaration
     this.kpiRatingForm = this.fb.group({
@@ -439,14 +444,13 @@ export class AppraisalFormComponent implements OnInit {
     }    
   }
 
-  submitAppraisalEntry() {
-    console.log(this.kpiCriteria);
-    console.log(this.kpiRatingForm.valid);
+  submitAppraisalEntry(finished: boolean) {
+    console.log(finished);
 
     if(this.kpiRatingForm.valid) {
       let data = {
         appraisalPeriodId: this.currentPeriodId,
-        employeeSignStatus: true,
+        employeeSignStatus: finished,
         kpiGroups: this.generateKpiGrpValues()
       }
       console.log(data);
@@ -455,6 +459,35 @@ export class AppraisalFormComponent implements OnInit {
           console.log(res);
           if(res.status == 200) {
             this.notifyService.showSuccess('Your appraisal entry has been sent successfully');
+            this.getPageData();
+          }
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+
+  }
+
+  submitAppraisalReview(finished: boolean) {
+    console.log(finished);
+
+    if(this.kpiRatingForm.valid) {
+      let data = {
+        appraisalPeriodId: this.currentPeriodId,
+        managerSignStatus: finished,
+        matrixScore: [Number(this.appraisalForm.controls['employeePerformance'].value), Number(this.appraisalForm.controls['employeePotential'].value)],
+        managerOverallComment: this.appraisalForm.controls['managerSummary'].value,
+        kpiGroups: this.generateKpiGrpValues()
+      }
+      console.log(data);
+      this.hrService.submitAppraisalReview(data, this.periodInView._id).subscribe({
+        next: res => {
+          console.log(res);
+          if(res.status == 200) {
+            this.notifyService.showSuccess('Your appraisal review has been sent successfully');
             this.getPageData();
           }
         },
@@ -484,6 +517,10 @@ export class AppraisalFormComponent implements OnInit {
         kpiValues['kpiName'] = kpi.kpiName;
         remarksObj['employeeComment'] = formCtrl.controls['employeeComments'].value;
         remarksObj['employeeRating'] = formCtrl.controls['employeeRating'].value;
+        if(!this.appraisalPending) {
+          remarksObj['managerComment'] = formCtrl.controls['managerComments'].value;
+          remarksObj['managerRating'] = formCtrl.controls['managerRating'].value;
+        }
         kpiValues['remarks'] = remarksObj;
         kpiRatings.push(kpiValues);
       })

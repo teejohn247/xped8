@@ -51,7 +51,7 @@ export class ExpenseRequestReviewComponent implements OnInit {
         controlLabel: 'Expense Date',
         controlWidth: '48%',
         readonly: this.data.forApproval,
-        initialValue: this.convertToDate(this.data.modalInfo.expenseDate),
+        initialValue: this.data.modalInfo.expenseDate,
         validators: [Validators.required],
         order: 2
       },

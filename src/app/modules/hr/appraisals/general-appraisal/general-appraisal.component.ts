@@ -29,16 +29,17 @@ export class GeneralAppraisalComponent implements OnInit {
   appraisalPeriodName: string;
 
   employees: any[] = [];
+  matrixScore = [0, 1];
 
   matrixItems = [
     {
-      id: 1,
+      id: 3,
       label: "Star",
       order: 3,
       staff: [
-        {
-          image: "staff1.jpg"
-        },
+        // {
+        //   image: "staff1.jpg"
+        // },
       ]
     },
     {
@@ -46,33 +47,33 @@ export class GeneralAppraisalComponent implements OnInit {
       label: "High Potential",
       order: 2,
       staff: [
-        {
-          image: "staff1.jpg"
-        },
-        {
-          image: "staff3.jpg"
-        },
-        {
-          image: "staff2.jpg"
-        },
+        // {
+        //   image: "staff1.jpg"
+        // },
+        // {
+        //   image: "staff3.jpg"
+        // },
+        // {
+        //   image: "staff2.jpg"
+        // },
       ]
     },
     {
-      id: 3,
+      id: 1,
       label: "Potential Gem",
       order: 1
     },
     {
-      id: 4,
+      id: 6,
       label: "High Performer",
       order: 6,
       staff: [
-        {
-          image: "staff1.jpg"
-        },
-        {
-          image: "profile-img.jpg"
-        },
+        // {
+        //   image: "staff1.jpg"
+        // },
+        // {
+        //   image: "profile-img.jpg"
+        // },
       ]
     },
     {
@@ -80,38 +81,38 @@ export class GeneralAppraisalComponent implements OnInit {
       label: "Core Player",
       order: 5,
       staff: [
-        {
-          image: "staff1.jpg"
-        },
-        {
-          image: "staff3.jpg"
-        },
-        {
-          image: "staff2.jpg"
-        },
-        {
-          image: "profile-img.jpg"
-        },
+        // {
+        //   image: "staff1.jpg"
+        // },
+        // {
+        //   image: "staff3.jpg"
+        // },
+        // {
+        //   image: "staff2.jpg"
+        // },
+        // {
+        //   image: "profile-img.jpg"
+        // },
       ]
     },
     {
-      id: 6,
+      id: 4,
       label: "Inconsistent Player",
       order: 4,
       staff: [
-        {
-          image: "profile-img.jpg"
-        },
+        // {
+        //   image: "profile-img.jpg"
+        // },
       ]
     },
     {
-      id: 7,
+      id: 9,
       label: "Solid Performer",
       order: 9,
       staff: [
-        {
-          image: "profile-img.jpg"
-        },
+        // {
+        //   image: "profile-img.jpg"
+        // },
       ]
     },
     {
@@ -119,16 +120,16 @@ export class GeneralAppraisalComponent implements OnInit {
       label: "Average Performer",
       order: 8,
       staff: [
-        {
-          image: "staff1.jpg"
-        },
-        {
-          image: "staff3.jpg"
-        },
+        // {
+        //   image: "staff1.jpg"
+        // },
+        // {
+        //   image: "staff3.jpg"
+        // },
       ]
     },
     {
-      id: 9,
+      id: 7,
       label: "Risk",
       order: 7,
     }
@@ -208,6 +209,13 @@ export class GeneralAppraisalComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // if(this.matrixScore = [0,1]) {
+    //   this.matrixItems.find(x => {
+    //     if(x.order == 4) x.staff.push({
+    //       image: "profile-img.jpg"
+    //     })
+    //   })
+    // }
     this.matrixItems.sort((a,b) => (a.order - b.order));
     this.getPageData();
   }
@@ -225,6 +233,119 @@ export class GeneralAppraisalComponent implements OnInit {
     this.periodInView = await this.hrService.getAppraisalDetails(this.currentPeriodId).toPromise();
     this.periodInView = this.periodInView['data'];
     console.log(this.periodInView);
+
+    this.generateMatrix(this.periodInView[0].appraisalData);
+  }
+
+  generateMatrix(info: any[]) {
+    info.forEach(x => {
+      console.log(x);
+      x.matrixScore = [0, 1];
+    })
+    info.map(detail => {
+      if(detail.matrixScore = [0, 2]) {
+        this.matrixItems.find(x => {
+          if(x.order == 1) x.staff.push(detail);
+        })
+      }
+      else if(detail.matrixScore = [1, 2]) {
+        this.matrixItems.find(x => {
+          if(x.order == 2) x.staff.push(detail);
+        })
+      }
+      else if(detail.matrixScore = [2, 2]) {
+        this.matrixItems.find(x => {
+          if(x.order == 3) x.staff.push(detail);
+        })
+      }
+      else if(detail.matrixScore[0] == 0 && detail.matrixScore[1] == 1) {
+        this.matrixItems.find(x => {
+          if(x.order == 4) x.staff.push(detail);
+        })
+      }
+      else if(detail.matrixScore = [1, 1]) {
+        this.matrixItems.find(x => {
+          if(x.order == 5) x.staff.push(detail);
+        })
+      }
+      else if(detail.matrixScore = [2, 1]) {
+        this.matrixItems.find(x => {
+          if(x.order == 6) x.staff.push(detail);
+        })
+      }
+      else if(detail.matrixScore = [0, 0]) {
+        this.matrixItems.find(x => {
+          if(x.order == 7) x.staff.push(detail);
+        })
+      }
+      else if(detail.matrixScore = [0, 1]) {
+        this.matrixItems.find(x => {
+          if(x.order == 8) x.staff.push(detail);
+        })
+      }
+      else if(detail.matrixScore = [0, 2]) {
+        this.matrixItems.find(x => {
+          if(x.order == 9) x.staff.push(detail);
+        })
+      }
+
+
+      // switch(detail.matrixScore) {
+      //   case [0, 2]:
+      //     this.matrixItems.find(x => {
+      //       if(x.order == 1) x.staff.push(detail);
+      //     })
+      //     break;
+      //   case [1, 2]:
+      //     this.matrixItems.find(x => {
+      //       if(x.order == 2) x.staff.push(detail);
+      //     })
+      //     break;
+      //   case [2, 2]:
+      //     this.matrixItems.find(x => {
+      //       if(x.order == 3) x.staff.push(detail);
+      //     })
+      //     break;
+      //   case detail.matrixScore.length === 2 && detail.matrixScore[0] === 0 && detail.matrixScore[1] === 1:
+      //     // alert('Here');
+      //     // this.matrixItems.find(x => {
+      //     //   if(x.order == 4) x.staff.push(detail);
+      //     // })
+      //     break;
+      //   case [1, 1]:
+      //     this.matrixItems.find(x => {
+      //       if(x.order == 5) x.staff.push(detail);
+      //     })
+      //     break;
+      //   case [2, 1]:
+      //     this.matrixItems.find(x => {
+      //       if(x.order == 6) x.staff.push(detail);
+      //     })
+      //     break;
+      //   case [0, 0]:
+      //     this.matrixItems.find(x => {
+      //       if(x.order == 7) x.staff.push(detail);
+      //     })
+      //     break;
+      //   case [0, 1]:
+      //     this.matrixItems.find(x => {
+      //       if(x.order == 8) x.staff.push(detail);
+      //     })
+      //     break;
+      //   case [0, 2]:
+      //     this.matrixItems.find(x => {
+      //       if(x.order == 9) x.staff.push(detail);
+      //     })
+      //     break;
+      //   default:
+      //     break;
+      // }
+      // if(detail.matrixScore = [0,1]) {
+      //   this.matrixItems.find(x => {
+      //     if(x.order == 4) x.staff.push(detail);
+      //   })
+      // }
+    })
   }
 
   convertToNum(val) {
@@ -376,10 +497,10 @@ export class GeneralAppraisalComponent implements OnInit {
       width: '30%',
       height: 'auto',
       data: {
-        name: this.periodInView.appraisalPeriodName,
-        id: this.periodInView._id,
+        name: this.periodInView[0].appraisalPeriodName,
+        id: this.periodInView[0]._id,
         isExisting: true,
-        modalInfo: this.periodInView
+        modalInfo: this.periodInView[0]
       },
     }).afterClosed().subscribe(() => {
       this.getPageData();

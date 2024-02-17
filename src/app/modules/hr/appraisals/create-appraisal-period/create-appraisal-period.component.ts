@@ -32,7 +32,7 @@ export class CreateAppraisalPeriodComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Name',
         controlWidth: '100%',
-        initialValue: this.data.isExisting ? this.data.modalInfo.periodName : this.data.name,
+        initialValue: this.data.isExisting ? this.data.modalInfo.appraisalPeriodName : this.data.name,
         validators: [Validators.required],
         order: 1
       },
@@ -50,7 +50,7 @@ export class CreateAppraisalPeriodComponent implements OnInit {
         controlType: 'date',
         controlLabel: 'Start Date',
         controlWidth: '48%',
-        initialValue: this.data.isExisting ? this.datePipe.transform(this.data.modalInfo.date, 'dd/MM/yyyy') : null,
+        initialValue: this.data.isExisting ? this.data.modalInfo.startDate : null,
         validators: [Validators.required],
         order: 3
       },
@@ -59,7 +59,7 @@ export class CreateAppraisalPeriodComponent implements OnInit {
         controlType: 'date',
         controlLabel: 'End Date',
         controlWidth: '48%',
-        initialValue: this.data.isExisting ? this.datePipe.transform(this.data.modalInfo.date, 'dd/MM/yyyy') : null,
+        initialValue: this.data.isExisting ? this.data.modalInfo.endDate : null,
         validators: [Validators.required],
         order: 4
       },
@@ -68,7 +68,7 @@ export class CreateAppraisalPeriodComponent implements OnInit {
         controlType: 'date',
         controlLabel: 'Active Date',
         controlWidth: '48%',
-        initialValue: this.data.isExisting ? this.datePipe.transform(this.data.modalInfo.date, 'dd/MM/yyyy') : null,
+        initialValue: this.data.isExisting ? this.data.modalInfo.activeDate : null,
         validators: [Validators.required],
         order: 5
       },
@@ -77,7 +77,7 @@ export class CreateAppraisalPeriodComponent implements OnInit {
         controlType: 'date',
         controlLabel: 'Inactive Date',
         controlWidth: '48%',
-        initialValue: this.data.isExisting ? this.datePipe.transform(this.data.modalInfo.date, 'dd/MM/yyyy') : null,
+        initialValue: this.data.isExisting ? this.data.modalInfo.inactiveDate : null,
         validators: [Validators.required],
         order: 6
       }
