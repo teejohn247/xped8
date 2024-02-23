@@ -483,7 +483,7 @@ export class AppraisalFormComponent implements OnInit {
         kpiGroups: this.generateKpiGrpValues()
       }
       console.log(data);
-      this.hrService.submitAppraisalReview(data, this.periodInView._id).subscribe({
+      this.hrService.submitAppraisalReview(data, this.periodInView.employeeKpiId).subscribe({
         next: res => {
           console.log(res);
           if(res.status == 200) {
