@@ -308,7 +308,7 @@ export class AppraisalFormComponent implements OnInit {
       this.employeeDetails = this.authService.loggedInUser.data;
       this.employeeInViewId = this.employeeDetails._id;
     }
-    // console.log(this.appraisalPending);
+    console.log(this.employeeDetails);
     // this.kpiGroups = await this.hrService.getKpiGroups().toPromise();
     this.ratingScale = await this.hrService.getKpiRatings().toPromise();
     this.appraisalPeriods = await this.hrService.getAppraisalPeriods().toPromise();
@@ -321,19 +321,29 @@ export class AppraisalFormComponent implements OnInit {
     this.periodInView = await this.hrService.getEmployeeAppraisalDetails(this.employeeInViewId, this.currentPeriodId).toPromise();
     this.periodInView = this.periodInView['data'][0];
     console.log(this.periodInView);
-    if(this.periodInView.status == 'Pending') this.appraisalPending = true;
+    if(this.periodInView.status == 'Pending') {
+      this.appraisalPending = true;
+    }
+    else {
+      this.appraisalPending = false;
+    }
     this.kpiCriteria = this.periodInView.kpiGroups;
 
-    if(this.periodInView.status != 'Pending') {
+    if(this.periodInView.status !== 'Pending') {
       this.appraisalForm.get('employeeName').setValue(this.periodInView.fullName);
       this.appraisalForm.get('employeeSignature').setValue(this.periodInView.fullName);
       this.appraisalForm.get('employeeSignDate').setValue(this.strToDate(this.periodInView.employeeSubmissionDate, 'startDate'));
     }
-    else if(this.periodInView.status != 'Pending' && this.periodInView.status != 'Awaiting Manager Review') {
+    if(this.periodInView.status == 'Manager reviewed') {
       this.appraisalForm.get('managerName').setValue(this.periodInView.managerName);
       this.appraisalForm.get('managerSignature').setValue(this.periodInView.managerName);
       this.appraisalForm.get('managerSignDate').setValue(this.strToDate(this.periodInView.managerSubmissionDate, 'endDate'));
+      this.appraisalForm.get('managerSummary').setValue(this.periodInView.managerOverallComment);
+      this.appraisalForm.get('employeePerformance').setValue(String(this.periodInView.matrixScore[0]));
+      this.appraisalForm.get('employeePotential').setValue(String(this.periodInView.matrixScore[1]));
     }
+
+    console.log(this.appraisalForm.value);
 
     // KPI Rating Form Declaration
     this.kpiRatingForm = this.fb.group({

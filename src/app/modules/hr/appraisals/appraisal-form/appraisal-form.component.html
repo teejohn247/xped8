@@ -141,7 +141,7 @@
                                                     <span class="text-capitalize">
                                                         <input 
                                                             type="text"
-                                                            [ngClass]="{'disabled': appraisalPending}"
+                                                            [ngClass]="{'disabled': !(periodInView?.managerId == employeeDetails?._id)}"
                                                             [matMenuTriggerFor]="managerRatingMenu"
                                                             formControlName="managerRating" 
                                                             class="form-control form-control-sm" 
@@ -159,8 +159,8 @@
                                                         <textarea
                                                             autosize
                                                             rows="1"
-                                                            [ngClass]="{'disabled': appraisalPending}"
-                                                            [readonly] = "appraisalPending"
+                                                            [ngClass]="{'disabled': !(periodInView?.managerId == employeeDetails?._id)}"
+                                                            [readonly] = "!(periodInView?.managerId == employeeDetails?._id)"
                                                             formControlName="managerComments" 
                                                             class="form-control form-control-sm" 
                                                             placeholder="Enter comments"
@@ -242,7 +242,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="!appraisalPending" class="validation mt-4">
+                    <div *ngIf="!(appraisalPending || periodInView?.status == 'Awaiting Manager Review')" class="validation mt-4">
                         <div class="hdr">For Managers:</div>
                         <div class="field-wrap align-items-start">
                             <mat-form-field color="accent" class="mb-lg-2" [style.width]="'22%'" appearance="fill">
@@ -292,7 +292,7 @@
                                 <input matInput formControlName="managerSignDate" style="font-size: 1rem; color: greenyellow;">
                             </mat-form-field>
 
-                            <div (click)="submitAppraisalReview(true)" class="cta primary-bkg icon lg"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Review</div>
+                            <div *ngIf="periodInView?.managerId == employeeDetails?._id" (click)="submitAppraisalReview(true)" class="cta primary-bkg icon lg"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Review</div>
                         </div>
 
                     </div>
