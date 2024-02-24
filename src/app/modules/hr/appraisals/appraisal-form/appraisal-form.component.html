@@ -292,7 +292,7 @@
                                 <input matInput formControlName="managerSignDate" style="font-size: 1rem; color: greenyellow;">
                             </mat-form-field>
 
-                            <div *ngIf="periodInView?.managerId == employeeDetails?._id" (click)="submitAppraisalReview(true)" class="cta primary-bkg icon lg"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Review</div>
+                            <div *ngIf="periodInView?.status !== 'Manager reviewed'" (click)="submitAppraisalReview(true)" class="cta primary-bkg icon lg"><i class="bi bi-check-circle-fill"></i> Submit Appraisal Review</div>
                         </div>
 
                     </div>
