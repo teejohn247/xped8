@@ -242,7 +242,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="!(appraisalPending || periodInView?.status == 'Awaiting Manager Review')" class="validation mt-4">
+                    <div *ngIf="!appraisalPending || periodInView?.managerId == employeeDetails?._id" class="validation mt-4">
                         <div class="hdr">For Managers:</div>
                         <div class="field-wrap align-items-start">
                             <mat-form-field color="accent" class="mb-lg-2" [style.width]="'22%'" appearance="fill">

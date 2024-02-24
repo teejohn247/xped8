@@ -301,11 +301,11 @@ export class AppraisalFormComponent implements OnInit {
   getInitialData = async () => {
     this.employeeInViewId = this.activatedRoute.snapshot.params["id"];
     console.log(this.employeeInViewId);
+    this.employeeDetails = this.authService.loggedInUser.data;
     if(this.employeeInViewId) {
       this.appraisalPending = false;
     }
     else {
-      this.employeeDetails = this.authService.loggedInUser.data;
       this.employeeInViewId = this.employeeDetails._id;
     }
     console.log(this.employeeDetails);
