@@ -170,9 +170,19 @@
                     border-radius: var(--radius-md);
                     background-color: var(--warning-lightest);
                     border: 1px solid white;
+
+                    &.pending {
+                        // border: 1px solid var(--warning-light);
+                        background-color: var(--warning-lightest);
+                    }
+
+                    &.inReview {
+                        // border: 1px solid var(--pending-light);
+                        background-color: var(--pending-lightest);
+                    }
         
-                    &.selected {
-                        border: 1px solid var(--approved-light);
+                    &.reviewed {
+                        // border: 1px solid var(--approved-light);
                         background-color: var(--approved-lightest);
                     }
         
@@ -246,7 +256,7 @@
 
         .appraisal-hdr {
             .detail {
-                color: var(--primary);
+                //color: var(--primary);
 
                 i {
                     font-size: 1.1rem;
@@ -541,7 +551,7 @@
         color: var(--darker);
         transition: all 0.4s ease-in;
 
-        &:hover {
+        &:hover, &.active {
             background-color: var(--primary-light);
         }
 

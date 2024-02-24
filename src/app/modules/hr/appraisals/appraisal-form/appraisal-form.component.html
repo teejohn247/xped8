@@ -6,7 +6,13 @@
             <div class="main-actions d-flex justify-content-start align-items-center">
                 <div class="custom-dropdown" [matMenuTriggerFor]="periodMenu"> Select Appraisal Period <i class="bi bi-chevron-down"></i> </div>
                 <mat-menu #periodMenu="matMenu">
-                    <div *ngFor="let item of appraisalPeriods['data']" (click)="setAppraisalData(item)" class="menu-item d-flex justify-content-between" mat-menu-item>
+                    <div 
+                        *ngFor="let item of appraisalPeriods['data']" 
+                        (click)="setAppraisalData(item)" 
+                        class="menu-item d-flex justify-content-between"
+                        [class.active]="periodInView?.appraisalPeriodName == item.appraisalPeriodName" 
+                        mat-menu-item
+                    >
                         {{item.appraisalPeriodName}}
                     </div>
                 </mat-menu>
@@ -141,7 +147,7 @@
                                                     <span class="text-capitalize">
                                                         <input 
                                                             type="text"
-                                                            [ngClass]="{'disabled': !(periodInView?.managerId == employeeDetails?._id)}"
+                                                            [ngClass]="{'disabled': (periodInView?.managerId !== employeeDetails?._id) || (periodInView?.status == 'Manager reviewed')}"
                                                             [matMenuTriggerFor]="managerRatingMenu"
                                                             formControlName="managerRating" 
                                                             class="form-control form-control-sm" 
@@ -159,8 +165,8 @@
                                                         <textarea
                                                             autosize
                                                             rows="1"
-                                                            [ngClass]="{'disabled': !(periodInView?.managerId == employeeDetails?._id)}"
-                                                            [readonly] = "!(periodInView?.managerId == employeeDetails?._id)"
+                                                            [ngClass]="{'disabled': (periodInView?.managerId !== employeeDetails?._id) || (periodInView?.status == 'Manager reviewed')}"
+                                                            [readonly] = "(periodInView?.managerId !== employeeDetails?._id) || (periodInView?.status == 'Manager reviewed')"
                                                             formControlName="managerComments" 
                                                             class="form-control form-control-sm" 
                                                             placeholder="Enter comments"
@@ -242,7 +248,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="!appraisalPending || periodInView?.managerId == employeeDetails?._id" class="validation mt-4">
+                    <div *ngIf="periodInView?.status == 'Manager reviewed' || periodInView?.managerId == employeeDetails?._id" class="validation mt-4">
                         <div class="hdr">For Managers:</div>
                         <div class="field-wrap align-items-start">
                             <mat-form-field color="accent" class="mb-lg-2" [style.width]="'22%'" appearance="fill">

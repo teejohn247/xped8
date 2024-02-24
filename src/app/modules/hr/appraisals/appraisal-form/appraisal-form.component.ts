@@ -525,6 +525,7 @@ export class AppraisalFormComponent implements OnInit {
         let formCtrl = this.kpiRatingForm.get(['kpiGroups', i, kpiGrp.groupName, j, kpi.kpiName]) as FormGroup;
         kpiValues['kpiId'] = kpi.kpiId;
         kpiValues['kpiName'] = kpi.kpiName;
+        kpiValues['kpiDescription'] = kpi.kpiDescription;
         remarksObj['employeeComment'] = formCtrl.controls['employeeComments'].value;
         remarksObj['employeeRating'] = formCtrl.controls['employeeRating'].value;
         if(!this.appraisalPending) {

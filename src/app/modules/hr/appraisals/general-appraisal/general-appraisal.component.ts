@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from "@angular/router";
 import { CreateKpiGroupComponent } from '../create-kpi-group/create-kpi-group.component';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { CreateKpiComponent } from '../create-kpi/create-kpi.component';
 import { CreateAppraisalPeriodComponent } from '../create-appraisal-period/create-appraisal-period.component';
@@ -17,6 +18,7 @@ import { CreateRatingScaleComponent } from '../create-rating-scale/create-rating
 })
 export class GeneralAppraisalComponent implements OnInit {
 
+  loggedInUser: any;
   departmentList: any[] = [];
   appraisalPeriods: any[] = [];
   appraisalRequests: any[] = [];
@@ -30,110 +32,7 @@ export class GeneralAppraisalComponent implements OnInit {
 
   employees: any[] = [];
   matrixScore = [0, 1];
-
-  matrixItems = [
-    {
-      id: 3,
-      label: "Star",
-      order: 3,
-      staff: [
-        // {
-        //   image: "staff1.jpg"
-        // },
-      ]
-    },
-    {
-      id: 2,
-      label: "High Potential",
-      order: 2,
-      staff: [
-        // {
-        //   image: "staff1.jpg"
-        // },
-        // {
-        //   image: "staff3.jpg"
-        // },
-        // {
-        //   image: "staff2.jpg"
-        // },
-      ]
-    },
-    {
-      id: 1,
-      label: "Potential Gem",
-      order: 1
-    },
-    {
-      id: 6,
-      label: "High Performer",
-      order: 6,
-      staff: [
-        // {
-        //   image: "staff1.jpg"
-        // },
-        // {
-        //   image: "profile-img.jpg"
-        // },
-      ]
-    },
-    {
-      id: 5,
-      label: "Core Player",
-      order: 5,
-      staff: [
-        // {
-        //   image: "staff1.jpg"
-        // },
-        // {
-        //   image: "staff3.jpg"
-        // },
-        // {
-        //   image: "staff2.jpg"
-        // },
-        // {
-        //   image: "profile-img.jpg"
-        // },
-      ]
-    },
-    {
-      id: 4,
-      label: "Inconsistent Player",
-      order: 4,
-      staff: [
-        // {
-        //   image: "profile-img.jpg"
-        // },
-      ]
-    },
-    {
-      id: 9,
-      label: "Solid Performer",
-      order: 9,
-      staff: [
-        // {
-        //   image: "profile-img.jpg"
-        // },
-      ]
-    },
-    {
-      id: 8,
-      label: "Average Performer",
-      order: 8,
-      staff: [
-        // {
-        //   image: "staff1.jpg"
-        // },
-        // {
-        //   image: "staff3.jpg"
-        // },
-      ]
-    },
-    {
-      id: 7,
-      label: "Risk",
-      order: 7,
-    }
-  ]
+  matrixItems: any[] = [];
 
   ratingAccordionItems = [
     {
@@ -166,6 +65,7 @@ export class GeneralAppraisalComponent implements OnInit {
   constructor(    
     public dialog: MatDialog,
     private router: Router,
+    private authService: AuthenticationService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) {
@@ -216,11 +116,13 @@ export class GeneralAppraisalComponent implements OnInit {
     //     })
     //   })
     // }
-    this.matrixItems.sort((a,b) => (a.order - b.order));
+    
     this.getPageData();
   }
 
   getPageData = async () => {
+    this.loggedInUser = this.authService.loggedInUser.data;
+    console.log(this.loggedInUser);
     this.departmentList = await this.hrService.getDepartments().toPromise();
     this.employees = await this.hrService.getEmployees().toPromise();
     this.ratingAccordionItems = await this.hrService.getKpiRatings().toPromise();
@@ -228,8 +130,12 @@ export class GeneralAppraisalComponent implements OnInit {
     this.appraisalPeriods = await this.hrService.getAppraisalPeriods().toPromise();
     this.appraisalRequests = await this.hrService.getAppraisalRequests().toPromise();
     console.log(this.appraisalRequests);
-    // this.periodInView = this.appraisalPeriods['data'][0];
     this.currentPeriodId = this.appraisalPeriods['data'][0]._id;
+    // this.periodInView = this.appraisalPeriods['data'][0];
+    this.loadPageData();
+  }
+
+  loadPageData= async () =>  {
     this.periodInView = await this.hrService.getAppraisalDetails(this.currentPeriodId).toPromise();
     this.periodInView = this.periodInView['data'];
     console.log(this.periodInView);
@@ -237,23 +143,88 @@ export class GeneralAppraisalComponent implements OnInit {
     this.generateMatrix(this.periodInView[0].appraisalData);
   }
 
-  generateMatrix(info: any[]) {
-    info.forEach(x => {
-      console.log(x);
-      x.matrixScore = [0, 1];
-    })
+  generateMatrix(info: any) {
+    console.log(info);
+    // info.forEach(x => {
+    //   console.log(x);
+    //   x.matrixScore = [0, 1];
+    // })
+    this.matrixItems = [
+      {
+        id: 3,
+        label: "Star",
+        order: 3,
+        staff: []
+      },
+      {
+        id: 2,
+        label: "High Potential",
+        order: 2,
+        staff: []
+      },
+      {
+        id: 1,
+        label: "Potential Gem",
+        order: 1,
+        staff: []
+      },
+      {
+        id: 6,
+        label: "High Performer",
+        order: 6,
+        staff: []
+      },
+      {
+        id: 5,
+        label: "Core Player",
+        order: 5,
+        staff: []
+      },
+      {
+        id: 4,
+        label: "Inconsistent Player",
+        order: 4,
+        staff: []
+      },
+      {
+        id: 9,
+        label: "Solid Performer",
+        order: 9,
+        staff: []
+      },
+      {
+        id: 8,
+        label: "Average Performer",
+        order: 8,
+        staff: []
+      },
+      {
+        id: 7,
+        label: "Risk",
+        order: 7,
+        staff: []
+      }
+    ]
+
+    this.matrixItems.sort((a,b) => (a.order - b.order));
+
     info.map(detail => {
-      if(detail.matrixScore = [0, 2]) {
+      if(detail.matrixScore[0] == 0 && detail.matrixScore[1] == 2) {
         this.matrixItems.find(x => {
-          if(x.order == 1) x.staff.push(detail);
+          if(x.order == 1) {
+            x.staff.push(detail);
+            alert('yeah')
+          };
+          // if(x.order == 1) ;
+
         })
       }
-      else if(detail.matrixScore = [1, 2]) {
+      else if(detail.matrixScore[0] == 1 && detail.matrixScore[1] == 2) {
         this.matrixItems.find(x => {
           if(x.order == 2) x.staff.push(detail);
         })
       }
-      else if(detail.matrixScore = [2, 2]) {
+      else if(detail.matrixScore[0] == 2 && detail.matrixScore[1] == 2) {
         this.matrixItems.find(x => {
           if(x.order == 3) x.staff.push(detail);
         })
@@ -263,27 +234,27 @@ export class GeneralAppraisalComponent implements OnInit {
           if(x.order == 4) x.staff.push(detail);
         })
       }
-      else if(detail.matrixScore = [1, 1]) {
+      else if(detail.matrixScore[0] == 1 && detail.matrixScore[1] == 1) {
         this.matrixItems.find(x => {
           if(x.order == 5) x.staff.push(detail);
         })
       }
-      else if(detail.matrixScore = [2, 1]) {
+      else if(detail.matrixScore[0] == 2 && detail.matrixScore[1] == 1) {
         this.matrixItems.find(x => {
           if(x.order == 6) x.staff.push(detail);
         })
       }
-      else if(detail.matrixScore = [0, 0]) {
+      else if(detail.matrixScore[0] == 0 && detail.matrixScore[1] == 0) {
         this.matrixItems.find(x => {
           if(x.order == 7) x.staff.push(detail);
         })
       }
-      else if(detail.matrixScore = [0, 1]) {
+      else if(detail.matrixScore[0] == 0 && detail.matrixScore[1] == 1) {
         this.matrixItems.find(x => {
           if(x.order == 8) x.staff.push(detail);
         })
       }
-      else if(detail.matrixScore = [0, 2]) {
+      else if(detail.matrixScore[0] == 0 && detail.matrixScore[1] == 2) {
         this.matrixItems.find(x => {
           if(x.order == 9) x.staff.push(detail);
         })
@@ -346,6 +317,7 @@ export class GeneralAppraisalComponent implements OnInit {
       //   })
       // }
     })
+
   }
 
   convertToNum(val) {
@@ -590,7 +562,9 @@ export class GeneralAppraisalComponent implements OnInit {
 
 
   setAppraisalData(details) {
-
+    console.log(details);
+    this.currentPeriodId = details._id;
+    this.loadPageData();
   }
 
 }

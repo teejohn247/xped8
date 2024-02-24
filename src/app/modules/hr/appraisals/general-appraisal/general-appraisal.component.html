@@ -5,16 +5,22 @@
             <!-- <div class="cta trans-bkg filter-trigger"><i class="bi bi-filter"></i> Filter</div> -->
             <div class="custom-dropdown" [matMenuTriggerFor]="periodMenu"> Select Appraisal Period <i class="bi bi-chevron-down"></i> </div>
             <mat-menu #periodMenu="matMenu">
-                <div *ngFor="let item of appraisalPeriods['data']" (click)="setAppraisalData(item)" class="menu-item d-flex justify-content-between" mat-menu-item>
+                <div 
+                    *ngFor="let item of appraisalPeriods['data']" 
+                    (click)="setAppraisalData(item)" 
+                    class="menu-item d-flex justify-content-between"
+                    [class.active]="periodInView && periodInView[0].appraisalPeriodName == item.appraisalPeriodName"  
+                    mat-menu-item
+                >
                     {{item.appraisalPeriodName}}
-                    <span class="actions">
+                    <span *ngIf="loggedInUser.isSuperAdmin" class="actions">
                         <i (click)="deleteAppraisalPeriod(item)" class="bi bi-trash3-fill delete"></i>
                     </span>
                 </div>
             </mat-menu>
-            <div (click)="addAppraisalPeriod()" class="cta primary-bkg icon md ms-lg-3"><i class="bi bi-calendar4-week"></i>New Appraisal Period</div>
-            <div (click)="openEditModal()" class="cta trans-bkg md rd edit ms-lg-3"><i class="bi bi-pen-fill"></i></div>
-            <div (click)="deleteAppraisalPeriod(periodInView[0])" class="cta trans-bkg md rd delete ms-lg-3"><i class="bi bi-trash3-fill"></i></div>
+            <div *ngIf="loggedInUser.isSuperAdmin" (click)="addAppraisalPeriod()" class="cta primary-bkg icon md ms-lg-3"><i class="bi bi-calendar4-week"></i>New Appraisal Period</div>
+            <div *ngIf="loggedInUser.isSuperAdmin" (click)="openEditModal()" class="cta trans-bkg md rd edit ms-lg-3"><i class="bi bi-pen-fill"></i></div>
+            <div *ngIf="loggedInUser.isSuperAdmin" (click)="deleteAppraisalPeriod(periodInView[0])" class="cta trans-bkg md rd delete ms-lg-3"><i class="bi bi-trash3-fill"></i></div>
         </div>
     </div>
 
@@ -41,7 +47,15 @@
                             <div *ngIf="periodInView" class="request-wrap">
                                 <div *ngFor="let employee of periodInView[0]?.appraisalData; let i = index" class="request-hld">
                                     <div class="view"><i class="bi bi-arrow-up-right-circle-fill"></i></div>
-                                    <div (click)="viewAppraisalInfo(employee)" class="cont">
+                                    <div 
+                                        (click)="viewAppraisalInfo(employee)" 
+                                        class="cont"
+                                        [ngClass]="{
+                                            'pending': employee.status == 'Pending',
+                                            'inReview': employee.status == 'Awaiting Manager Review',
+                                            'reviewed': employee.status == 'Manager reviewed'
+                                        }"
+                                    >
                                         <div class="det d-flex align-items-center gap-2">
                                             <div class="image rd bkg-standard" style="background-image: url('{{employee.profilePic}}');"></div>
                                             <div class="info">
@@ -67,7 +81,7 @@
                     <div class="card-cont mb-lg-4">
                         <div class="appraisal-hdr">
                             <div class="detail">
-                                <span>Appraisal Matrix</span>
+                                <span>Appraisal Matrix for {{periodInView && periodInView[0].appraisalPeriodName}}</span>
                             </div>
                         </div>
                     </div>
@@ -113,7 +127,7 @@
                 <div class="row-card card-xmmd card-ylg h-auto ms-lg-4">
                     <div class="cont">
                         <div class="card-title clr">Key Performance Indicators</div>
-                        <div (click)="addKpiGroup()" class="cta quick primary-bkg xs">Add Group</div>
+                        <div *ngIf="loggedInUser.isSuperAdmin" (click)="addKpiGroup()" class="cta quick primary-bkg xs">Add Group</div>
 
                         <mat-accordion>
                             <mat-expansion-panel hideToggle *ngFor="let item of kpiGroups['data']; let i = index" class="mat-elevation-z0">
@@ -122,9 +136,9 @@
                                         <div class="content w-100 d-flex justify-content-between align-items-center">
                                             <div class="det">
                                                 <div class="major bd text-capitalize">{{item.groupName}} KPIs</div>
-                                                <div class="minor">{{item.groupKpis.length}} KPIs <div (click)="addKpi(item._id)" class="cta primary-light-bkg xxs ms-lg-1">Create KPI</div></div>
+                                                <div *ngIf="loggedInUser.isSuperAdmin" class="minor">{{item.groupKpis.length}} KPIs <div (click)="addKpi(item._id)" class="cta primary-light-bkg xxs ms-lg-1">Create KPI</div></div>
                                             </div>
-                                            <div class="actions">
+                                            <div *ngIf="loggedInUser.isSuperAdmin" class="actions">
                                                 <i *ngIf="!(item.groupName == 'General' || item.groupName == 'specific')" (click)="updateKpiGroup(item)" class="bi bi-pen-fill"></i>
                                                 <i *ngIf="!(item.groupName == 'General' || item.groupName == 'specific')" (click)="deleteKpiGroup(item)" class="bi bi-trash3-fill"></i>
                                             </div>
@@ -135,7 +149,7 @@
                                     <div class="list-scroll">
                                         <div *ngFor="let entity of item.groupKpis; let j = index" class="list-hld">
                                             <div class="name">{{entity.kpiName}}</div>
-                                            <div class="actions">
+                                            <div *ngIf="loggedInUser.isSuperAdmin" class="actions">
                                                 <i (click)="updateKpi(entity)" class="bi bi-pen-fill"></i>
                                                 <i (click)="deleteKpi(entity)" class="bi bi-trash3-fill"></i>
                                             </div>
@@ -201,7 +215,7 @@
 
                     <div class="cont mt-lg-4">
                         <div class="card-title clr mb-lg-1">Rating Scale</div>
-                        <div (click)="addRating()" class="cta quick primary-bkg xs">Add Rating</div>
+                        <div *ngIf="loggedInUser.isSuperAdmin" (click)="addRating()" class="cta quick primary-bkg xs">Add Rating</div>
                         <mat-accordion>
                             <mat-expansion-panel hideToggle *ngFor="let item of ratingAccordionItems['data']; let i = index" class="mat-elevation-z0">
                                 <mat-expansion-panel-header style="max-height: 40px;">
@@ -211,7 +225,7 @@
                                                 <span class="rating-icon pe-lg-1" *ngFor="let f of [].constructor(convertToNum(item.value))"><i class="bi bi-star-fill"></i></span>
                                                 <span class="ps-lg-1">{{item.ratingName}}</span>
                                             </div>
-                                            <div class="actions">
+                                            <div *ngIf="loggedInUser.isSuperAdmin" class="actions">
                                                 <i (click)="updateKpiRating(item)" class="bi bi-pen-fill"></i>
                                                 <i (click)="deleteKpiRating(item)" class="bi bi-trash3-fill"></i>
                                             </div>
