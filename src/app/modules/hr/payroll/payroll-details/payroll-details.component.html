@@ -6,7 +6,13 @@
             <div (click)="openPayrollModal()" class="cta primary-bkg icon md"><i class="bi bi-calendar3"></i>Create New Period</div>
             <div class="custom-dropdown" [matMenuTriggerFor]="periodMenu"> Select Payroll Period <i class="bi bi-chevron-down"></i> </div>
             <mat-menu #periodMenu="matMenu">
-                <div *ngFor="let item of payrollPeriods['data']" (click)="setPayrollData(item)" class="menu-item" mat-menu-item>
+                <div 
+                    *ngFor="let item of payrollPeriods['data']" 
+                    (click)="setPayrollData(item)" 
+                    class="menu-item" 
+                    [class.active]="periodInView && periodInView.payrollPeriodName == item.payrollPeriodName"  
+                    mat-menu-item
+                >
                     {{item.payrollPeriodName}}
                     <!-- <span class="actions">
                         <i class="bi bi-pen-fill edit"></i>

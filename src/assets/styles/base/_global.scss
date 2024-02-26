@@ -19,6 +19,12 @@ a {
     justify-content: center;
 }
 
+.scroll-cont {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
 .bkg-standard {
     background-size: cover;
     background-repeat: no-repeat;
@@ -284,7 +290,7 @@ a {
 .content-wrap {
     height: 100%;
     display: flex;
-    overflow: hidden;
+    overflow-y: scroll;
     background-color: #F9FAFE;
     flex-direction: column;
     padding: 3vh 4%;

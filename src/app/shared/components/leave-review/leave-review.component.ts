@@ -79,7 +79,7 @@ export class LeaveReviewComponent implements OnInit {
         controlLabel: 'Reason for decision',
         controlWidth: '100%',
         readonly: false,
-        initialValue: '',
+        initialValue: this.data.modalInfo.decisionMessage,
         validators: null,
         order: 6
       })
