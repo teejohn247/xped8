@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgChartsModule } from 'ng2-charts';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule }  from '@angular/material/table';
@@ -58,7 +59,8 @@ const SHARED_COMP = [
     ReactiveFormsModule,
     FormsModule,
     NgChartsModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    NgxMaterialTimepickerModule
   ],
   providers : [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

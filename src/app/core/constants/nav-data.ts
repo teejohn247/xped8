@@ -46,6 +46,11 @@ export const navbarData = [
                 label: 'Recruitment',
             },
             {
+                routeLink: 'human-resources/calendar',
+                icon: 'bi bi-calendar2-week-fill',
+                label: 'Calendar'
+            },
+            {
                 routeLink: 'human-resources/document-management',
                 icon: 'bi bi-file-earmark-text-fill',
                 label: 'Attendance'
@@ -150,6 +155,11 @@ export const navbarDataReg = [
         label: 'Appraisal Requests',
     },
     {
+        routeLink: 'human-resources/calendar',
+        icon: 'bi bi-calendar2-week-fill',
+        label: 'Calendar'
+    },
+    {
         routeLink: 'human-resources/visitors-log',
         icon: 'bi bi-stickies-fill',
         label: 'Visitors Log'
@@ -207,6 +217,11 @@ export const navbarDataManager = [
         routeLink: 'human-resources/appraisals',
         icon: 'bi bi-journal-check',
         label: 'Appraisal Management',
+    },
+    {
+        routeLink: 'human-resources/calendar',
+        icon: 'bi bi-calendar2-week-fill',
+        label: 'Calendar'
     },
     {
         routeLink: 'human-resources/visitors-log',

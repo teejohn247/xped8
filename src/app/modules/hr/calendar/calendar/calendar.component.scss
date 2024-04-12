@@ -1,0 +1,29 @@
+.form-check {
+    padding: 0.4rem 2.5rem 0.35rem;
+    border-radius: 6px;
+
+    &.events {
+        background: var(--primary-light);
+    }
+
+    &.meetings {
+        background: var(--pending-light);
+    }
+
+    &.holidays {
+        background: var(--considered-light);
+    }
+
+    &.leave {
+        background: var(--approved-light);
+    }
+
+    .form-check-label {
+
+        span {
+            cursor: pointer;
+            color: var(--black-tint);
+            letter-spacing: 0.02rem;
+        }
+    }
+}

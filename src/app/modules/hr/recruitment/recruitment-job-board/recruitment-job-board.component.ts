@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { DatePipe } from '@angular/common';
+import { JobPostInfoComponent } from '../job-post-info/job-post-info.component';
 
 @Component({
   selector: 'app-recruitment-job-board',
@@ -6,6 +11,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./recruitment-job-board.component.scss']
 })
 export class RecruitmentJobBoardComponent implements OnInit {
+  jobRoles: any[] = [];
+  employeeList: any[] = [];
+  departmentList: any[] = [];
 
   jobPosts = [
     {
@@ -70,9 +78,33 @@ export class RecruitmentJobBoardComponent implements OnInit {
     },
   ]
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog,
+    private datePipe: DatePipe,
+    private hrService: HumanResourcesService,     
+    private notifyService: NotificationService,
+  ) { }
 
   ngOnInit(): void {
+    this.getPageData();
+  }
+
+  getPageData = async () => {
+    this.jobRoles = await this.hrService.getJobRoles().toPromise();
+    this.employeeList = await this.hrService.getEmployees().toPromise();
+    this.departmentList = await this.hrService.getDepartments().toPromise();
+  }
+
+  addNewJobPost() {
+    const dialogRef = this.dialog.open(JobPostInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        isExisting: false,
+        employeeList: this.employeeList['data'],
+        departmentList: this.departmentList['data'],
+      },
+    });
   }
 
 }

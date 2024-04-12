@@ -3,6 +3,7 @@
 @import "@angular/material/prebuilt-themes/pink-bluegrey";
 @import './assets/styles/base/base-dir';
 @import './assets/styles/components/components-dir';
+@import '../node_modules/angular-calendar/css/angular-calendar.css';
 
 html, 
 body { 
@@ -16,3 +17,166 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     background-color: rgba(255, 255, 255, 0.5) !important;
 }
 
+/******************* CALENDAR STYLINGS ***********************/
+
+.cal-curr-month {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+}
+
+.cal-week-view {
+    overflow: hidden;
+    border-radius: 0.4rem;
+    box-shadow: var(--card-shadow);
+
+    .cal-day-headers {
+        background: var(--primary-light);
+
+        .cal-header {
+
+            b {
+                font-size: 0.85rem !important;
+                font-weight: 400 !important;
+                letter-spacing: 0.02rem;
+            }
+    
+            span {
+                font-size: 0.7rem !important;
+                letter-spacing: 0.02rem;
+            }
+        }
+    }
+}
+
+.cal-month-view {
+    overflow: hidden;
+    border-radius: 0.4rem;
+    box-shadow: var(--card-shadow);
+
+    .cal-header {
+        background: var(--primary-light);
+    
+        &:hover {
+            background: var(--primary-light);
+        }
+
+        .cal-cell {
+            font-weight: 400;
+            letter-spacing: 0.02rem;
+            padding: 10px 0;
+        }
+    }
+
+    .cal-days {
+        border: none;
+
+        .ng-star-inserted {
+
+            &:last-child {
+
+                .cal-cell-row {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+
+    .cal-day-cell {
+        min-height: 30px;
+    }
+
+    .cal-day-number {
+        font-size: 0.85rem;
+    }
+
+    .cal-day-cell.cal-today .cal-day-number {
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .cal-open-day-events {
+        //background: var(--black-tint-md);
+
+        .cal-event-actions {
+
+            a {
+                &:first-child {
+                    color: var(--primary);
+                }
+                &:last-child {
+                    color: var(--warning);
+                }
+            }
+        }
+    }
+
+    .cal-events {
+        margin: 5px 7px;
+    }
+
+    .cal-day-badge {
+        background: var(--primary);
+        //color: var(--darker);
+    }
+}
+
+.btn-group.cal-btns {
+    background: transparent;
+    border: none;
+
+    .prev, .next {
+        //color: var(--darker);
+        border: none;
+        background: var(--primary);
+        //border-radius: 50%;
+    }
+
+    .current {
+        font-size: 0.85rem;
+        border: none;
+        margin: 0;
+        background: var(--primary-light);
+        color: var(--darker);
+
+        &:hover {
+            background: var(--primary-light);
+        }
+    }
+
+    .month-btn,
+    .week-btn, 
+    .day-btn {
+        font-size: 0.85rem;
+        color: var(--darker);
+        border: none;
+        background: var(--primary-light);
+
+        &.active {
+            color: white;
+            background: var(--primary);
+        }
+    } 
+}
+
+.timepicker {
+    overflow: hidden !important;
+    border-radius: 0.4rem !important;
+}
+
+.timepicker-backdrop-overlay,
+.timepicker-overlay {
+    z-index: 1005 !important;
+}
+
+.timepicker-button {
+    color: var(--primary) !important;
+}   
+.timepicker__header,
+.clock-face__number > span.active,
+.clock-face__clock-hand {
+    background-color: var(--primary) !important;
+}
+.clock-face__clock-hand_minute {
+    border-color: var(--primary) !important;
+}

@@ -20,6 +20,7 @@ import { ExpenseManagementComponent } from './expense-management/expense-managem
 import { PayrollDetailsComponent } from './payroll/payroll-details/payroll-details.component';
 import { PayrollPortalComponent } from './payroll/payroll-portal/payroll-portal.component';
 import { AppraisalFormComponent } from './appraisals/appraisal-form/appraisal-form.component';
+import { CalendarComponent } from './calendar/calendar/calendar.component';
 
 
 const routes: Routes = [
@@ -125,6 +126,10 @@ const routes: Routes = [
   {
     path: 'expense-management',
     component: ExpenseManagementComponent
+  },
+  {
+    path: 'calendar',
+    component: CalendarComponent
   },
   {
     path: 'appraisals',

@@ -5,76 +5,67 @@ import { NotificationService } from 'src/app/shared/services/utils/notification.
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 
 @Component({
-  selector: 'app-register-guest',
-  templateUrl: './register-guest.component.html',
-  styleUrls: ['./register-guest.component.scss']
+  selector: 'app-meeting-info',
+  templateUrl: './meeting-info.component.html',
+  styleUrls: ['./meeting-info.component.scss']
 })
-export class RegisterGuestComponent implements OnInit {
+export class MeetingInfoComponent implements OnInit {
 
-  visitorFieldData: any[];
+  meetingFieldData: any[];
   employees: any[] = [];
-  visitorForm!: FormGroup
-  type: 'text' | 'select';
-  @Input() control:string;
+  meetingForm!: FormGroup
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<RegisterGuestComponent>,
+    public dialogRef: MatDialogRef<MeetingInfoComponent>,
     private fb: FormBuilder,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) {
     this.employees = this.data.employeeList;
 
-    this.visitorFieldData = [
+    this.meetingFieldData = [
       {
-        controlName: 'name',
+        controlName: 'meetingTitle',
         controlType: 'text',
-        controlLabel: 'Name',
-        controlWidth: '48%',
+        controlLabel: 'Meeting Title',
+        controlWidth: '100%',
         initialValue: null,
         validators: [Validators.required],
         order: 1
       },
       {
-        controlName: 'email',
-        controlType: 'text',
-        controlLabel: 'Email Address',
-        controlWidth: '48%',
-        initialValue: null,
-        validators: [Validators.required, Validators.email],
-        order: 3
-      },
-      {
-        controlName: 'phoneNo',
-        controlType: 'text',
-        controlLabel: 'Phone Number',
-        controlWidth: '48%',
-        initialValue: null,
+        controlName: 'invitedGuests',
+        controlType: 'mutipleSelect',
+        controlLabel: 'Invited Guests',
+        controlWidth: '100%',
+        initialValue: '',
+        selectOptions: this.arrayToObject(this.employees, 'email'),
         validators: [Validators.required],
         order: 2
       },
       {
-        controlName: 'purpose',
+        controlName: 'location',
         controlType: 'select',
-        controlLabel: 'Purpose of visit',
+        controlLabel: 'Meeting Location',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: 'Online',
         selectOptions: {
-          Business: 'Business',
-          Personal: 'Personal',
+          Online: 'Online',
+          Business: 'Business Lounge',
+          Hallway: 'Hallway',
         },
         validators: [Validators.required],
-        order: 5
+        order: 3
       },
       {
-        controlName: 'visitDate',
+        controlName: 'meetingDate',
         controlType: 'date',
-        controlLabel: 'Visit Date',
+        controlLabel: 'Meeting Date',
         controlWidth: '48%',
         initialValue: null,
         validators: [Validators.required],
-        order: 6
+        order: 4
       },
       {
         controlName: 'startTime',
@@ -83,7 +74,7 @@ export class RegisterGuestComponent implements OnInit {
         controlWidth: '48%',
         initialValue: null,
         validators: [Validators.required],
-        order: 7
+        order: 5
       },
       {
         controlName: 'endTime',
@@ -92,32 +83,30 @@ export class RegisterGuestComponent implements OnInit {
         controlWidth: '48%',
         initialValue: null,
         validators: [Validators.required],
-        order: 8
+        order: 6
       },
       {
-        controlName: 'host',
-        controlType: 'select',
-        controlLabel: 'Employee',
-        controlWidth: '48%',
-        initialValue: '',
-        selectOptions: this.arrayToObject(this.employees, 'fullName'),
-        validators: [Validators.required],
-        order: 4
+        controlName: 'meetingDescription',
+        controlType: 'text',
+        controlLabel: 'Meeting Description',
+        controlWidth: '100%',
+        initialValue: null,
+        validators: [],
+        order: 7
       },
     ]
 
-    this.visitorFieldData.sort((a,b) => (a.order - b.order));
-    this.visitorForm = this.fb.group({})
+    this.meetingFieldData.sort((a,b) => (a.order - b.order));
+    this.meetingForm = this.fb.group({})
 
-    this.visitorFieldData.forEach(field => {
+    this.meetingFieldData.forEach(field => {
       const formControl = this.fb.control(field.initialValue, field.validators)
-      this.visitorForm.addControl(field.controlName, formControl)
+      this.meetingForm.addControl(field.controlName, formControl)
     })
   }
 
   ngOnInit(): void {
-    
-    
+    console.log(this.employees);
   }
 
   //Converts an array to an Object of key value pairs
@@ -136,21 +125,21 @@ export class RegisterGuestComponent implements OnInit {
   }
 
   onSubmit() {
-    if(this.visitorForm.valid) {
+    if(this.meetingForm.valid) {
       let data = {
-        employeeId: this.visitorForm.value.host,
-        guestName: this.visitorForm.value.name,
-        purpose: this.visitorForm.value.purpose,
-        email: this.visitorForm.value.email,
-        phoneNumber: this.visitorForm.value.phoneNo,
-        visitDate: this.visitorForm.value.visitDate,
+        employeeId: this.meetingForm.value.host,
+        guestName: this.meetingForm.value.name,
+        purpose: this.meetingForm.value.purpose,
+        email: this.meetingForm.value.email,
+        phoneNumber: this.meetingForm.value.phoneNo,
+        visitDate: this.meetingForm.value.visitDate,
       }
       console.log(data);
       this.hrService.bookVisitor(data).subscribe({
         next: res => {
           // console.log(res);
           if(res.status == 200) {
-            this.notifyService.showSuccess('This visitor has been booked successfully');
+            this.notifyService.showSuccess('This meeting has been booked successfully');
             this.dialogRef.close();
           }
         },
@@ -162,4 +151,16 @@ export class RegisterGuestComponent implements OnInit {
     }
   }
 
+  removeGuest(guestEmail: string) {
+    const selectedGuests = this.meetingForm.value['invitedGuests'] as string[];
+    this.removeFirst(selectedGuests, guestEmail);
+    this.meetingForm.get['invitedGuests'].setValue(selectedGuests); // To trigger change detection
+  }
+
+  private removeFirst<T>(array: T[], toRemove: T): void {
+    const index = array.indexOf(toRemove);
+    if (index !== -1) {
+      array.splice(index, 1);
+    }
+  }
 }
