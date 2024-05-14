@@ -39,6 +39,14 @@ a {
     background-color: var(--primary-lightest) !important;
 }
 
+.bkg-success-light {
+    background-color: var(--approved-lightest) !important;
+}
+
+.bkg-warning-light {
+    background-color: var(--warning-lightest) !important;
+}
+
 .status {
     color: var(--white);
     border-radius: var(--radius-lg);
@@ -81,7 +89,8 @@ a {
         }
     }
 
-    &.rejected {
+    &.rejected,
+    &.warning {
         background-color: var(--warning);
 
         &.light {

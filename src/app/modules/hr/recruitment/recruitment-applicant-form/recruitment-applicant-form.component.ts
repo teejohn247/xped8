@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-recruitment-applicant-form',
@@ -7,7 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RecruitmentApplicantFormComponent implements OnInit {
 
-  constructor() { }
+  applicationForm = this.fb.group({
+    firstName: [''],
+    lastName: [''],
+    email: [''],
+    employeeId: [''],
+    department: [''],
+    manager: [''],
+    travelPolicy: [''],
+    expenses: [''],
+    permission: [''],
+    primaryDepartment: [''],
+    advancePermission: [''],
+    sendInvite: [false]
+  });
+
+  constructor(private fb: FormBuilder,) { }
 
   ngOnInit(): void {
   }

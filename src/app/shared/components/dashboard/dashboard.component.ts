@@ -6,6 +6,7 @@ import * as Highcharts from 'highcharts';
 import { DatePipe } from '@angular/common';
 import { PayrollSummary } from 'src/app/shared/models/payroll-data';
 import { MatDialog } from '@angular/material/dialog';
+import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { SharedService } from 'src/app/shared/services/utils/shared.service';
@@ -24,6 +25,9 @@ export class DashboardComponent implements OnInit {
   departmentList: any[] = [];
   employeeList: any[] = [];
   payrollPeriods: any[] = [];
+  userDetails: any;
+
+  attendanceList: any[] = [];
 
   carouselItems = [
     {
@@ -52,19 +56,55 @@ export class DashboardComponent implements OnInit {
     public dialog: MatDialog,
     private route: Router,
     private datePipe: DatePipe,
+    private authService: AuthenticationService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
     private sharedService: SharedService,
   ) { }
 
   ngOnInit(): void {
+    this.userDetails = this.authService.loggedInUser.data;
+    console.log(this.userDetails);
     this.getPageData();
+    if(!this.userDetails.isSuperAdmin) {
+      this.sharedService.getCurrentLocation().subscribe(pos=> {
+        console.log(pos);
+        let checkInTime = new Date();
+        let userPos:[number, number] = [pos.latitude, pos.longitude];
+        let distanceFromOffice = this.checkLocation(userPos);
+        if(distanceFromOffice > 2) {
+          this.notifyService.confirmAction({
+            title: 'Location Details',
+            message: `You are currently at this position: ${pos.latitude} and ${pos.longitude}. You are currently ${distanceFromOffice}km away from the office. Do you want to check in manually?`,
+            confirmText: 'Manual Checkin',
+            cancelText: 'Cancel',
+          }).subscribe((confirmed) => {
+            if (confirmed) {
+              this.manualCheckAction('checkIn');
+            }
+          });
+        }
+        else {
+          this.manualCheckAction('checkIn');
+        }
+      });
+    }
+    
+  }
+
+  checkLocation(userPos) {
+    const officePos: [number, number] = [6.595643351234309, 3.3544838956325185];
+    // [6.595643351234309, 3.3544838956325185]
+    // [6.4293011410936725, 3.4184931377760366]
+    return this.sharedService._getDistanceFromLatLonInKm(officePos, userPos);
   }
 
   getPageData = async () => {
     this.departmentList = await this.hrService.getDepartments().toPromise();
     this.employeeList = await this.hrService.getEmployees().toPromise();
     this.payrollPeriods = await this.hrService.getPayrollPeriods().toPromise();
+    this.attendanceList = await this.hrService.getAttendanceList().toPromise();
+    console.log(this.attendanceList);
 
     this.dashboardSummary = [
       {
@@ -171,6 +211,30 @@ export class DashboardComponent implements OnInit {
     setInterval(() => {
       this.onNextClick();
     }, this.slideInterval)
+  }
+
+  manualCheckAction(action: string) {
+    let data = {
+      checkInTime: new Date(),
+    }
+    this.hrService.staffCheckInOut(data).subscribe({
+      next: res => {
+        // console.log(res);
+        if(res.status == 200) {
+          if(action == 'checkIn') {
+            this.notifyService.showSuccess('You have been checked in successfully');
+          }
+          else {
+            this.notifyService.showSuccess('You have been checked out successfully');
+          }
+        }
+        // this.getPageData();
+      },
+      error: err => {
+        console.log(err)
+        this.notifyService.showError(err.error.error);
+      } 
+    })
   }
 
 }

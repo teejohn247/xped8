@@ -51,7 +51,7 @@ export const navbarData = [
                 label: 'Calendar'
             },
             {
-                routeLink: 'human-resources/document-management',
+                routeLink: 'human-resources/attendance',
                 icon: 'bi bi-file-earmark-text-fill',
                 label: 'Attendance'
             },

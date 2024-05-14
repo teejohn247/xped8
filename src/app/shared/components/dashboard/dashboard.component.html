@@ -32,7 +32,40 @@
             </div>
 
             <div class="row-card card-xsm card-yxl">
-                <div class="col-card card-yxl d-flex flex-column justify-content-between align-items-center">
+                <div *ngIf="!userDetails.isSuperAdmin" class="col-card card-yxl d-flex flex-column justify-content-between align-items-center">
+
+                    <div class="cont status-card userInfo d-flex flex-column justify-content-center card-xxl card-ymmd px-lg-4">
+                        <div class="card-det d-flex align-items-center">
+                            <div class="image bkg-standard" style="background-image: url('{{userDetails?.profilePic}}');"></div>
+                            <div class="card-det">
+                                <div class="name">{{userDetails.fullName}}</div>
+                                <div class="role">{{userDetails.companyRole}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cont status-card attendance bkg-success-light d-flex flex-column justify-content-center card-xxl card-ymmd px-lg-4">
+                        <div (click)="manualCheckAction('checkIn')" class="card-det d-flex justify-content-center align-items-center">
+                            <div class="icon"><i class="bi bi-door-open"></i></div>
+                            <div class="det">
+                                <div class="title"></div>
+                                <div class="time"><span class="md">Check In</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cont status-card attendance bkg-warning-light d-flex flex-column justify-content-center card-xxl card-ymmd px-lg-4">
+                        <div (click)="manualCheckAction('checkOut')" class="card-det d-flex justify-content-center align-items-center">
+                            <div class="icon"><i class="bi bi-door-closed"></i></div>
+                            <div class="det">
+                                <div class="title"></div>
+                                <div class="time"><span class="md">Check Out</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="userDetails.isSuperAdmin" class="col-card card-yxl d-flex flex-column justify-content-between align-items-center">
                     <div *ngFor="let item of dashboardSummary" class="cont status-card d-flex flex-column justify-content-center card-xxl card-ymmd px-lg-4">
                         <div class="card-det d-flex align-items-center">
                             <div class="icon lg" [ngStyle]="{'color': item.colorDark}"><i class="{{item.symbol}}"></i></div>
@@ -60,7 +93,7 @@
                 <div class="row-card d-flex justify-content-between card-xmlg card-yxl">
                     <div class="cont card-xmmd d-flex flex-column justify-content-between">
                         <div class="card-title">Payroll Information</div>
-                        <div class="payroll-info mb-lg-2">
+                        <div *ngIf="payrollPeriods.length > 0" class="payroll-info mb-lg-2">
                             <div class="info">{{payrollPeriods['data'][0]?.payrollPeriodName}}</div>
                             <div class="info">Gross Pay: <span>£ {{payrollPeriods['data'][0]?.totalEarnings}}</span></div>
                             <div class="info">Deductions: <span>£ {{payrollPeriods['data'][0]?.deductions}}</span></div>

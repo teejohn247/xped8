@@ -21,6 +21,8 @@ import { PayrollDetailsComponent } from './payroll/payroll-details/payroll-detai
 import { PayrollPortalComponent } from './payroll/payroll-portal/payroll-portal.component';
 import { AppraisalFormComponent } from './appraisals/appraisal-form/appraisal-form.component';
 import { CalendarComponent } from './calendar/calendar/calendar.component';
+import { AttendanceListComponent } from './attendance/attendance-list/attendance-list.component';
+import { RecruitmentMasterListComponent } from './recruitment/recruitment-master-list/recruitment-master-list.component';
 
 
 const routes: Routes = [
@@ -110,6 +112,10 @@ const routes: Routes = [
         component: RecruitmentJobBoardComponent
       },
       {
+        path : 'master-list',
+        component: RecruitmentMasterListComponent
+      },
+      {
         path: 'applicant-screening',
         component: RecruitmentScreeningComponent
       },
@@ -138,6 +144,10 @@ const routes: Routes = [
   {
     path: 'appraisals/:id',
     component: AppraisalFormComponent
+  },
+  {
+    path: 'attendance',
+    component: AttendanceListComponent
   },
   {
     path: 'visitors-log',

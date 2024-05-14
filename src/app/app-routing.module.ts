@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './shared/components/login/login.component';
 import { UserAuthGuard } from './shared/services/utils/user-auth.guard';
+import { RecruitmentApplicantFormComponent } from './modules/hr/recruitment/recruitment-applicant-form/recruitment-applicant-form.component';
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: 'set-password/:token',
     component: LoginComponent
+  },
+  {
+    path: 'application-form',
+    component: RecruitmentApplicantFormComponent
   },
   {
     path: 'app',

@@ -46,6 +46,8 @@ import { MeetingInfoComponent } from './calendar/meeting-info/meeting-info.compo
 import { JobPostInfoComponent } from './recruitment/job-post-info/job-post-info.component';
 import { RecruitmentApplicantsComponent } from './recruitment/recruitment-applicants/recruitment-applicants.component';
 import { RecruitmentApplicantFormComponent } from './recruitment/recruitment-applicant-form/recruitment-applicant-form.component';
+import { AttendanceListComponent } from './attendance/attendance-list/attendance-list.component';
+import { RecruitmentMasterListComponent } from './recruitment/recruitment-master-list/recruitment-master-list.component';
 
 
 @NgModule({
@@ -55,7 +57,7 @@ import { RecruitmentApplicantFormComponent } from './recruitment/recruitment-app
     SelfServicePortalComponent, 
     SelfServiceLeaveRequestsComponent, 
     SelfServicePayrollComponent, 
-    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent, EditEmployeeComponent, CreateKpiGroupComponent, CreateKpiComponent, CreateAppraisalPeriodComponent, AppraisalFormComponent, CreateRatingScaleComponent, PayrollDetailsComponent, PayrollUploadComponent, ExpenseManagementComponent, ExpenseRequestReviewComponent, PayrollPortalComponent, PayrollPeriodDetailsComponent, PayrollCalculatorComponent, AssignManagerApproversComponent, PayslipComponent, CalendarComponent, MeetingInfoComponent, JobPostInfoComponent, RecruitmentApplicantsComponent, RecruitmentApplicantFormComponent
+    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent, EditEmployeeComponent, CreateKpiGroupComponent, CreateKpiComponent, CreateAppraisalPeriodComponent, AppraisalFormComponent, CreateRatingScaleComponent, PayrollDetailsComponent, PayrollUploadComponent, ExpenseManagementComponent, ExpenseRequestReviewComponent, PayrollPortalComponent, PayrollPeriodDetailsComponent, PayrollCalculatorComponent, AssignManagerApproversComponent, PayslipComponent, CalendarComponent, MeetingInfoComponent, JobPostInfoComponent, RecruitmentApplicantsComponent, RecruitmentApplicantFormComponent, AttendanceListComponent, RecruitmentMasterListComponent
   ],
   imports: [
     CommonModule,

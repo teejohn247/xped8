@@ -20,8 +20,13 @@ export class SettingsService {
 
   constructor(private http: HttpClient, private authService: AuthenticationService) { }
 
-  //Add comapny name
+  //Add company name
   public createCompany(companyName: any): Observable<any> {
     return this.http.post<any>(`${this.path}/createCompany`, companyName, this.requestOptions);
+  }
+
+  //Get all notifications
+  public getNotifications(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchNotifications`, this.requestOptions);
   }
 }

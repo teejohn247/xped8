@@ -1,0 +1,48 @@
+.standalone {
+    width: 50%;
+    height: 100vh;
+    overflow: hidden;
+    padding: 1rem 0;
+    margin: 0 auto;
+
+    .content-wrap {
+        padding: 2rem 5%;
+        overflow: auto;
+        //background: var(--primary-light);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border-grey);
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+            justify-content: space-between;
+            gap: 1.5rem 0;
+
+            .input-hld {
+                width: 48%;
+
+                label {
+                    margin-bottom: 0.3rem;
+                    letter-spacing: 0.03rem;
+                    color: var(--black-tint);
+                }
+
+                input {
+                    font-size: 0.9rem;
+                    letter-spacing: 0.03rem;
+                    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+
+                    &::placeholder {
+                        color: var(--black-tint-md);
+                    }
+                }
+
+                &.full {
+                    width: 100%;
+                }
+            }
+        }
+    }
+    
+}

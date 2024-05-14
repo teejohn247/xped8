@@ -502,9 +502,24 @@ export class HumanResourcesService {
     return this.http.get<any>(`${this.path}/fetchJobListings`, this.requestOptions);
   }
 
+  //Get the list of all applicants
+  public getMasterList(): Observable<any> {
+    return this.http.get<any>(`${this.path}/masterList`, this.requestOptions);
+  }
+
   //Publish a job post
   public publishJobPost(info: any, jobId: any): Observable<any> {
     return this.http.patch<any>(`${this.path}/publishJob/${jobId}`, info, this.requestOptions);
   }
 
+  /*************** ATTENDANCE RELATED ACTIONS ***************/
+  //Get the attendance list
+  public getAttendanceList(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchAttendance`, this.requestOptions);
+  }
+
+  //Staff Check in or check out
+  public staffCheckInOut(info: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/checkInOut`, info, this.requestOptions);
+  }
 }
