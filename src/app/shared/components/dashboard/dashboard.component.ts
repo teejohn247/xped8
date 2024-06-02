@@ -93,7 +93,7 @@ export class DashboardComponent implements OnInit {
   }
 
   checkLocation(userPos) {
-    const officePos: [number, number] = [6.595643351234309, 3.3544838956325185];
+    const officePos: [number, number] = [6.4293011410936725, 3.4184931377760366];
     // [6.595643351234309, 3.3544838956325185]
     // [6.4293011410936725, 3.4184931377760366]
     return this.sharedService._getDistanceFromLatLonInKm(officePos, userPos);

@@ -68,6 +68,16 @@
                             </td>
                         </ng-container>
 
+                        <ng-container *ngIf="column.key == 'date'">
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+                            <td mat-cell *matCellDef="let row">{{ strToDate(row[column.key], 'date') }}</td>
+                        </ng-container>
+
+                        <ng-container *ngIf="column.key == 'checkIn' || column.key == 'checkOut'">
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+                            <td mat-cell *matCellDef="let row">{{ row[column.key] && strToDate(row[column.key], 'checked') }}</td>
+                        </ng-container>
+
                         <ng-container *ngIf="column.key == 'actions'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>
                             </th>
@@ -87,8 +97,8 @@
                         <ng-container *ngIf="column.key == 'attendanceStatus'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
                             <td style="white-space: nowrap;" mat-cell *matCellDef="let row">
-                                <span class="status approved" *ngIf="row[column.key] == true">Present</span>
-                                <span class="status warning" *ngIf="row[column.key] == false">Absent</span>
+                                <span class="status approved" *ngIf="row['checkIn']">Present</span>
+                                <span class="status warning" *ngIf="!row['checkIn']">Absent</span>
                             </td>
                         </ng-container>
 

@@ -1,0 +1,22 @@
+.active-status {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--warning);
+    display: inline-block;
+    transform: scale(1);
+    animation: live-pulse-red 1.5s infinite;
+    box-shadow: 0 0 0 0 var(--warning);
+
+    &.medium {
+        background-color: var(--pending);
+        box-shadow: unset;
+        animation: unset;
+    }
+
+    &.low {
+        background-color: var(--primary-light);
+        box-shadow: unset;
+        animation: unset;
+    }
+}

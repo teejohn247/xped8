@@ -19,10 +19,10 @@ const routes: Routes = [
         path: 'human-resources',
         loadChildren: () => import('../hr/hr.module').then(m => m.HrModule),
       },
-      // {
-      //   path: 'crm',
-      //   // loadChildren: () => import('../').then(m => m.HrModule),
-      // },
+      {
+        path: 'crm',
+        loadChildren: () => import('../crm/crm.module').then(m => m.CrmModule),
+      },
       {
         path: 'settings',
         loadChildren: () => import('../settings/settings.module').then(m => m.SettingsModule),

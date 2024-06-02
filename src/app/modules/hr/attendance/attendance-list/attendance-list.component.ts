@@ -58,6 +58,14 @@ export class AttendanceListComponent implements OnInit {
       sortable: true
     },
     {
+      key: "date",
+      label: "Date",
+      order: 5,
+      columnWidth: "10%",
+      cellStyle: "width: 100%",
+      sortable: true
+    },
+    {
       key: "checkIn",
       label: "Check In",
       order: 7,
@@ -93,6 +101,7 @@ export class AttendanceListComponent implements OnInit {
   ]
 
   constructor(
+    private datePipe: DatePipe,
     private hrService: HumanResourcesService, 
   ) { }
 
@@ -117,6 +126,25 @@ export class AttendanceListComponent implements OnInit {
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  strToDate(dateVal: string, key:string) {
+    if(key == 'date') {
+      let newFormat = new Date(dateVal);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }
+    else if(key = 'checked') {
+      let newFormat = new Date(dateVal);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'shortTime')
+    }
+    else {
+      const [day, month, year] = dateVal.split('-');
+      let newFormat = new Date(+year, +month - 1, +day);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }    
   }
 
 }
