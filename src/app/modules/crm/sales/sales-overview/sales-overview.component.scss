@@ -1,0 +1,155 @@
+.status-card-wrap {
+    display: flex;
+    margin-top: 0.5rem;
+    white-space: nowrap;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+
+    &::-webkit-scrollbar,
+    &::-webkit-scrollbar-track {
+        display: none;
+    }
+
+    .status-card-hld {
+        width: 27%;
+        position: relative;
+        margin-bottom: 0.3rem;
+        display: inline-block;
+        border-radius: var(--radius-md);
+        background-color: white;
+        box-shadow: var(--card-shadow);
+        scroll-snap-align: start;
+
+        &:nth-child(n+2) {
+            margin-left: 2%;
+        }
+
+        .cont {
+            padding: 0.8rem 6%;
+            border-radius: var(--radius-md);
+            background-color: var(--primary-lightest);
+            border: 1px solid white;
+
+            &.primary {
+                border: 1px solid var(--primary-light);
+                background-color: var(--primary-lightest);
+            }
+
+            &.active {
+                border: 1px solid var(--approved-light);
+                background-color: var(--approved-lightest);
+            }
+
+            &.pending {
+                border: 1px solid var(--pending-light);
+                background-color: var(--pending-lightest);
+            }
+
+            &.warning {
+                border: 1px solid var(--warning-light);
+                background-color: var(--warning-lightest)
+            }
+
+
+            .det {
+                position: relative;
+
+                .title {
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                    letter-spacing: 0.03rem;
+                    color: var(--darker);
+                }
+
+                .date {
+                    margin-top: 0.2rem;
+
+                    span {
+                        font-size: 0.7rem;
+                        letter-spacing: 0.03rem;
+
+                        i {
+                            font-size: 0.75rem;
+                            color: var(--darker);
+                            margin-right: 0.3rem;
+                        }
+                    }
+                }
+
+                .count {
+                    font-size: 0.7rem;
+                    letter-spacing: 0.03rem;
+                    
+                    span {
+                        font-size: 1.5rem;
+                        font-weight: 600;
+                        color: var(--black-tint);
+                        margin-right: 0.4rem;
+                    }
+                }
+
+                .icon {
+                    width: 60%;
+                    font-size: 1.8rem;
+                    //font-weight: 600;
+                    //color: var(--darker);
+                    text-align: right;
+
+                    &.primary {
+                        color: var(--primary);
+                    }
+
+                    &.active {
+                        color: var(--approved);
+                    }
+
+                    &.warning {
+                        color: var(--warning);
+                    }
+
+                    &.pending {
+                        color: var(--pending);
+                    }
+                }
+
+                &:last-child {
+                    display: flex;
+                    margin-top: 2rem;
+                    align-items: flex-end;
+                    justify-content: space-between;
+                }
+            }
+        }
+    }
+}
+
+
+.tab-wrap {
+    width: fit-content;
+    padding: 0.6rem 0;
+
+    ul {
+
+        li {
+
+            a {
+                font-weight: 500;
+                cursor: pointer;
+                align-items: center;
+
+                span {
+
+                    &:last-child {
+                        font-weight: 500;
+                        color: white;
+                        background: var(--primary);
+                        border-radius: 0.3rem;
+                        padding: 0rem 0.3rem;
+                        display: inline-block;
+                        margin-left: 0.3rem;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -9,6 +9,28 @@
         </div>
     </div>
 
+    <div class="row-section mt-lg-3" style="flex: unset;">
+        <div class="inner-col card-xxl" style="overflow-x: hidden;">
+            <div class="status-card-wrap">
+                <div *ngFor="let item of leadsSummary" class="status-card-hld">
+                    <div class="cont {{item.status}}">
+                        <div class="det">
+                            <div class="title">{{item.salesType}}</div>
+                            <div class="date">
+                                <span><i class="bi bi-calendar2-week"></i></span>
+                                <span>{{item.referenceDate }}</span>
+                            </div>
+                        </div>
+                        <div class="det">
+                            <div class="count"><span>{{item.salesValue}}</span></div>
+                            <div class="icon {{item.status}}"><i class="{{item.icon}}"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row-section mt-lg-4">
         <div class="table-wrap">
             <div class="inner-row d-flex justify-content-start align-items-center">

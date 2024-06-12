@@ -1,0 +1,96 @@
+.notes-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+
+    .notes-card {
+        width: 15rem;
+        height: 15rem;
+        padding: 1.2rem;
+        cursor: pointer;
+        transform: rotate(-2deg);
+        transition: all 0.4s ease;
+        background-color: var(--primary-light);
+        box-shadow: var(--card-shadow);
+
+        &:nth-child(even) {
+            transform: rotate(2deg);
+            position: relative;
+            top: 5px;
+        }
+
+        &:nth-child(3n) {
+            transform: rotate(-2deg);
+            position: relative;
+            top: -5px;
+        }
+
+        &:nth-child(5n) {
+            transform: rotate(3deg);
+            position: relative;
+            top: -10px;
+        }
+
+        &:hover {
+            transform: scale(1.06);
+            z-index: 4;
+        }
+
+        &.normal {
+            
+            background: var(--notes-yellow);
+        }
+
+        &.important {
+            background: var(--approved-light);
+
+            .row-det {
+
+                .name {
+                    color: var(--primary);
+                }
+            }
+        }
+
+        .inner-wrap {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row-det {
+
+            .title {
+                font-size: 1.1rem;
+                font-weight: 600;
+                letter-spacing: 0.03rem;
+            }
+
+            .date {
+                font-size: 0.8rem;
+                letter-spacing: 0.02rem;
+            }
+
+            .details {
+                height: 7rem;
+                overflow: hidden;
+                line-height: 1.4;
+                font-family: 'Comic Neue';
+                font-weight: 400;
+                letter-spacing: 0.02rem;
+            }
+
+            .name {
+                font-size: 0.85rem;
+                font-weight: 700;
+                font-family: 'Comic Neue';
+                letter-spacing: 0.03rem;
+                color: var(--warning);
+            }
+
+            &:last-child {
+                margin-top: auto;
+            }
+        }
+    }
+}

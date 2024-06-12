@@ -91,6 +91,10 @@
                     width: auto;
                     height: 107%;
                     position: relative;
+
+                    &.lg {
+                        height: 120%;
+                    }
                 }
 
                 &.profile {

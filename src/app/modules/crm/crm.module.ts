@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CrmRoutingModule } from './crm-routing.module';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { DashboardOverviewComponent } from './dashboard/dashboard-overview/dashboard-overview.component';
 import { LeadsPortalComponent } from './leads/leads-portal/leads-portal.component';
 import { ContactsPortalComponent } from './contacts/contacts-portal/contacts-portal.component';
@@ -22,6 +23,15 @@ import { AgentsPortalComponent } from './agents/agents-portal/agents-portal.comp
 import { AgentInfoComponent } from './agents/agent-info/agent-info.component';
 import { AgentsProfileComponent } from './agents/agents-profile/agents-profile.component';
 import { LeadsInfoComponent } from './leads/leads-info/leads-info.component';
+import { SalesOverviewComponent } from './sales/sales-overview/sales-overview.component';
+import { SalesDetailsComponent } from './sales/sales-details/sales-details.component';
+import { QuotationInfoComponent } from './sales/quotation-info/quotation-info.component';
+import { PurchaseOrderInfoComponent } from './sales/purchase-order-info/purchase-order-info.component';
+import { InvoiceInfoComponent } from './sales/invoice-info/invoice-info.component';
+import { NotesComponent } from './shared/notes/notes.component';
+import { NotesInfoComponent } from './shared/notes-info/notes-info.component';
+import { SalesOrdersComponent } from './shared/sales-orders/sales-orders.component';
+import { ActivityInfoComponent } from './shared/activity-info/activity-info.component';
 
 
 @NgModule({
@@ -44,12 +54,22 @@ import { LeadsInfoComponent } from './leads/leads-info/leads-info.component';
     AgentsPortalComponent,
     AgentInfoComponent,
     AgentsProfileComponent,
-    LeadsInfoComponent
+    LeadsInfoComponent,
+    SalesOverviewComponent,
+    SalesDetailsComponent,
+    QuotationInfoComponent,
+    PurchaseOrderInfoComponent,
+    InvoiceInfoComponent,
+    NotesComponent,
+    NotesInfoComponent,
+    SalesOrdersComponent,
+    ActivityInfoComponent
   ],
   imports: [
     CommonModule,
     CrmRoutingModule,
     SharedModule,
+    NgxMaterialTimepickerModule,
     HighchartsChartModule
   ]
 })

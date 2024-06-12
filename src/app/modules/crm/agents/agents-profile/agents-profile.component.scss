@@ -206,3 +206,88 @@
         }
     }
 }
+
+.activities-wrap {
+    margin-top: 1rem;
+
+    .activity-hld {
+        padding: 0.8rem 1.2rem;
+        border-radius: var(--radius-md);
+        //border: 1px solid var(--primary-light);
+        box-shadow: var(--card-shadow);
+
+        &:nth-child(n+2) {
+            margin-top: 1rem;
+            //border-top: 1px solid var(--border-black-lightest);
+        }
+
+        .row-det {
+            
+            &:first-child,
+            &:last-child {
+                display: flex;
+                gap: 1.5rem;
+            }
+
+            &:first-child {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .det {
+                    font-size: 0.75rem;
+                    letter-spacing: 0.02rem;
+                    color: var(--black-tint);
+
+                    &.call {
+                        background: var(--primary-light);
+                    }
+
+                    &.meeting {
+                        background: var(--pending-light);
+                    }
+
+                    &.email {
+                        background: var(--warning-light);
+                    }
+
+                    &:first-child {
+                        width: fit-content;
+                        height: auto;
+                        border-radius: var(--radius-md);
+                        padding: 0.2rem 0.7rem;
+
+                        i {
+                            font-size: 0.7rem;
+                            margin-right: 0.4rem;
+                        }
+                    }
+                }
+            }
+
+            &:last-child {
+
+                .det {
+                    font-size: 0.65rem;
+                    letter-spacing: 0.03rem;
+                    color: var(--black-tint);
+
+                    span {
+                        font-weight: 500;
+                    }
+                }
+            }
+
+            &:nth-child(2) {
+                margin-top: 0.6rem;
+                margin-bottom: 0.8rem;
+
+                .det {
+                    font-size: 0.8rem;
+                    letter-spacing: 0.02rem;
+                    color: var(--black-tint);
+                }
+            }
+        }
+    }
+}

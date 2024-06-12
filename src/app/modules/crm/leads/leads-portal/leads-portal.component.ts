@@ -10,27 +10,7 @@ export class LeadsPortalComponent implements OnInit {
   tabMenu = [
     {
       routeLink: 'profile',
-      label: 'Profile',
-    },
-    {
-      routeLink: 'activities',
-      label: 'Activities',
-    },
-    {
-      routeLink: 'history',
-      label: 'History',
-    },
-    {
-      routeLink: 'purchase-orders',
-      label: 'Purchase Orders',
-    },
-    {
-      routeLink: 'quotations',
-      label: 'Quotations',
-    },
-    {
-      routeLink: 'invoices',
-      label: 'Invoices',
+      label: 'Profile & Activities',
     },
     {
       routeLink: 'notes',

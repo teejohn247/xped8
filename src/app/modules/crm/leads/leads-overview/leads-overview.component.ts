@@ -26,6 +26,7 @@ export class LeadsOverviewComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   leadsList: any[] = [];
+  leadsSummary: any[] = [];
 
   // Leads Table Column Names
   tableColumns: any[] = [
@@ -165,11 +166,45 @@ export class LeadsOverviewComponent implements OnInit {
     private datePipe: DatePipe,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
-
   ) { }
 
   ngOnInit(): void {
     this.getPageData();
+
+    this.leadsSummary = [
+      {
+        id: 1,
+        salesType: "Total Leads",
+        referenceDate: 'Last 30 days',
+        salesValue: '234',
+        icon: "bi bi-person-badge-fill",
+        status: "primary"
+      },
+      {
+        id: 2,
+        salesType: "Leads Value",
+        referenceDate: 'Last 30 days',
+        salesValue: '$12k',
+        icon: "bi bi-cash-stack",
+        status: "pending"
+      },
+      {
+        id: 3,
+        salesType: "Total Won",
+        referenceDate: 'Last 30 days',
+        salesValue: '100',
+        icon: "bi bi-person-fill-check",
+        status: "active"
+      },
+      {
+        id: 4,
+        salesType: "Total Lost",
+        referenceDate: 'Last 30 days',
+        salesValue: '100',
+        icon: "bi bi-person-fill-dash",
+        status: "warning"
+      }
+    ]
   }
 
   getPageData = async () => {

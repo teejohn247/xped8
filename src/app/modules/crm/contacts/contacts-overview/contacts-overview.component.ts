@@ -26,6 +26,7 @@ export class ContactsOverviewComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   contactsList: any[] = [];
+  contactSummary: any[] = [];
 
   //Contacts Table Column Names
   tableColumns: any[] = [
@@ -158,6 +159,41 @@ export class ContactsOverviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPageData();
+
+    this.contactSummary = [
+      {
+        id: 1,
+        salesType: "Total Contacts",
+        referenceDate: 'Last 30 days',
+        salesValue: '6',
+        icon: "bi bi-people-fill",
+        status: "primary"
+      },
+      {
+        id: 2,
+        salesType: "Total Sales Value",
+        referenceDate: 'Last 30 days',
+        salesValue: '$12k',
+        icon: "bi bi-cash-stack",
+        status: "pending"
+      },
+      {
+        id: 3,
+        salesType: "Total Invoices",
+        referenceDate: 'Last 30 days',
+        salesValue: '$10k',
+        icon: "bi bi-file-earmark-text",
+        status: "active"
+      },
+      {
+        id: 4,
+        salesType: "Monthly Acquisition Rate",
+        referenceDate: 'Last 30 days',
+        salesValue: '10%',
+        icon: "bi bi-rocket-takeoff",
+        status: "warning"
+      }
+    ]
   }
 
   getPageData = async () => {

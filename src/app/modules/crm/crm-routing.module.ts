@@ -13,6 +13,10 @@ import { AgentsOverviewComponent } from './agents/agents-overview/agents-overvie
 import { AgentsPortalComponent } from './agents/agents-portal/agents-portal.component';
 import { AgentsProfileComponent } from './agents/agents-profile/agents-profile.component';
 import { LeadsProfileComponent } from './leads/leads-profile/leads-profile.component';
+import { SalesOverviewComponent } from './sales/sales-overview/sales-overview.component';
+import { SalesDetailsComponent } from './sales/sales-details/sales-details.component';
+import { NotesComponent } from './shared/notes/notes.component';
+import { SalesOrdersComponent } from './shared/sales-orders/sales-orders.component';
 
 const routes: Routes = [
   {
@@ -41,6 +45,10 @@ const routes: Routes = [
         path : 'profile',
         component: LeadsProfileComponent
       },
+      {
+        path : 'notes',
+        component: NotesComponent
+      },
     ]
   },
   {
@@ -59,6 +67,14 @@ const routes: Routes = [
       {
         path : 'profile',
         component: ContactsProfileComponent
+      },
+      {
+        path : 'sales-orders',
+        component: SalesOrdersComponent
+      },
+      {
+        path : 'notes',
+        component: NotesComponent
       },
     ]
   },
@@ -98,8 +114,24 @@ const routes: Routes = [
         path : 'profile',
         component: AgentsProfileComponent
       },
+      {
+        path : 'sales-orders',
+        component: SalesOrdersComponent
+      },
+      {
+        path : 'notes',
+        component: NotesComponent
+      },
     ]
   },
+  {
+    path: 'sales',
+    component: SalesOverviewComponent,
+  },
+  {
+    path: 'sales/:id',
+    component: SalesDetailsComponent
+  }
 ];
 
 @NgModule({

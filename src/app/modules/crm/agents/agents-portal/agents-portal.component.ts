@@ -10,27 +10,11 @@ export class AgentsPortalComponent implements OnInit {
   tabMenu = [
     {
       routeLink: 'profile',
-      label: 'Profile',
+      label: 'Profile & Activities',
     },
     {
-      routeLink: 'activities',
-      label: 'Activities',
-    },
-    {
-      routeLink: 'history',
-      label: 'History',
-    },
-    {
-      routeLink: 'purchase-orders',
-      label: 'Purchase Orders',
-    },
-    {
-      routeLink: 'quotations',
-      label: 'Quotations',
-    },
-    {
-      routeLink: 'invoices',
-      label: 'Invoices',
+      routeLink: 'sales-orders',
+      label: 'Sales Orders',
     },
     {
       routeLink: 'notes',

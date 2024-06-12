@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div class="row-section mt-lg-4">
+    <!-- <div class="row-section mt-lg-4">
         <div class="table-wrap">
             <div class="inner-row d-flex justify-content-start align-items-center">
                 <div class="search-bar">
@@ -38,14 +38,12 @@
                     class="dataTable lg mat-elevation-z0"
                     matSort
                 >
-                    <!-- Table Columns -->
                     <ng-container *ngFor="let column of tableColumns; let row" [matColumnDef]="column.label">
 
                         <ng-container *ngIf="column.key == 'image'">
                             <th style="width:5%" mat-header-cell *matHeaderCellDef></th>
                             <td style="width:1%; white-space: nowrap;" mat-cell *matCellDef="let row">
                                 <span *ngIf="!row.applicantImage" class="initials">{{row.firstName[0] + row.lastName[0]}}</span>
-                                <!-- <span *ngIf="row.applicantImage" class="table-img bkg-standard" style="background-image: url('{{row.employeeImage}}');"></span> -->
                             </td>
                         </ng-container>
 
@@ -105,7 +103,83 @@
                     
                 </table>
             </div>
+
+            
         </div>
         
+    </div> -->
+
+    <div style="flex:none;" class="row-section mt-lg-4">
+        <div class="tab-wrap">
+            <ul class="tab-list">
+                <li>
+                    <a [class.active]="ticketsInView == 'all'" (click)="ticketsInView = 'all'">
+                        <span>All Tickets</span>
+                        <span>3</span>
+                    </a>
+                </li>
+                <li>
+                    <a [class.active]="ticketsInView == 'pending'" (click)="ticketsInView = 'pending'">
+                        <span>Pending</span>
+                        <span>1</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a [class.active]="ticketsInView == 'investigating'" (click)="ticketsInView = 'investigating'">
+                        <span>In Progress</span>
+                        <span>1</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a [class.active]="ticketsInView == 'completed'" (click)="ticketsInView = 'completed'">
+                        <span>Resolved</span>
+                        <span>1</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row-section mt-lg-4">
+        <div class="inner-row w-100 d-flex justify-content-between mt-lg-2">
+
+            <div class="tickets-wrap">
+                <div *ngFor="let ticket of tableData" class="ticket-card {{ticket.status}}">
+                    <div class="inner-wrap">
+                        <div class="row-det">
+                            <span class="active-status" [class]="ticket.priority"></span>
+                            <span>#{{ticket.ticketNo}}</span>
+                            <span class="status text-capitalize {{ticket.status}}">{{ticket.status}}</span>
+                        </div>
+                        <div class="row-det">
+                            <span class="title">{{ticket.ticketTitle}}</span>
+                            <div class="details">
+                                <p>{{ticket.ticketDetails}}</p>
+                            </div>
+                        </div>
+                        <div class="row-det">
+                            <div class="image">
+                                <!-- <span *ngIf="!row.applicantImage" class="initials">Gustavo Calzoni</span> -->
+                                <span class="card-img bkg-standard" style="background-image: url('./assets/images/illustrations/{{ticket.contactImage}}');"></span>
+                            </div>
+                            <div class="info">
+                                <div class="name">{{ticket.firstName}} {{ticket.lastName}}</div>
+                                <div class="email">{{ticket.email}}</div>
+                                <div class="phone">{{ticket.phone}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="tickets-creation">
+
+            </div>
+
+            
+        </div>
     </div>
 </div>

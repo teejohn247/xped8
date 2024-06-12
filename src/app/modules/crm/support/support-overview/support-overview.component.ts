@@ -25,6 +25,7 @@ export class SupportOverviewComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
 
   ticketsList: any[] = [];
+  ticketsInView: string = 'all';
 
   //Tickets Table Column Names
   tableColumns: any[] = [
@@ -103,6 +104,8 @@ export class SupportOverviewComponent implements OnInit {
       lastName: 'Calzoni',
       email: 'gustavocalzoni@gmail.com',
       ticketTitle: 'Screen UI Glitch',
+      ticketDetails: `My screen keeps on going on and off and I have tried several methods to stabilize it but to no avail.`,
+      contactImage: 'staff1.jpg',
       phone: '+44765848840',
       status: 'pending'
     },
@@ -114,6 +117,8 @@ export class SupportOverviewComponent implements OnInit {
       lastName: 'Anthony',
       email: 'gustavocalzoni@gmail.com',
       ticketTitle: 'Unable to access account',
+      ticketDetails: `My screen keeps on going on and off and I have tried several methods to stabilize it but to no avail.`,
+      contactImage: 'staff2.jpg',
       phone: '+44765848840',
       status: 'completed'
     },
@@ -125,6 +130,8 @@ export class SupportOverviewComponent implements OnInit {
       lastName: 'Grizcof',
       email: 'samuelgrizcof@gmail.com',
       ticketTitle: 'Incessant account time out',
+      ticketDetails: `My screen keeps on going on and off and I have tried several methods to stabilize it but to no avail.`,
+      contactImage: 'staff3.jpg',
       phone: '+44765848840',
       status: 'investigating'
     }
