@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CrmRoutingModule } from './crm-routing.module';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { DashboardOverviewComponent } from './dashboard/dashboard-overview/dashboard-overview.component';
 import { LeadsPortalComponent } from './leads/leads-portal/leads-portal.component';
@@ -69,6 +70,7 @@ import { ActivityInfoComponent } from './shared/activity-info/activity-info.comp
     CommonModule,
     CrmRoutingModule,
     SharedModule,
+    NgxChartsModule,
     NgxMaterialTimepickerModule,
     HighchartsChartModule
   ]

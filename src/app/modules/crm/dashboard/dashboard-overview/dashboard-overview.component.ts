@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { SharedService } from 'src/app/shared/services/utils/shared.service';
+import { TicketInfoComponent } from '../../support/ticket-info/ticket-info.component';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class DashboardOverviewComponent implements OnInit {
   AreaHighcharts: typeof Highcharts = Highcharts;
   areaChartOptions: Highcharts.Options = {
     title: {
-      text: "Sales Revenue"
+      text: ""
     },
     credits: {
       enabled: false
@@ -41,7 +42,7 @@ export class DashboardOverviewComponent implements OnInit {
     },
     yAxis: {          
       title:{
-        text:"Pounds"
+        text:""
       },
       labels: {
         formatter: function () {
@@ -59,6 +60,7 @@ export class DashboardOverviewComponent implements OnInit {
       {
         type: 'areaspline',
         name: 'Revenue',
+        showInLegend: false,
         data: [7.9, 10.2, 13.7, 16.5, 17.9, 15.2, 17.0, 20.6, 22.2, 26.3, 29.6, 27.8],
         fillColor: {
           linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
@@ -175,6 +177,200 @@ export class DashboardOverviewComponent implements OnInit {
     }
   ]
 
+  view: any[] = [620, 320];
+  colorScheme = {
+    domain: ['#9370DB', '#87CEFA', '#FA8072', '#FF7F50', '#90EE90', '#9370DB']
+  };
+
+  contactsVsLeadsScheme = {
+    domain: ['#9370DB', '#87CEFA', '#FA8072', '#FF7F50', '#90EE90', '#9370DB']
+  };
+  contactsVsLeads = [
+    {
+      "name": "Contacts",
+      "status": "contacts"
+    },
+    {
+      "name": "Leads",
+      "status": "leads"
+    },
+  ]
+
+  contactsVsLeadsData = [
+    {
+      "name": "Jan",
+      "series": [
+        {
+          "name": "contacts",
+          "value": 27
+        },
+        {
+          "name": "leads",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "name": "Feb",
+      "series": [
+        {
+          "name": "contacts",
+          "value": 45
+        },
+        {
+          "name": "leads",
+          "value": 85
+        }
+      ]
+    },
+    {
+      "name": "Mar",
+      "series": [
+        {
+          "name": "contacts",
+          "value": 36
+        },
+        {
+          "name": "leads",
+          "value": 76
+        }
+      ]
+    },
+    {
+      "name": "Apr",
+      "series": [
+        {
+          "name": "contacts",
+          "value": 32
+        },
+        {
+          "name": "leads",
+          "value": 60
+        }
+      ]
+    },
+    {
+      "name": "May",
+      "series": [
+        {
+          "name": "contacts",
+          "value": 21
+        },
+        {
+          "name": "leads",
+          "value": 124
+        }
+      ]
+    },
+    {
+      "name": "Jun",
+      "series": [
+        {
+          "name": "contacts",
+          "value": 36
+        },
+        {
+          "name": "leads",
+          "value": 58
+        }
+      ]
+    }
+  ];
+
+  invoiceStatusScheme = {
+    domain: ['rgba(54, 171, 104, 0.7)', 'rgba(229, 166, 71, 0.7)', 'rgba(235, 87, 87, 0.7)']
+  };
+  invoiceStatus = [
+    {
+      "name": "Paid",
+      "value": 22770,
+      "status": "complete"
+    },
+    {
+      "name": "Partially Paid",
+      "value": 22070,
+      "status": "pending"
+    },
+    {
+      "name": "Pending",
+      "value": 40770,
+      "status": "warning"
+    },
+  ]
+
+  leadsStatusScheme = {
+    domain: ['rgba(54, 171, 104, 0.7)', 'rgba(229, 166, 71, 0.7)', 'rgba(66, 133, 244, 0.7)', 'rgba(235, 87, 87, 0.7)']
+  };
+  leadsStatus = [
+    {
+      "name": "Won",
+      "value": 25,
+      "status": "complete"
+    },
+    {
+      "name": "Prospect",
+      "value": 45,
+      "status": "pending"
+    },
+    {
+      "name": "New",
+      "value": 120,
+      "status": "awaiting"
+    },
+    {
+      "name": "Lost",
+      "value": 30,
+      "status": "warning"
+    },
+  ]
+
+  ticketProgressScheme = {
+    domain: ['rgba(54, 171, 104, 0.7)', 'rgba(229, 166, 71, 0.7)', 'rgba(66, 133, 244, 0.7)']
+  };
+  ticketProgress = [
+    {
+      "name": "Resolved",
+      "value": 270,
+      "status": "complete"
+    },
+    {
+      "name": "Investigating",
+      "value": 309,
+      "status": "pending"
+    },
+    {
+      "name": "Awaitng Customer",
+      "value": 230,
+      "status": "awaiting"
+    },
+  ]
+
+  public singleDataVals = [
+    {
+      "name": "China",
+      "value": 2243772,
+    },
+    {
+      "name": "USA",
+      "value": 1126000
+    },
+    {
+      "name": "Norway",
+      "value": 296215
+    },
+    {
+      "name": "Japan",
+      "value": 257363
+    },
+    {
+      "name": "Germany",
+      "value": 196750
+    },
+    {
+      "name": "France",
+      "value": 204617
+    }
+  ];
 
   constructor(
     public dialog: MatDialog,
@@ -199,13 +395,13 @@ export class DashboardOverviewComponent implements OnInit {
         id: 1,
         value: '250',
         percentChange: "5%",
-        name: "Active Contacts",
+        name: "Total Contacts",
         refLabel: 'Contact',
         colorDark: "rgb(54,171,104)",
         colorLight: "rgba(54,171,104,0.2)",
         icon: "bi bi-arrow-up-right",
         symbol: "bi bi-people-fill",
-        status: 'active'
+        status: 'primary'
       },
       {
         id: 2,
@@ -229,8 +425,20 @@ export class DashboardOverviewComponent implements OnInit {
         colorLight: "rgba(235, 87, 87, 0.2)",
         icon: "bi bi-arrow-down-right",
         symbol: "bi bi-ticket-detailed-fill",
-        status: 'warning'
-      }
+        status: 'danger'
+      },
+      {
+        id: 4,
+        value: '£ 30,500',
+        percentChange: "5%",
+        name: "Total Invoices",
+        refLabel: '',
+        colorDark: "rgb(54,171,104)",
+        colorLight: "rgba(54,171,104,0.2)",
+        icon: "bi bi-arrow-up-right",
+        symbol: "bi bi-file-earmark-text-fill",
+        status: 'active'
+      },
     ]
   }
 
@@ -244,6 +452,16 @@ export class DashboardOverviewComponent implements OnInit {
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  createNewTicket() {
+    const dialogRef = this.dialog.open(TicketInfoComponent, {
+      width: '40%',
+      height: 'auto',
+      data: {
+        isExisting: false,
+      },
+    });
   }
 
 

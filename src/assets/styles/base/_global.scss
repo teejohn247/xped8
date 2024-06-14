@@ -751,3 +751,14 @@ a {
 // .selectField {
 //     padding-top: 12px;
 // }
+
+.highcharts-axis.highcharts-xaxis path {
+    stroke: var(--black-tint-mmd) !important;
+}
+
+.highcharts-axis-labels.highcharts-xaxis-labels text,
+.highcharts-axis-labels.highcharts-yaxis-labels text {
+    color: var(--text-grey) !important;
+    fill: var(--text-grey) !important;
+    letter-spacing: 0.02rem !important;
+}

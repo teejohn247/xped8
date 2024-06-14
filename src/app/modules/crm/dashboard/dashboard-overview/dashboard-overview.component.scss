@@ -1,6 +1,20 @@
 .status-card-wrap {
 
     .status-card {
+        //cursor: pointer;
+
+        // &:hover {
+
+        //     .cont {
+
+        //         .det {
+
+        //             .icon {
+        //                 transform: scale(1.1);
+        //             }
+        //         }
+        //     }
+        // }
 
         .cont {
             padding: 1rem 7% 1.1rem;
@@ -17,14 +31,20 @@
                 background-color: var(--approved-lightest);
             }
 
-            &.warning {
+            &.pending {
                 border: 1px solid var(--pending-light);
                 background-color: var(--pending-lightest);
             }
 
-            &.pending {
+            &.primary {
                 border: 1px solid var(--primary-light);
                 background-color: var(--primary-lightest)
+                //background-color: var(--pending-lightest);
+            }
+
+            &.danger {
+                border: 1px solid var(--warning-light);
+                background-color: var(--warning-lightest)
                 //background-color: var(--pending-lightest);
             }
 
@@ -73,11 +93,12 @@
                     width: 30%;
                     font-size: 1.8rem;
                     display: inline-block;
+                    transition: all 0.4s ease;
                     //font-weight: 600;
                     //color: var(--darker);
                     text-align: left;
 
-                    &.total {
+                    &.primary {
                         color: var(--primary);
                     }
 
@@ -85,12 +106,12 @@
                         color: var(--approved);
                     }
 
-                    &.warning {
+                    &.danger {
                         color: var(--warning);
                     }
 
                     &.pending {
-                        color: var(--primary);
+                        color: var(--pending);
                     }
                 }
 
@@ -127,4 +148,117 @@
         box-shadow: unset;
         animation: unset;
     }
+}
+
+::ng-deep .ngx-charts g .grid-panel.odd rect {
+  fill: none;
+}
+
+.row-card {
+
+    .hdr {
+        .card-title {
+            font-size: 0.95rem;
+            letter-spacing: 0.03rem;
+            font-weight: 600;
+        }
+        .preamble {
+            font-size: 0.8rem;
+            letter-spacing: 0.04rem;
+            color: var(--text-grey);
+            margin-top: 0.2rem;
+        }
+
+        .actions-info {
+
+            .dropdown-trigger {
+                width: 10rem;
+                display: inline-flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.75rem;
+                letter-spacing: 0.03rem;
+                padding: 0.2rem 0.7rem;
+                border-radius: var(--radius-xs);
+                transition: var(--transition-norm);
+                border: 1px solid var(--border-black-lightest);
+                cursor: pointer;
+
+                i {
+                    margin-left: 0.6rem;
+                }
+            }
+        }
+
+        .legend {
+            flex-wrap: wrap;
+
+            &.general {
+                gap: 0.1rem 1rem;
+
+                li {
+                    font-size: 0.72rem;
+                    white-space: nowrap;
+                    letter-spacing: 0.02rem;
+                    color: var(--black-tint);
+                    padding-left: 1rem;
+                    position: relative;
+
+                    &.complete {
+
+                        &:before {
+                            background: var(--approved);
+                        }
+                    }
+
+                    &.pending {
+
+                        &:before {
+                            background: var(--pending);
+                        }
+                    }
+
+                    &.warning {
+
+                        &:before {
+                            background: var(--warning);
+                        }
+                    }
+
+                    &.awaiting {
+
+                        &:before {
+                            background: var(--primary);
+                        }
+                    }
+
+                    &.contacts {
+
+                        &:before {
+                            background: #9370DB;
+                        }
+                    }
+
+                    &.leads {
+                        &:before {
+                            background: #87CEFA;
+                        }
+                    }
+
+                    &:before {
+                        content: '';
+                        width: 0.6rem;
+                        height: 0.6rem;
+                        border-radius: 50%;
+                        position: absolute;
+                        transform: translateY(-50%);
+                        left: 0;
+                        top: 50%;
+                    }
+                }
+            }
+        }
+    }
+
+    
 }

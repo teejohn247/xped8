@@ -9,6 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { TicketInfoComponent } from '../ticket-info/ticket-info.component';
 
 @Component({
   selector: 'app-support-overview',
@@ -171,6 +172,16 @@ export class SupportOverviewComponent implements OnInit {
 
   viewDetails(id: any) {
     this.router.navigate([id], {relativeTo: this.route});
+  }
+
+  createNewTicket() {
+    const dialogRef = this.dialog.open(TicketInfoComponent, {
+      width: '40%',
+      height: 'auto',
+      data: {
+        isExisting: false,
+      },
+    });
   }
 
 }
