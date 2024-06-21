@@ -5,6 +5,7 @@ import { HrRoutingModule } from './hr-routing.module';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { AutosizeModule } from 'ngx-autosize';
@@ -48,6 +49,7 @@ import { RecruitmentApplicantsComponent } from './recruitment/recruitment-applic
 import { RecruitmentApplicantFormComponent } from './recruitment/recruitment-applicant-form/recruitment-applicant-form.component';
 import { AttendanceListComponent } from './attendance/attendance-list/attendance-list.component';
 import { RecruitmentMasterListComponent } from './recruitment/recruitment-master-list/recruitment-master-list.component';
+import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 
 
 @NgModule({
@@ -57,7 +59,7 @@ import { RecruitmentMasterListComponent } from './recruitment/recruitment-master
     SelfServicePortalComponent, 
     SelfServiceLeaveRequestsComponent, 
     SelfServicePayrollComponent, 
-    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent, EditEmployeeComponent, CreateKpiGroupComponent, CreateKpiComponent, CreateAppraisalPeriodComponent, AppraisalFormComponent, CreateRatingScaleComponent, PayrollDetailsComponent, PayrollUploadComponent, ExpenseManagementComponent, ExpenseRequestReviewComponent, PayrollPortalComponent, PayrollPeriodDetailsComponent, PayrollCalculatorComponent, AssignManagerApproversComponent, PayslipComponent, CalendarComponent, MeetingInfoComponent, JobPostInfoComponent, RecruitmentApplicantsComponent, RecruitmentApplicantFormComponent, AttendanceListComponent, RecruitmentMasterListComponent
+    SelfServiceReimbursementComponent, SelfServiceOverviewComponent, PayrollSummaryComponent, RecruitmentOverviewComponent, RecruitmentJobBoardComponent, RecruitmentPortalComponent, RecruitmentScreeningComponent, RecruitmentOnboardingComponent, VisitorsLogComponent, GeneralAppraisalComponent, LeaveManagementOverviewComponent, BulkUploadComponent, EditEmployeeComponent, CreateKpiGroupComponent, CreateKpiComponent, CreateAppraisalPeriodComponent, AppraisalFormComponent, CreateRatingScaleComponent, PayrollDetailsComponent, PayrollUploadComponent, ExpenseManagementComponent, ExpenseRequestReviewComponent, PayrollPortalComponent, PayrollPeriodDetailsComponent, PayrollCalculatorComponent, AssignManagerApproversComponent, PayslipComponent, CalendarComponent, MeetingInfoComponent, JobPostInfoComponent, RecruitmentApplicantsComponent, RecruitmentApplicantFormComponent, AttendanceListComponent, RecruitmentMasterListComponent, DashboardComponent
   ],
   imports: [
     CommonModule,
@@ -65,6 +67,7 @@ import { RecruitmentMasterListComponent } from './recruitment/recruitment-master
     SharedModule,
     HighchartsChartModule,
     NgbModalModule,
+    NgxChartsModule,
     NgxMaterialTimepickerModule,
     FlatpickrModule.forRoot(),
     CalendarModule.forRoot({

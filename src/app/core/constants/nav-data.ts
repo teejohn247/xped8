@@ -1,15 +1,20 @@
 // Super Admin Menu Items
 export const navbarData = [
+    // {
+    //     routeLink: '/dashboard',
+    //     icon: 'bi bi-grid-fill',
+    //     label: 'Dashboard'
+    // },
     {
-        routeLink: '/dashboard',
-        icon: 'bi bi-grid-fill',
-        label: 'Dashboard'
-    },
-    {
-        routeLink: 'human-resources/employees',
+        routeLink: 'human-resources/dashboard',
         icon: 'bi bi-person-vcard-fill',
         label: 'Human Resources',
         subMenu: [
+            {
+                routeLink: 'human-resources/dashboard',
+                icon: 'bi bi-grid-fill',
+                label: 'Dashboard',
+            },
             {
                 routeLink: 'human-resources/employees',
                 icon: 'bi bi-people-fill',
@@ -162,7 +167,7 @@ export const navbarData = [
 // Employee Menu Items
 export const navbarDataReg = [
     {
-        routeLink: '/dashboard',
+        routeLink: 'human-resources/dashboard',
         icon: 'bi bi-grid-fill',
         label: 'Dashboard'
     },
@@ -201,17 +206,12 @@ export const navbarDataReg = [
         icon: 'bi bi-stickies-fill',
         label: 'Visitors Log'
     },
-    {
-        routeLink: 'human-resources/self-service/induction',
-        icon: 'bi bi-person-workspace',
-        label: 'Induction'
-    }
 ]
 
 // Manager Menu Items
 export const navbarDataManager = [
     {
-        routeLink: '/dashboard',
+        routeLink: 'human-resources/dashboard',
         icon: 'bi bi-grid-fill',
         label: 'Dashboard'
     },
@@ -265,11 +265,11 @@ export const navbarDataManager = [
         icon: 'bi bi-stickies-fill',
         label: 'Visitors Log'
     },
-    {
-        routeLink: 'human-resources/self-service/induction',
-        icon: 'bi bi-person-workspace',
-        label: 'Induction'
-    }
+    // {
+    //     routeLink: 'human-resources/self-service/induction',
+    //     icon: 'bi bi-person-workspace',
+    //     label: 'Induction'
+    // }
 ]
 
 export interface INavbarData {

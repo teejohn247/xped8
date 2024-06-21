@@ -23,14 +23,19 @@ import { AppraisalFormComponent } from './appraisals/appraisal-form/appraisal-fo
 import { CalendarComponent } from './calendar/calendar/calendar.component';
 import { AttendanceListComponent } from './attendance/attendance-list/attendance-list.component';
 import { RecruitmentMasterListComponent } from './recruitment/recruitment-master-list/recruitment-master-list.component';
+import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'employees',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
     //component: EmployeesListComponent
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent
   },
   {
     path: 'employees',

@@ -12,9 +12,9 @@
         justify-content: center;
         position: relative;
         background-color: rgba(0, 0, 0, 0.4);
-        background-position: center;
+        background-position: bottom;
         background-repeat: no-repeat;
-        background-size: cover;
+        background-size: contain;
 
         .overlay {
             width: 100%;

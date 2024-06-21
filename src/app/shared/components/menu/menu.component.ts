@@ -16,7 +16,7 @@ export class MenuComponent implements OnInit {
   regMenuData = navbarDataReg;
   managerMenuData = navbarDataManager;
 
-  currentLink = 'General';
+  currentLink = 'Human Resources';
 
   constructor(
     private authService: AuthenticationService, 
@@ -27,7 +27,7 @@ export class MenuComponent implements OnInit {
     console.log(this.userDetails);
     if(this.userDetails.data.isSuperAdmin) {
       this.collapsed = false;
-      this.currentLink = 'Dashboard';
+      this.currentLink = 'Human Resources';
     };
   }
 
