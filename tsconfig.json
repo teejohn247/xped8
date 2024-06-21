@@ -14,7 +14,10 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "strictPropertyInitialization": false,
+    "typeRoots": ["node_modules/@types"],
+    "types": ["googlemaps"]
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

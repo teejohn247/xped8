@@ -339,8 +339,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="cont status-card d-flex flex-column justify-content-center card-ymmd">
-                            
+                        <div class="cont status-card map d-flex flex-column justify-content-center card-ymmd">
+                            <div class="google_map_container">
+                                <!-- the google map component goes here -->
+                                <google-map [zoom]="mapZoom" [center]="mapCenter" [options]="mapOptions">
+                                    <map-marker
+                                      #marker="mapMarker"
+                                      [position]="mapCenter"
+                                      [options]="markerOptions"
+                                    >
+                                    </map-marker>
+                                </google-map>
+                            </div>
                         </div>
                     </div>
                 </div>

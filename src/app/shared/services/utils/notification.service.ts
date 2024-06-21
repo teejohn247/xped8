@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ConfirmationDialogData } from '../../models/confirmation-dialog-data';
 import { ConfirmationDialogComponent } from '../../components/confirmation-dialog/confirmation-dialog.component';
+import { WorkLocationComponent } from 'src/app/modules/hr/attendance/work-location/work-location.component';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,18 @@ export class NotificationService {
       {
         data,
         width: '40%',
+        height: 'auto',
+        disableClose: true,
+      }
+    ).afterClosed();
+  }
+
+  confirmCheckIn(data: ConfirmationDialogData): Observable<boolean> {
+    return this.dialog.open(
+      WorkLocationComponent, 
+      {
+        data,
+        width: '60%',
         height: 'auto',
         disableClose: true,
       }

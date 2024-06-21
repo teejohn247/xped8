@@ -85,6 +85,20 @@
 
     .status-card {
 
+        &.map {
+            position: relative;
+            padding: 0;
+            overflow: hidden;
+
+            .google_map_container {
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                position: absolute;
+                height: 14rem;
+            }
+        }
+
         &:first-child {
             border: 1px solid rgba(29, 161, 242, 0.2);
             background: rgba(29, 161, 242, 0.1);
@@ -97,7 +111,7 @@
 
         &:last-child {
             border: 1px solid var(--pending-light);
-            background: var(--pending-lightest);
+            //background: var(--pending-lightest);
         }
 
     }
@@ -325,6 +339,15 @@
 }
 
 ::ng-deep {
+
+    .google_map_container {
+
+        .map-container {
+            width: 400px !important;
+            height: 250px !important;
+        }
+    }
+    
 
     .ngx-gauge-meter {
 

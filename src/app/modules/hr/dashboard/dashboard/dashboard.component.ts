@@ -5,15 +5,7 @@ import { AuthenticationService } from 'src/app/shared/services/utils/authenticat
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { SharedService } from 'src/app/shared/services/utils/shared.service';
-// import { GoogleMap } from '@angular/google-maps';
-
-interface CustomMapMarkerPosition{
-  position: google.maps.LatLngLiteral,
-  title: string,
-  options?: any,
-  type?: string,
-  property?: any
-}
+import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 
 @Component({
   selector: 'app-dashboard',
@@ -94,23 +86,43 @@ export class DashboardComponent implements OnInit {
   };
 
   //Google Maps
-  center: google.maps.LatLngLiteral = {lat: 24, lng: 12};
-  zoom = 13.5;
-  mapOptions: google.maps.MapOptions = {
-    styles: [
-      {
-        elementType: 'labels.text',
-        stylers: [
-          { color: '#ff0000' },
-          { fontSize: '6px' }
-        ]
-      }
-    ]
-  }
+  // center: google.maps.LatLngLiteral = {lat: 24, lng: 12};
+  // zoom = 13.5;
+  // mapOptions: google.maps.MapOptions = {
+  //   styles: [
+  //     {
+  //       elementType: 'labels.text',
+  //       stylers: [
+  //         { color: '#ff0000' },
+  //         { fontSize: '6px' }
+  //       ]
+  //     }
+  //   ]
+  // }
 
-  markerOptions: google.maps.marker.AdvancedMarkerElementOptions = {gmpDraggable: false,gmpClickable:true};
-  markerPositions: CustomMapMarkerPosition[] = [];
-  @ViewChild('map', { static: true }) mapElement: any;
+  @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
+  @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow;
+
+  mapZoom = 14;
+  mapCenter: google.maps.LatLng;
+  mapOptions: google.maps.MapOptions = {
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    zoomControl: true,
+    scrollwheel: false,
+    disableDoubleClickZoom: true,
+    maxZoom: 20,
+    minZoom: 4,
+  };
+
+  markerInfoContent = '';
+  markerOptions: google.maps.MarkerOptions = {
+    draggable: false,
+    animation: google.maps.Animation.DROP,
+  };
+
+  // markerOptions: google.maps.marker.AdvancedMarkerElementOptions = {gmpDraggable: false,gmpClickable:true};
+  // markerPositions: CustomMapMarkerPosition[] = [];
+  // @ViewChild('map', { static: true }) mapElement: any;
 
   constructor(
     private authService: AuthenticationService,
@@ -135,11 +147,27 @@ export class DashboardComponent implements OnInit {
         let checkInTime = new Date();
         let userPos:[number, number] = [pos.latitude, pos.longitude];
         this.userLocation = userPos;
+        const point: google.maps.LatLngLiteral = {
+          lat: pos.latitude,
+          lng: pos.longitude,
+        };
+  
+        this.mapCenter = new google.maps.LatLng(point);
+        //this.map.panTo(point);
+  
+        // this.markerInfoContent = "I'm here!";
+  
+        this.markerOptions = {
+          draggable: false,
+          animation: google.maps.Animation.DROP,
+        };
+
         let distanceFromOffice = this.checkLocation(userPos);
         if(distanceFromOffice > 2) {
-          this.notifyService.confirmAction({
+          this.notifyService.confirmCheckIn({
             title: 'Location Details',
-            message: `You are currently at this position: ${pos.latitude} and ${pos.longitude}. You are currently ${distanceFromOffice}km away from the office. Do you want to check in manually?`,
+            userLocation: [pos.latitude, pos.longitude],
+            message: `You are currently at this position: ${pos.latitude} and ${pos.longitude} shown aon the map above which is ${Math.floor(distanceFromOffice).toLocaleString()}km away from the office. Do you want to check in manually?`,
             confirmText: 'Manual Checkin',
             cancelText: 'Cancel',
           }).subscribe((confirmed) => {
@@ -156,9 +184,9 @@ export class DashboardComponent implements OnInit {
     console.log(this.userDetails);
   }
 
-  ngAfterViewInit(): void {
-    this.addMarkersToMap()
-  }
+  // ngAfterViewInit(): void {
+  //   this.addMarkersToMap()
+  // }
 
   get checkedInStatus() {
     if (sessionStorage.getItem('loggedInUser')) {
@@ -419,47 +447,47 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  setMapMarkerPositions(){
-    this.markerPositions.push(
-      {
-        position:{lat: parseFloat(this.userLocation[0]), lng: parseFloat(this.userLocation[1])},
-        title: 'Location',
-        type: 'Remote',
-        options: {
-          gmpDraggable: false,
-          gmpClickable: true,
-          content: this.createMarkerContent('../../../../assets/images/illustrations/location.png', 30, 30)
-        },
-        property: this.userLocation
-      })
-  }
+  // setMapMarkerPositions(){
+  //   this.markerPositions.push(
+  //     {
+  //       position:{lat: parseFloat(this.userLocation[0]), lng: parseFloat(this.userLocation[1])},
+  //       title: 'Location',
+  //       type: 'Remote',
+  //       options: {
+  //         gmpDraggable: false,
+  //         gmpClickable: true,
+  //         content: this.createMarkerContent('../../../../assets/images/illustrations/location.png', 30, 30)
+  //       },
+  //       property: this.userLocation
+  //     })
+  // }
 
-  addMarkersToMap() {
-    try {
-      this.markerPositions.forEach(markerData => {
-        let marker:  google.maps.marker.AdvancedMarkerElement =  ({
-          position: markerData.position,
-          map: this.mapElement.googleMap,
-          title: markerData.title,
-          gmpDraggable: markerData.options.gmpDraggable,
-          gmpClickable: markerData.options.gmpClickable,
-          content: markerData.options.content
-        }) as any;
-        marker.addListener('click', () => {});
-      });
-    }
-    catch(e) {
-      console.log(e)
-    }
-  }
+  // addMarkersToMap() {
+  //   try {
+  //     this.markerPositions.forEach(markerData => {
+  //       let marker:  google.maps.marker.AdvancedMarkerElement =  ({
+  //         position: markerData.position,
+  //         map: this.mapElement.googleMap,
+  //         title: markerData.title,
+  //         gmpDraggable: markerData.options.gmpDraggable,
+  //         gmpClickable: markerData.options.gmpClickable,
+  //         content: markerData.options.content
+  //       }) as any;
+  //       marker.addListener('click', () => {});
+  //     });
+  //   }
+  //   catch(e) {
+  //     console.log(e)
+  //   }
+  // }
 
-  createMarkerContent(iconUrl: string, width: number, height: number): HTMLElement {
-    const div = document.createElement('div');
-    div.style.width = `${width}px`;
-    div.style.height = `${height}px`;
-    div.style.backgroundImage = `url(${iconUrl})`;
-    div.style.backgroundSize = 'contain';
-    div.style.backgroundRepeat = 'no-repeat';
-    return div;
-  }
+  // createMarkerContent(iconUrl: string, width: number, height: number): HTMLElement {
+  //   const div = document.createElement('div');
+  //   div.style.width = `${width}px`;
+  //   div.style.height = `${height}px`;
+  //   div.style.backgroundImage = `url(${iconUrl})`;
+  //   div.style.backgroundSize = 'contain';
+  //   div.style.backgroundRepeat = 'no-repeat';
+  //   return div;
+  // }
 }
