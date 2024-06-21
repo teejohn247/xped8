@@ -127,15 +127,15 @@ export class MeetingInfoComponent implements OnInit {
   onSubmit() {
     if(this.meetingForm.valid) {
       let data = {
-        employeeId: this.meetingForm.value.host,
-        guestName: this.meetingForm.value.name,
-        purpose: this.meetingForm.value.purpose,
-        email: this.meetingForm.value.email,
-        phoneNumber: this.meetingForm.value.phoneNo,
-        visitDate: this.meetingForm.value.visitDate,
+        meetingTitle: this.meetingForm.value.meetingTitle,
+        invitedGuests: this.meetingForm.value.invitedGuests,
+        location: this.meetingForm.value.location,
+        meetingDescription: this.meetingForm.value.meetingDescription,
+        meetingStartTime: this.combineDateTime(this.meetingForm.value.meetingDate,this.meetingForm.value.startTime),
+        meetingEndTime: this.combineDateTime(this.meetingForm.value.meetingDate,this.meetingForm.value.endTime)
       }
       console.log(data);
-      this.hrService.bookVisitor(data).subscribe({
+      this.hrService.bookMeeting(data).subscribe({
         next: res => {
           // console.log(res);
           if(res.status == 200) {
@@ -162,5 +162,16 @@ export class MeetingInfoComponent implements OnInit {
     if (index !== -1) {
       array.splice(index, 1);
     }
+  }
+
+  combineDateTime(dateVal: Date, timeVal: String) {
+    const date = String(dateVal);
+    const time = timeVal;
+    const t1: any = time.split(' ');
+    const t2: any = t1[0].split(':');
+    t2[0] = (t1[1] === 'PM' ? (1*t2[0] + 12) : t2[0]);
+    const time24 = (t2[0] < 10 ? '0' + t2[0] : t2[0]) + ':' + t2[1];
+    const completeDate = date.replace("00:00", time24.toString());
+    return completeDate;
   }
 }

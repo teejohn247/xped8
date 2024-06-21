@@ -12,17 +12,25 @@
     .top {
 
         .major, .minor {
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
             font-size: 1.5rem;
             font-weight: 600;
             letter-spacing: 0.04rem;
             text-shadow: var(--card-shadow);
             color: white;
+
+            img {
+                width: auto;
+                height: 2.7rem;
+            }
         }
 
         .minor {
             font-weight: 700;
             color: var(--bkg-light);
-            margin-top: 0.5rem;
+            margin-top: 0.2rem;
         }
     }
 

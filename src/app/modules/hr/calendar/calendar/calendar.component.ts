@@ -48,6 +48,16 @@ export class CalendarComponent implements OnInit {
     event: CalendarEvent;
   };
 
+  holidayActions: CalendarEventAction[] = [
+    {
+      label: '<i class="bi bi-pen-fill ms-2"></i>',
+      a11yLabel: 'Edit',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.handleEvent('Edited', event);
+      },
+    }
+  ]
+
   actions: CalendarEventAction[] = [
     {
       label: '<i class="bi bi-pen-fill ms-2"></i>',
@@ -133,9 +143,11 @@ export class CalendarComponent implements OnInit {
   }
 
   getPageData = async () => {
-    this.calendarDetails = await this.hrService.getCalendar().toPromise();
     this.employeeList = await this.hrService.getEmployees().toPromise();
+    this.calendarDetails = await this.hrService.getCalendar().toPromise(); 
+    this.calendarDetails = this.calendarDetails['data'];   
     console.log(this.calendarDetails);
+    this.generateEvents();
   }
 
   // Event Filter Functions
@@ -167,7 +179,7 @@ export class CalendarComponent implements OnInit {
   filterEvents() {
     // Filter out the unselected ids
     const selectedPreferences = this.filterForm.value.eventFilters.map((checked, index) => checked ? this.eventFilters[index].id : null).filter(value => value !== null);
-    console.log(selectedPreferences);
+    // console.log(selectedPreferences);
     // Do something with the result
   }
 
@@ -234,13 +246,67 @@ export class CalendarComponent implements OnInit {
   }
 
   createNewMeeting() {
-    const dialogRef = this.dialog.open(MeetingInfoComponent, {
-      width: '30%',
-      height: 'auto',
-      data: {
-        isExisting: false,
-        employeeList: this.employeeList['data']
-      },
-    });
+    if(this.employeeList) {
+      const dialogRef = this.dialog.open(MeetingInfoComponent, {
+        width: '30%',
+        height: 'auto',
+        data: {
+          isExisting: false,
+          employeeList: this.employeeList['data']
+        },
+      });
+      dialogRef.afterClosed().subscribe(() => {
+        this.hrService.getCalendar().subscribe(res => {
+          this.calendarDetails = res.data;
+          console.log(this.calendarDetails);
+        });
+      });
+    }
+    else {
+      this.notifyService.showError('All data needed to create a meeting is not available yet. please try again');
+    }
+    
+  }
+
+  generateEvents() {
+    this.generateHolidayEvents();
+  }
+
+  generateHolidayEvents() {
+    this.calendarDetails['holidays'].map(event => {
+      let eventData = {
+        title: event.holidayName,
+        start: startOfDay(this.strToDate(event.date)),
+        end: endOfDay(this.strToDate(event.date)),
+        color: colors.red,
+        actions: this.holidayActions,
+        allDay: true,
+        draggable: true,
+        resizable: {
+          beforeStart: false,
+          afterEnd: false,
+        },
+      }
+      this.events.push(eventData);
+    })
+    // this.events = [
+    //   ...this.events,
+    //   {
+    //     title: 'New event',
+    //     start: startOfDay(new Date()),
+    //     end: endOfDay(new Date()),
+    //     color: colors.red,
+    //     draggable: true,
+    //     resizable: {
+    //       beforeStart: true,
+    //       afterEnd: true,
+    //     },
+    //   },
+    // ];
+  }
+
+  strToDate(dateString) {
+    const dateObject = new Date(Date.parse(dateString));
+    return dateObject
   }
 }
