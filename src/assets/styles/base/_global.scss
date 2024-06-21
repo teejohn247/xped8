@@ -700,6 +700,28 @@ a {
     }
 }
 
+//Api loader
+.apiLoader {
+    width: 23px;
+    height: 23px;
+    border: 5px dotted #FFF;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    margin-left: 0.4rem;
+    box-sizing: border-box;
+    animation: rotation 2s linear infinite;
+}
+  
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+} 
+
 
 //KEYFRAMES
 
