@@ -50,6 +50,7 @@ export class AuthenticationService {
         this._isLoggedin$.next(true);
         sessionStorage.setItem(this.TOKEN_NAME, res.token);
         sessionStorage.setItem('loggedInUser', JSON.stringify(res));
+        sessionStorage.setItem('userCheckedIn', JSON.stringify(false));
         sessionStorage.setItem('currency', JSON.stringify('$'));
         //this.user = this.getUser(res.token);
       })

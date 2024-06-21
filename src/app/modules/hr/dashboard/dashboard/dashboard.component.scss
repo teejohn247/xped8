@@ -59,6 +59,20 @@
             // box-shadow: var(--card-shadow);
             // background: white;
 
+            &.user {
+                width: 6.5rem;
+                height: 6.5rem;
+                display: flex;
+                border-radius: 50%;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: auto;
+                    height: 5.5rem;
+                }
+            }
+
             img {
                 width: auto;
                 height: 4.5rem;
@@ -85,6 +99,35 @@
             border: 1px solid var(--pending-light);
             background: var(--pending-lightest);
         }
+
+    }
+}
+
+.attendance {
+
+    .card-det {
+        cursor: pointer;
+
+        .icon {
+            font-size: 2.7rem;
+            color: var(--black-tint);
+        }
+        
+        .det {
+            margin-left: 1.5rem;
+
+            .title {
+                font-size: 0.85rem;
+                text-transform: uppercase;
+            }
+
+            .time {
+                font-size: 1.2rem;
+                font-weight: 700;
+                letter-spacing: 0.03rem;
+            }
+        }
+
 
     }
 }
@@ -231,6 +274,69 @@
             //     margin-top: 1rem;
             //     letter-spacing: 0.03rem;
             // }
+        }
+
+        &.leave {
+
+            span {
+
+                &:first-child {
+                    font-size: 4rem;
+                    font-weight: 600;
+                    color: var(--black-tint);
+                }
+    
+                &:last-child {
+                    font-size: 0.9rem;
+                    line-height: 1.2;
+                    margin-top: 1rem;
+                    letter-spacing: 0.03rem;
+                }
+            }
+        }
+    }
+}
+
+.guage-chart {
+    margin-top: 2rem;
+    position: relative;
+
+    .nav-actions {
+        position: absolute;
+        bottom: 1rem;
+
+        .action {
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.03rem;
+
+            i {
+                cursor: pointer;
+            }
+        }
+
+        .info {
+            font-size: 0.85rem;
+            letter-spacing: 0.03rem;
+            color: var(--text-grey);
+            margin-top: 0.5rem;
+        }
+    }
+}
+
+::ng-deep {
+
+    .ngx-gauge-meter {
+
+        .reading-block {
+            font-weight: 600;
+            font-family: 'Roboto';
+            overflow: visible !important;
+            font-size: 55px !important;
+        }
+
+        .reading-label {
+            display: none !important;
         }
     }
 }

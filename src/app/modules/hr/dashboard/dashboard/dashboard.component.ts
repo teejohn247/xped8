@@ -1,10 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Options } from 'highcharts';
 import * as Highcharts from 'highcharts';
 import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { SharedService } from 'src/app/shared/services/utils/shared.service';
+// import { GoogleMap } from '@angular/google-maps';
+
+interface CustomMapMarkerPosition{
+  position: google.maps.LatLngLiteral,
+  title: string,
+  options?: any,
+  type?: string,
+  property?: any
+}
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +30,14 @@ export class DashboardComponent implements OnInit {
   payrollPeriods: any[] = [];
   cardsSummary: any[] = [];
   expenseData: any[];
+  checkedIn: boolean = false;
+  userLocation: any;
+
+  totalLeaveDays: number;
+  leaveDaysUsed: number;
+  leaveRecords: any[] = [];
+  Leavecharts: typeof Highcharts;
+  leaveChartOptions: Options;
   
   AreaHighcharts: typeof Highcharts = Highcharts;
   areaChartOptions: Highcharts.Options = {
@@ -76,6 +93,25 @@ export class DashboardComponent implements OnInit {
     domain: ['#9370DB']
   };
 
+  //Google Maps
+  center: google.maps.LatLngLiteral = {lat: 24, lng: 12};
+  zoom = 13.5;
+  mapOptions: google.maps.MapOptions = {
+    styles: [
+      {
+        elementType: 'labels.text',
+        stylers: [
+          { color: '#ff0000' },
+          { fontSize: '6px' }
+        ]
+      }
+    ]
+  }
+
+  markerOptions: google.maps.marker.AdvancedMarkerElementOptions = {gmpDraggable: false,gmpClickable:true};
+  markerPositions: CustomMapMarkerPosition[] = [];
+  @ViewChild('map', { static: true }) mapElement: any;
+
   constructor(
     private authService: AuthenticationService,
     private hrService: HumanResourcesService,     
@@ -89,15 +125,16 @@ export class DashboardComponent implements OnInit {
     this.userDetails = this.authService.loggedInUser.data;
     this.currency = this.authService.currency ? this.authService.currency : '';
 
-    this.userDetails.isSuperAdmin ? this.getPageData() : '';
+    this.userDetails.isSuperAdmin ? this.getPageData() : this.getEmployeeData();
   }
 
   ngOnInit(): void {
-    if(!this.userDetails.isSuperAdmin) {
+    if(!this.userDetails.isSuperAdmin && !this.checkedInStatus) {
       this.sharedService.getCurrentLocation().subscribe(pos=> {
         console.log(pos);
         let checkInTime = new Date();
         let userPos:[number, number] = [pos.latitude, pos.longitude];
+        this.userLocation = userPos;
         let distanceFromOffice = this.checkLocation(userPos);
         if(distanceFromOffice > 2) {
           this.notifyService.confirmAction({
@@ -119,6 +156,15 @@ export class DashboardComponent implements OnInit {
     console.log(this.userDetails);
   }
 
+  ngAfterViewInit(): void {
+    this.addMarkersToMap()
+  }
+
+  get checkedInStatus() {
+    if (sessionStorage.getItem('loggedInUser')) {
+      return JSON.parse(sessionStorage.getItem('userCheckedIn'));
+    }
+  }
 
   getPageData = async () => {
     this.departmentList = await this.hrService.getDepartments().toPromise();
@@ -293,6 +339,8 @@ export class DashboardComponent implements OnInit {
         if(res.status == 200) {
           if(action == 'checkIn') {
             this.notifyService.showSuccess('You have been checked in successfully');
+            this.checkedIn = true;
+            sessionStorage.setItem('userCheckedIn', JSON.stringify(this.checkedIn));
           }
           else {
             this.notifyService.showSuccess('You have been checked out successfully');
@@ -307,4 +355,111 @@ export class DashboardComponent implements OnInit {
     })
   }
 
+  getEmployeeData = async () => {
+    this.payrollPeriods = await this.hrService.getPayrollPeriods().toPromise();
+    console.log(this.payrollPeriods);
+    this.leaveRecords = this.userDetails.leaveAssignment;
+    this.totalLeaveDays = this.leaveRecords.reduce((n, {noOfLeaveDays}) => n + noOfLeaveDays, 0);
+    this.leaveDaysUsed = this.leaveRecords.reduce((n, {daysUsed}) => n + daysUsed, 0);
+    console.log(this.leaveRecords);
+
+    this.Leavecharts = Highcharts;
+    this.leaveChartOptions = {
+      chart: {
+        type: 'pie',
+        plotShadow: false
+      },
+      credits: {
+        enabled: false
+      },
+      plotOptions: {
+        pie: {
+          innerSize: '99%',
+          borderWidth: 20,
+          borderColor: null,
+          slicedOffset: 5,
+          dataLabels: {
+            connectorWidth: 0,
+            enabled: false
+          }
+        }
+      },
+      tooltip: {
+        headerFormat: '<span style="font-size:11px; letter-spacing: 0.03rem; font-family: Roboto">{series.name}</span><br>',
+        pointFormat: '<span style="font-size:11px; letter-spacing: 0.03rem; font-family: Roboto; color:{point.color}">{point.name}</span>: <b>{point.value}days</b> <br/>'
+      },
+      title: {
+        verticalAlign: 'middle',
+        floating: false,
+        text: ''
+      },
+      legend: {
+        enabled: false
+      },
+      series: [
+        {
+          type: 'pie',
+          name: 'Leave Days',
+          data: [
+            {
+              name: 'Days Used', 
+              y: this.leaveDaysUsed*100/this.totalLeaveDays, 
+              value: this.leaveDaysUsed, 
+              color: '#f08585'
+            },
+            {
+              name: 'Days Left', 
+              y: ((this.totalLeaveDays - this.leaveDaysUsed)*100)/this.totalLeaveDays, 
+              value: this.totalLeaveDays - this.leaveDaysUsed, 
+              color: '#4dc781'
+            },
+          ]
+        }
+      ]
+    }
+  }
+
+  setMapMarkerPositions(){
+    this.markerPositions.push(
+      {
+        position:{lat: parseFloat(this.userLocation[0]), lng: parseFloat(this.userLocation[1])},
+        title: 'Location',
+        type: 'Remote',
+        options: {
+          gmpDraggable: false,
+          gmpClickable: true,
+          content: this.createMarkerContent('../../../../assets/images/illustrations/location.png', 30, 30)
+        },
+        property: this.userLocation
+      })
+  }
+
+  addMarkersToMap() {
+    try {
+      this.markerPositions.forEach(markerData => {
+        let marker:  google.maps.marker.AdvancedMarkerElement =  ({
+          position: markerData.position,
+          map: this.mapElement.googleMap,
+          title: markerData.title,
+          gmpDraggable: markerData.options.gmpDraggable,
+          gmpClickable: markerData.options.gmpClickable,
+          content: markerData.options.content
+        }) as any;
+        marker.addListener('click', () => {});
+      });
+    }
+    catch(e) {
+      console.log(e)
+    }
+  }
+
+  createMarkerContent(iconUrl: string, width: number, height: number): HTMLElement {
+    const div = document.createElement('div');
+    div.style.width = `${width}px`;
+    div.style.height = `${height}px`;
+    div.style.backgroundImage = `url(${iconUrl})`;
+    div.style.backgroundSize = 'contain';
+    div.style.backgroundRepeat = 'no-repeat';
+    return div;
+  }
 }

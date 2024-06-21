@@ -6,6 +6,8 @@ import { FlatpickrModule } from 'angularx-flatpickr';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NgxGaugeModule } from 'ngx-gauge';
+import { GoogleMap } from "@angular/google-maps";
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { AutosizeModule } from 'ngx-autosize';
@@ -68,6 +70,7 @@ import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
     HighchartsChartModule,
     NgbModalModule,
     NgxChartsModule,
+    NgxGaugeModule,
     NgxMaterialTimepickerModule,
     FlatpickrModule.forRoot(),
     CalendarModule.forRoot({
