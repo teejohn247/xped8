@@ -60,16 +60,17 @@
             // background: white;
 
             &.user {
-                width: 6.5rem;
-                height: 6.5rem;
+                width: 5.5rem;
+                height: 5.5rem;
                 display: flex;
                 border-radius: 50%;
                 align-items: center;
+                overflow: hidden;
                 justify-content: center;
 
                 img {
                     width: auto;
-                    height: 5.5rem;
+                    height: 100%;
                 }
             }
 
