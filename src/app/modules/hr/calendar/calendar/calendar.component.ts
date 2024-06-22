@@ -289,20 +289,6 @@ export class CalendarComponent implements OnInit {
       }
       this.events.push(eventData);
     })
-    // this.events = [
-    //   ...this.events,
-    //   {
-    //     title: 'New event',
-    //     start: startOfDay(new Date()),
-    //     end: endOfDay(new Date()),
-    //     color: colors.red,
-    //     draggable: true,
-    //     resizable: {
-    //       beforeStart: true,
-    //       afterEnd: true,
-    //     },
-    //   },
-    // ];
   }
 
   strToDate(dateString) {

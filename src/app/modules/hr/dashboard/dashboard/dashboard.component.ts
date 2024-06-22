@@ -167,7 +167,7 @@ export class DashboardComponent implements OnInit {
           this.notifyService.confirmCheckIn({
             title: 'Location Details',
             userLocation: [pos.latitude, pos.longitude],
-            message: `You are currently at this position: ${pos.latitude} and ${pos.longitude} shown aon the map above which is ${Math.floor(distanceFromOffice).toLocaleString()}km away from the office. Do you want to check in manually?`,
+            message: `You are currently at this position: ${pos.latitude} and ${pos.longitude} shown on the map above which is ${Math.floor(distanceFromOffice).toLocaleString()}km away from the office. Do you want to check in manually as working remotely today?`,
             confirmText: 'Manual Checkin',
             cancelText: 'Cancel',
           }).subscribe((confirmed) => {

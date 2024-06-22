@@ -62,6 +62,9 @@ export class AuthenticationService {
     sessionStorage.removeItem('loggedInUser');
     sessionStorage.clear();
     this.route.navigate(['login']);
+    setTimeout(()=> {
+      window.location.reload();
+    }, 800)
   }
 
   public getUser(token: string) {

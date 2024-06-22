@@ -30,7 +30,7 @@
                     <div class="list-header">{{item.label}}</div>
                     <ul class="list">
                         <li *ngFor="let link of item.subMenu">
-                            <a [routerLink]="[link.routeLink]" routerLinkActive="active" >
+                            <a [routerLink]="[link.routeLink]" routerLinkActive="active" [routerLinkActiveOptions]="{exact : true}">
                                 <i class="{{link.icon}}"></i>
                                 <!-- <mat-icon class="material-icons-round">{{item.icon}}</mat-icon> -->
                                 <span>{{link.label}}</span>
