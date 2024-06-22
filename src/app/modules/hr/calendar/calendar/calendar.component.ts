@@ -10,6 +10,7 @@ import { NotificationService } from 'src/app/shared/services/utils/notification.
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { DatePipe } from '@angular/common';
 import { MeetingInfoComponent } from '../meeting-info/meeting-info.component';
+import { PublicHolidayInfoComponent } from 'src/app/modules/settings/human-resources/public-holiday-info/public-holiday-info.component';
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -53,7 +54,8 @@ export class CalendarComponent implements OnInit {
       label: '<i class="bi bi-pen-fill ms-2"></i>',
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
+        console.log(event);
+        this.viewHolidayInfo(event);
       },
     }
   ]
@@ -63,15 +65,14 @@ export class CalendarComponent implements OnInit {
       label: '<i class="bi bi-pen-fill ms-2"></i>',
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
+        this.viewMeetingInfo(event);
       },
     },
     {
       label: '<i class="bi bi-trash3-fill ms-2 text-danger"></i>',
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
+        this.deleteMeeting(event);
       },
     },
   ];
@@ -258,7 +259,7 @@ export class CalendarComponent implements OnInit {
       dialogRef.afterClosed().subscribe(() => {
         this.hrService.getCalendar().subscribe(res => {
           this.calendarDetails = res.data;
-          console.log(this.calendarDetails);
+          // console.log(this.calendarDetails);
         });
       });
     }
@@ -270,6 +271,7 @@ export class CalendarComponent implements OnInit {
 
   generateEvents() {
     this.generateHolidayEvents();
+    this.generateMeetingEvents();
   }
 
   generateHolidayEvents() {
@@ -278,7 +280,7 @@ export class CalendarComponent implements OnInit {
         title: event.holidayName,
         start: startOfDay(this.strToDate(event.date)),
         end: endOfDay(this.strToDate(event.date)),
-        color: colors.red,
+        color: colors.blue,
         actions: this.holidayActions,
         allDay: true,
         draggable: true,
@@ -291,8 +293,92 @@ export class CalendarComponent implements OnInit {
     })
   }
 
+  generateMeetingEvents() {
+    this.calendarDetails['meetings'].map(event => {
+      if(event.dateTime) {
+        let eventData = {
+          title: event.holidayName,
+          start: startOfDay(this.strToDate(event.dateTime)),
+          end: endOfDay(this.strToDate(event.dateTime)),
+          color: colors.red,
+          actions: this.actions,
+          allDay: true,
+          draggable: true,
+          resizable: {
+            beforeStart: false,
+            afterEnd: false,
+          },
+        }
+        this.events.push(eventData);
+      }
+    })
+  }
+
   strToDate(dateString) {
     const dateObject = new Date(Date.parse(dateString));
     return dateObject
+  }
+
+  viewHolidayInfo(details: any) {
+    // console.log(details)
+    let modalInfo: any;
+    this.calendarDetails['holidays'].find((x: any) => {
+      if(x.holidayName == details.title) modalInfo = x;
+    })
+    this.dialog.open(PublicHolidayInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: modalInfo.holidayName,
+        id: modalInfo._id,
+        isExisting: true,
+        modalInfo: modalInfo
+      },
+    })
+  }
+
+  viewMeetingInfo(details: any) {
+    // console.log(details)
+    let modalInfo: any = {};
+    // this.calendarDetails['meetings'].find((x: any) => {
+    //   if(x.meetingTitle == details.title) modalInfo = x;
+    // })
+    this.dialog.open(MeetingInfoComponent, {
+      width: '35%',
+      height: 'auto',
+      data: {
+        name: modalInfo.meetingTitle,
+        id: modalInfo._id,
+        isExisting: true,
+        employeeList: this.employeeList['data'],
+        modalInfo: modalInfo
+      },
+    })
+  }
+
+  //Delete a Meeting
+  deleteMeeting(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Delete ' + info.title,
+      message: 'Are you sure you want to delete this meeting?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        // this.hrService.deletePayrollPeriod(info._id).subscribe({
+        //   next: res => {
+        //     // console.log(res);
+        //     if(res.status == 200) {
+        //       this.notifyService.showInfo('The period has been deleted successfully');
+        //     }
+        //     this.getPageData();
+        //   },
+        //   error: err => {
+        //     console.log(err)
+        //     this.notifyService.showError(err.error.error);
+        //   } 
+        // })
+      }
+    });
   }
 }

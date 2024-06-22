@@ -113,7 +113,7 @@ export class MeetingInfoComponent implements OnInit {
   arrayToObject(arrayVar, key:string) {
     let reqObj = {}
     reqObj = arrayVar.reduce((agg, item, index) => {
-      agg[item['_id']] = item[key];
+      agg[item[key]] = item[key];
       return agg;
     }, {})
     console.log(reqObj);

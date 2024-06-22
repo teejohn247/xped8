@@ -12,7 +12,9 @@
                         <img src="../../../../assets/images/illustrations/user.png" />
                     </div>
                     <div class="create-details">
-                        <div class="create-name">Enter meeting information</div>
+                        <div *ngIf="!data.isExisting" class="create-name">Enter Meeting Information</div>
+                        <div *ngIf="data.isExisting" class="create-name">View Meeting Information</div>
+                        <div class="create-name"></div>
                         <!-- <p>The first step is to complete your business information.</p> -->
                     </div>
                     <div (click)="closeDialog()" class="close-btn">&times;</div>
