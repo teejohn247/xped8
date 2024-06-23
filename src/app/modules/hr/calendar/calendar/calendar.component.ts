@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CalendarEvent, CalendarEventAction, CalendarEventTimesChangedEvent, CalendarView } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
+import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { DatePipe } from '@angular/common';
@@ -14,7 +15,7 @@ import { PublicHolidayInfoComponent } from 'src/app/modules/settings/human-resou
 
 const colors: Record<string, EventColor> = {
   red: {
-    primary: '#ad2121',
+    primary: '#eb5757',
     secondary: '#FAE3E3',
   },
   blue: {
@@ -34,8 +35,11 @@ const colors: Record<string, EventColor> = {
 })
 export class CalendarComponent implements OnInit {
 
+  userDetails: any;
   employeeList: any[] = [];
-  calendarDetails: any[] = [];
+  calendarDetails: any;
+  sortedEvents: any[] = [];
+  upcomingEvents: any[] = [];
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
@@ -55,7 +59,7 @@ export class CalendarComponent implements OnInit {
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
         console.log(event);
-        this.viewHolidayInfo(event);
+        if(this.userDetails.isSuperAdmin) this.viewHolidayInfo(event);
       },
     }
   ]
@@ -80,44 +84,44 @@ export class CalendarComponent implements OnInit {
   refresh = new Subject<void>();
 
   events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: { ...colors.red },
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: { ...colors.yellow },
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: { ...colors.blue },
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: { ...colors.yellow },
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
+    // {
+    //   start: subDays(startOfDay(new Date()), 1),
+    //   end: addDays(new Date(), 1),
+    //   title: 'A 3 day event',
+    //   color: { ...colors.red },
+    //   actions: this.actions,
+    //   allDay: true,
+    //   resizable: {
+    //     beforeStart: true,
+    //     afterEnd: true,
+    //   },
+    //   draggable: true,
+    // },
+    // {
+    //   start: startOfDay(new Date()),
+    //   title: 'An event with no end date',
+    //   color: { ...colors.yellow },
+    //   actions: this.actions,
+    // },
+    // {
+    //   start: subDays(endOfMonth(new Date()), 3),
+    //   end: addDays(endOfMonth(new Date()), 3),
+    //   title: 'A long event that spans 2 months',
+    //   color: { ...colors.blue },
+    //   allDay: true,
+    // },
+    // {
+    //   start: addHours(startOfDay(new Date()), 2),
+    //   end: addHours(new Date(), 2),
+    //   title: 'A draggable and resizable event',
+    //   color: { ...colors.yellow },
+    //   actions: this.actions,
+    //   resizable: {
+    //     beforeStart: true,
+    //     afterEnd: true,
+    //   },
+    //   draggable: true,
+    // },
   ];
   activeDayIsOpen: boolean = false;
 
@@ -126,20 +130,22 @@ export class CalendarComponent implements OnInit {
     private modal: NgbModal,
     public dialog: MatDialog,
     private datePipe: DatePipe,
+    private authService: AuthenticationService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) {
+    this.userDetails = this.authService.loggedInUser.data;
     const formControls = this.eventFilters.map(control => new FormControl(false));
     const selectAllControl = new FormControl(false);
     this.filterForm = this.fb.group({
       eventFilters: new FormArray(formControls),
       selectAll: selectAllControl
     });
+    this.getPageData();
   }
 
   ngOnInit(): void {
     console.log(this.events);
-    this.getPageData();
     this.filterChange();
   }
 
@@ -148,6 +154,7 @@ export class CalendarComponent implements OnInit {
     this.calendarDetails = await this.hrService.getCalendar().toPromise(); 
     this.calendarDetails = this.calendarDetails['data'];   
     console.log(this.calendarDetails);
+    this.sortCalendarEvents();
     this.generateEvents();
   }
 
@@ -185,6 +192,8 @@ export class CalendarComponent implements OnInit {
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    // let meetingEvents = events.filter(x => !x.allDay)
+    // console.log('Meeting clicked', meetingEvents);
     if (isSameMonth(date, this.viewDate)) {
       if (
         (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
@@ -196,6 +205,7 @@ export class CalendarComponent implements OnInit {
       }
       this.viewDate = date;
     }
+    // this.viewMeetingInfo(meetingEvents);
   }
 
   eventTimesChanged({event, newStart, newEnd }: CalendarEventTimesChangedEvent): void {
@@ -213,8 +223,8 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
-    this.modalData = { event, action };
-    this.modal.open(this.modalContent, { size: 'lg' });
+    if(event.allDay) this.viewHolidayInfo(event);
+    else this.viewMeetingInfo(event);
   }
 
   addEvent(): void {
@@ -259,6 +269,7 @@ export class CalendarComponent implements OnInit {
       dialogRef.afterClosed().subscribe(() => {
         this.hrService.getCalendar().subscribe(res => {
           this.calendarDetails = res.data;
+          this.generateEvents();
           // console.log(this.calendarDetails);
         });
       });
@@ -272,18 +283,43 @@ export class CalendarComponent implements OnInit {
   generateEvents() {
     this.generateHolidayEvents();
     this.generateMeetingEvents();
+    // console.log(this.events);
+  }
+
+  sortCalendarEvents() {
+    this.calendarDetails['holidays'].map(event => {
+      event['dateRef'] = event.date;
+      event['type'] = 'holiday';
+      this.sortedEvents.push(event);
+    })
+
+    this.calendarDetails['meetings'].map(event => {
+      event['dateRef'] = event.meetingStartTime;
+      event['type'] = 'meeting';
+      this.sortedEvents.push(event);
+    })
+
+    this.sortedEvents.sort(function(a, b): any {
+      return a.dateRef.localeCompare(b.dateRef);
+    });
+    
+    const today = new Date().getTime();
+    this.upcomingEvents = this.sortedEvents.filter((items)  => {
+      return new Date(items.dateRef).getTime() > today;
+    })
+    console.log(this.upcomingEvents);
   }
 
   generateHolidayEvents() {
-    this.calendarDetails['holidays'].map(event => {
+    this.calendarDetails['holidays'].map((event: any) => {
       let eventData = {
         title: event.holidayName,
         start: startOfDay(this.strToDate(event.date)),
         end: endOfDay(this.strToDate(event.date)),
-        color: colors.blue,
-        actions: this.holidayActions,
+        color: colors.red,
+        actions: this.userDetails.isSuperAdmin ? this.holidayActions : null,
         allDay: true,
-        draggable: true,
+        draggable: false,
         resizable: {
           beforeStart: false,
           afterEnd: false,
@@ -294,23 +330,21 @@ export class CalendarComponent implements OnInit {
   }
 
   generateMeetingEvents() {
-    this.calendarDetails['meetings'].map(event => {
-      if(event.dateTime) {
-        let eventData = {
-          title: event.holidayName,
-          start: startOfDay(this.strToDate(event.dateTime)),
-          end: endOfDay(this.strToDate(event.dateTime)),
-          color: colors.red,
-          actions: this.actions,
-          allDay: true,
-          draggable: true,
-          resizable: {
-            beforeStart: false,
-            afterEnd: false,
-          },
-        }
-        this.events.push(eventData);
+    this.calendarDetails['meetings'].map((event: any) => {
+      let eventData = {
+        title: event.meetingTitle,
+        start: this.strToDate(event.meetingStartTime),
+        end: this.strToDate(event.meetingEndTime),
+        color: colors.blue,
+        actions: this.actions,
+        allDay: false,
+        draggable: false,
+        resizable: {
+          beforeStart: false,
+          afterEnd: false,
+        },
       }
+      this.events.push(eventData);
     })
   }
 
@@ -340,9 +374,9 @@ export class CalendarComponent implements OnInit {
   viewMeetingInfo(details: any) {
     // console.log(details)
     let modalInfo: any = {};
-    // this.calendarDetails['meetings'].find((x: any) => {
-    //   if(x.meetingTitle == details.title) modalInfo = x;
-    // })
+    this.calendarDetails['meetings'].find((x: any) => {
+      if(x.meetingTitle == details.title) modalInfo = x;
+    })
     this.dialog.open(MeetingInfoComponent, {
       width: '35%',
       height: 'auto',

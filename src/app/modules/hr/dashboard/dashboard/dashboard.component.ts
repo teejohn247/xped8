@@ -19,11 +19,16 @@ export class DashboardComponent implements OnInit {
   dateTime: Date;
   employeeList: any[];
   departmentList: any[];
+
   payrollPeriods: any[] = [];
   cardsSummary: any[] = [];
   expenseData: any[];
   checkedIn: boolean = false;
   userLocation: any;
+
+  calendarDetails: any;
+  sortedEvents: any[] = [];
+  upcomingEvents: any[] = [];
 
   totalLeaveDays: number;
   leaveDaysUsed: number;
@@ -197,6 +202,9 @@ export class DashboardComponent implements OnInit {
   getPageData = async () => {
     this.departmentList = await this.hrService.getDepartments().toPromise();
     this.employeeList = await this.hrService.getEmployees().toPromise();
+    this.calendarDetails = await this.hrService.getCalendar().toPromise(); 
+    this.calendarDetails = this.calendarDetails['data'];
+    this.sortCalendarEvents();   
     this.payrollPeriods = await this.hrService.getPayrollPeriods().toPromise();
     console.log(this.departmentList);
 
@@ -447,47 +455,27 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  // setMapMarkerPositions(){
-  //   this.markerPositions.push(
-  //     {
-  //       position:{lat: parseFloat(this.userLocation[0]), lng: parseFloat(this.userLocation[1])},
-  //       title: 'Location',
-  //       type: 'Remote',
-  //       options: {
-  //         gmpDraggable: false,
-  //         gmpClickable: true,
-  //         content: this.createMarkerContent('../../../../assets/images/illustrations/location.png', 30, 30)
-  //       },
-  //       property: this.userLocation
-  //     })
-  // }
+  sortCalendarEvents() {
+    this.calendarDetails['holidays'].map(event => {
+      event['dateRef'] = event.date;
+      event['type'] = 'holiday';
+      this.sortedEvents.push(event);
+    })
 
-  // addMarkersToMap() {
-  //   try {
-  //     this.markerPositions.forEach(markerData => {
-  //       let marker:  google.maps.marker.AdvancedMarkerElement =  ({
-  //         position: markerData.position,
-  //         map: this.mapElement.googleMap,
-  //         title: markerData.title,
-  //         gmpDraggable: markerData.options.gmpDraggable,
-  //         gmpClickable: markerData.options.gmpClickable,
-  //         content: markerData.options.content
-  //       }) as any;
-  //       marker.addListener('click', () => {});
-  //     });
-  //   }
-  //   catch(e) {
-  //     console.log(e)
-  //   }
-  // }
+    this.calendarDetails['meetings'].map(event => {
+      event['dateRef'] = event.meetingStartTime;
+      event['type'] = 'meeting';
+      this.sortedEvents.push(event);
+    })
 
-  // createMarkerContent(iconUrl: string, width: number, height: number): HTMLElement {
-  //   const div = document.createElement('div');
-  //   div.style.width = `${width}px`;
-  //   div.style.height = `${height}px`;
-  //   div.style.backgroundImage = `url(${iconUrl})`;
-  //   div.style.backgroundSize = 'contain';
-  //   div.style.backgroundRepeat = 'no-repeat';
-  //   return div;
-  // }
+    this.sortedEvents.sort(function(a, b): any {
+      return a.dateRef.localeCompare(b.dateRef);
+    });
+    
+    const today = new Date().getTime();
+    this.upcomingEvents = this.sortedEvents.filter((items)  => {
+      return new Date(items.dateRef).getTime() > today;
+    })
+    console.log(this.upcomingEvents);
+  }
 }

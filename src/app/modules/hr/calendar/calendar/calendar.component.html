@@ -142,72 +142,32 @@
                     <div class="cont mt-lg-4">
                         <div class="card-title clr mb-lg-1">Upcoming Events</div>
                         <div class="listed-items mt-lg-3">
-                            <div class="item">
-                                <div class="content">
+                            <div *ngFor="let item of upcomingEvents | slice:0:5;" class="item">
+                                <div *ngIf="item.type == 'holiday'" class="content">
                                     <div class="det">
-                                        <div class="major bd">Senior Frontend Engineer</div>
-                                        <div class="minor">Ibrahim Babatunde</div>
+                                        <div class="major bd">{{item.holidayName}}</div>
+                                        <div class="minor">Holiday</div>
                                     </div>
                                     <div class="det right">
-                                        <div class="major">Apr 20</div>
-                                        <div class="minor sm">12:30pm - 12:45pm</div>
+                                        <div class="major">{{item.date | date:'MMM d'}}</div>
+                                        <div class="minor sm"></div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="item.type == 'meeting'" class="content">
+                                    <div class="det">
+                                        <div class="major bd">{{item.meetingTitle}}</div>
+                                        <div *ngIf="item.zoomLink" class="minor">Meeting : <a target="_blank" [href]="item.zoomLink.start_url">Join Meeting</a></div>
+                                        <div *ngIf="!item.zoomLink" class="minor text-capitalize">{{item.location}}</div>
+                                    </div>
+                                    <div class="det right">
+                                        <div class="major">{{item.meetingStartTime | date:'MMM d'}}</div>
+                                        <div class="minor sm">{{item.meetingStartTime | date:'h:mm a'}} - {{item.meetingEndTime | date:'h:mm a'}}</div>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="item">
-                                <div class="content">
-                                    <div class="det">
-                                        <div class="major bd">Marketing Manager</div>
-                                        <div class="minor">Remi Olubode</div>
-                                    </div>
-                                    <div class="det right">
-                                        <div class="major">May 21</div>
-                                        <div class="minor sm">1:10pm - 2:45pm</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="item">
-                                <div class="content">
-                                    <div class="det">
-                                        <div class="major bd">Finance Analyst</div>
-                                        <div class="minor">Matt Greg</div>
-                                    </div>
-                                    <div class="det right">
-                                        <div class="major">May 26</div>
-                                        <div class="minor sm">4:10pm - 4:25pm</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="item">
-                                <div class="content">
-                                    <div class="det">
-                                        <div class="major bd">Technology Consultant</div>
-                                        <div class="minor">Rita Mreace</div>
-                                    </div>
-                                    <div class="det right">
-                                        <div class="major">May 30</div>
-                                        <div class="minor sm">9:30am - 10:45am</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="item">
-                                <div class="content">
-                                    <div class="det">
-                                        <div class="major bd">HR Consultant</div>
-                                        <div class="minor">Spence Holderyne</div>
-                                    </div>
-                                    <div class="det right">
-                                        <div class="major">Jun 4</div>
-                                        <div class="minor sm">10:30am - 10:45am</div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>

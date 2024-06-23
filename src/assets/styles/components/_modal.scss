@@ -138,6 +138,14 @@
                 position: relative;
                 color: var(--white);
 
+                p {
+                    font-size: 0.8rem;
+                    letter-spacing: 0.03rem;
+                    a {
+                        color: var(--warning);
+                    }
+                }
+
                 .create-name {
                     font-size: 1rem;
                     letter-spacing: 0.06rem;

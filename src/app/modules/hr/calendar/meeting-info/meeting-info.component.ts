@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-meeting-info',
@@ -19,6 +20,7 @@ export class MeetingInfoComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<MeetingInfoComponent>,
     private fb: FormBuilder,
+    private datePipe: DatePipe,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) {
@@ -30,7 +32,7 @@ export class MeetingInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Meeting Title',
         controlWidth: '100%',
-        initialValue: null,
+        initialValue: data.isExisting ? data?.modalInfo.meetingTitle : null,
         validators: [Validators.required],
         order: 1
       },
@@ -39,7 +41,7 @@ export class MeetingInfoComponent implements OnInit {
         controlType: 'mutipleSelect',
         controlLabel: 'Invited Guests',
         controlWidth: '100%',
-        initialValue: '',
+        initialValue: data.isExisting ? data?.modalInfo.invitedGuests.map(x => x.employeeId) : null,
         selectOptions: this.arrayToObject(this.employees, 'email'),
         validators: [Validators.required],
         order: 2
@@ -49,9 +51,10 @@ export class MeetingInfoComponent implements OnInit {
         controlType: 'select',
         controlLabel: 'Meeting Location',
         controlWidth: '48%',
-        initialValue: 'Online',
+        initialValue: data.isExisting ? data?.modalInfo.location : 'Online',
         selectOptions: {
           Online: 'Online',
+          online: 'Online',
           Business: 'Business Lounge',
           Hallway: 'Hallway',
         },
@@ -63,7 +66,7 @@ export class MeetingInfoComponent implements OnInit {
         controlType: 'date',
         controlLabel: 'Meeting Date',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: data.isExisting ? data?.modalInfo.meetingStartTime : null,
         validators: [Validators.required],
         order: 4
       },
@@ -72,7 +75,7 @@ export class MeetingInfoComponent implements OnInit {
         controlType: 'time',
         controlLabel: 'Start Time',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: data.isExisting ? this.datePipe.transform(data?.modalInfo.meetingStartTime, 'h:mm a') : null,
         validators: [Validators.required],
         order: 5
       },
@@ -81,7 +84,7 @@ export class MeetingInfoComponent implements OnInit {
         controlType: 'time',
         controlLabel: 'End Time',
         controlWidth: '48%',
-        initialValue: null,
+        initialValue: data.isExisting ? this.datePipe.transform(data?.modalInfo.meetingEndTime, 'h:mm a') : null,
         validators: [Validators.required],
         order: 6
       },
@@ -90,7 +93,7 @@ export class MeetingInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Meeting Description',
         controlWidth: '100%',
-        initialValue: null,
+        initialValue: data.isExisting ? data?.modalInfo.meetingDescription : null,
         validators: [],
         order: 7
       },
@@ -106,7 +109,7 @@ export class MeetingInfoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.employees);
+    console.log(this.data);
   }
 
   //Converts an array to an Object of key value pairs

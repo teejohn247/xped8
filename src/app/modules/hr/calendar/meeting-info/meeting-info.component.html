@@ -14,8 +14,7 @@
                     <div class="create-details">
                         <div *ngIf="!data.isExisting" class="create-name">Enter Meeting Information</div>
                         <div *ngIf="data.isExisting" class="create-name">View Meeting Information</div>
-                        <div class="create-name"></div>
-                        <!-- <p>The first step is to complete your business information.</p> -->
+                        <p *ngIf="data.isExisting && data.modalInfo.zoomLink"><a [href]="data.modalInfo.zoomLink.start_url" target="_blank">Join Meeting Here</a></p>
                     </div>
                     <div (click)="closeDialog()" class="close-btn">&times;</div>
                     <!-- <div *ngIf="isUpdateCustomer" class="create-details">
@@ -100,7 +99,7 @@
                     </ng-container>
 
                     <div class="btn-hld d-flex justify-content-end mt-lg-3" style="width: 100%">
-                        <div (click)="onSubmit()" class="cta primary-bkg mmd text-uppercase" style="min-width: 30%" type="submit">Submit</div>
+                        <div *ngIf="!data.isExisting" (click)="onSubmit()" class="cta primary-bkg mmd text-uppercase" style="min-width: 30%" type="submit">Submit</div>
                     </div>
 
                 </form>
