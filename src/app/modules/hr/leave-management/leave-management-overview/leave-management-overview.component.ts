@@ -21,6 +21,7 @@ export class LeaveManagementOverviewComponent implements OnInit {
   requestedApprovals: any[] = [];
   approvedRequests: any[] = [];
   leaveTypeList: any[] = [];
+  employeeList: any[] = [];
   dataSource: MatTableDataSource<LeaveRequestTable>;
   selection = new SelectionModel<LeaveRequestTable>(true, []);
 
@@ -288,6 +289,9 @@ export class LeaveManagementOverviewComponent implements OnInit {
   }
 
   getPageData = async () => {
+    this.employeeList = await this.hrService.getEmployees().toPromise();
+    this.employeeList = this.employeeList['data']
+    console.log(this.employeeList);
     this.requestedApprovals = await this.hrService.getRequestedLeaveApprovals().toPromise();
     this.leaveTypeList = await this.hrService.getLeaveTypes().toPromise();
     // console.log(this.leaveTypeList);

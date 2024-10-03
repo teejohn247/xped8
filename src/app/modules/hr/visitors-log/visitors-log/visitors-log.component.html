@@ -17,11 +17,11 @@
                             <div class="title">{{item.visitorType}}</div>
                             <div class="date">
                                 <span><i class="bi bi-calendar2-week"></i></span>
-                                <span>{{item.referenceDate}}</span>
+                                <span>{{item.referenceDate | date }}</span>
                             </div>
                         </div>
                         <div class="det">
-                            <div class="count"><span>{{item.visitorCount}}</span> Visitors</div>
+                            <div class="count"><span>{{item.visitorCount}}</span> {{item.visitorCount > 1 ? 'Visitors' : 'Visitor'}}</div>
                             <div class="icon {{item.status}}"><i class="{{item.icon}}"></i></div>
                         </div>
                     </div>
@@ -86,41 +86,43 @@
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="column.key == 'checkin'">
-                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>Check In
-                            </th>
-                            <td style="width:1%; white-space: nowrap;" mat-cell 
-                                *matCellDef="let row">
-                                <div *ngIf="row['Status'] == 'Active'" class="active-status"></div>
-                                <div *ngIf="row['Status'] == 'Overstay'" class="active-status closed"></div>
-                                <span *ngIf="row['Status'] == 'Active' || 'Inactive'" class="ps-2">{{ row[column.label] }}</span>
-                                <span *ngIf="row['Status'] == 'Expected'" class="cta approved-bkg xs">Checkin</span>
+                        <ng-container *ngIf="column.key == 'checkIn'">
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>Check In</th>
+                            <td style="width:1%; white-space: nowrap;" mat-cell *matCellDef="let row">
+                                <div *ngIf="row['status'] == 'Active'" class="active-status"></div>
+                                <div *ngIf="row['status'] == 'Overstay'" class="active-status closed"></div>
+                                <span *ngIf="row['status'] == 'Active' || 'Inactive'" class="ps-2">{{ row[column.key] && strToDate(row[column.key], 'checked') }}</span>
+                                <span (click)="checkInVisitor(row._id)" *ngIf="row['status'] == 'Expected'" class="cta approved-bkg xs">Checkin</span> 
+                                <!-- <span class="cta approved-bkg xs">Checkin</span> -->
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="column.key == 'checkout'">
-                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>Check Out
-                            </th>
-                            <td style="width:1%; white-space: nowrap;" mat-cell 
-                                *matCellDef="let row">
-                                <span *ngIf="row['Status'] == 'Inactive'" class="ps-2">{{ row[column.label] }}</span>
-                                <span *ngIf="row['Status'] == 'Active'" class="cta warning-bkg xs">Checkout</span>
-                                <span *ngIf="row['Status'] == 'Overstay'" class="cta warning-bkg xs">Checkout</span>
+                        <ng-container *ngIf="column.key == 'checkOut'">
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>Check Out</th>
+                            <td style="width:1%; white-space: nowrap;" mat-cell *matCellDef="let row">
+                                <span *ngIf="row['status'] == 'Inactive'" class="ps-2">{{ row[column.key] && strToDate(row[column.key], 'checked') }}</span>
+                                <span (click)="checkOutVisitor(row._id)" *ngIf="row['status'] == 'Active'" class="cta warning-bkg xs">Checkout</span>
+                                <span (click)="checkOutVisitor(row._id)" *ngIf="row['status'] == 'Overstay'" class="cta warning-bkg xs">Checkout</span>
                             </td>
-                        </ng-container>                        
+                        </ng-container> 
+                        
+                        <ng-container *ngIf="column.key == 'visitDate'">
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
+                            <td mat-cell *matCellDef="let row">{{ strToDate(row[column.key], 'visitDate') }}</td>
+                        </ng-container>
 
                         <ng-container *ngIf="column.key == 'actions'">
                             <th style="width:5%" mat-header-cell *matHeaderCellDef>
                             </th>
                             <td style="width:1%; white-space: nowrap;" mat-cell *matCellDef="let element">
                                 <span class="table-icon edit"><i class="bi bi-pen-fill"></i></span>
-                                <span  class="table-icon delete ms-lg-3"><i class="bi bi-trash3-fill"></i></span>
+                                <span (click)="deleteMeeting(element)" class="table-icon delete ms-lg-3"><i class="bi bi-trash3-fill"></i></span>
                             </td>
                         </ng-container>
 
                         <ng-container>
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef mat-sort-header>{{ column.key == 'image' || column.key == 'actions' ? "" : column.label }}</th>
-                            <td mat-cell *matCellDef="let row">{{ row[column.label] }}</td>
+                            <td mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
                         </ng-container>
                         
                     </ng-container>

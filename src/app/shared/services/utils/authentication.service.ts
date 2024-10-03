@@ -28,6 +28,12 @@ export class AuthenticationService {
     return null;
   }
 
+  get currency() {
+    if (sessionStorage.getItem('loggedInUser')) {
+      return JSON.parse(sessionStorage.getItem('currency'));
+    }
+  }
+
   constructor(private http: HttpClient, private route: Router) {
     //Checking for login status in local storage
     this._isLoggedin$.next(!!this.token);
@@ -44,6 +50,8 @@ export class AuthenticationService {
         this._isLoggedin$.next(true);
         sessionStorage.setItem(this.TOKEN_NAME, res.token);
         sessionStorage.setItem('loggedInUser', JSON.stringify(res));
+        sessionStorage.setItem('userCheckedIn', JSON.stringify(false));
+        sessionStorage.setItem('currency', JSON.stringify('$'));
         //this.user = this.getUser(res.token);
       })
     );
@@ -54,6 +62,9 @@ export class AuthenticationService {
     sessionStorage.removeItem('loggedInUser');
     sessionStorage.clear();
     this.route.navigate(['login']);
+    setTimeout(()=> {
+      window.location.reload();
+    }, 800)
   }
 
   public getUser(token: string) {

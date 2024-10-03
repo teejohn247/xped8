@@ -1,3 +1,58 @@
+
+.userInfo {
+
+    .image {
+        width: 4rem;
+        height: 4rem;
+    }
+
+    .card-det {
+        margin-left: 0.6rem;
+
+        .name {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.03rem;
+        }
+
+        .role {
+            font-size: 0.8rem;
+            letter-spacing: 0.03rem;
+            color: var(--black-tint);
+            margin-top: 0.2rem;
+        }
+    }
+}
+
+.attendance {
+
+    .card-det {
+        cursor: pointer;
+
+        .icon {
+            font-size: 2.7rem;
+            color: var(--black-tint);
+        }
+        
+        .det {
+            margin-left: 1.5rem;
+
+            .title {
+                font-size: 0.85rem;
+                text-transform: uppercase;
+            }
+
+            .time {
+                font-size: 1.2rem;
+                font-weight: 700;
+                letter-spacing: 0.03rem;
+            }
+        }
+
+
+    }
+}
+
 .payroll-info {
     display: flex;
     flex-wrap: wrap;

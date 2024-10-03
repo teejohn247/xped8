@@ -1,9 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import * as Highcharts from 'highcharts';
+import { MatDialog } from '@angular/material/dialog';
 import { TableColumn } from 'src/app/shared/models/table-columns';
 import { MatTableDataSource } from '@angular/material/table';
 import { JobPostTable } from 'src/app/shared/models/job-data';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { DatePipe } from '@angular/common';
+import { JobPostInfoComponent } from '../job-post-info/job-post-info.component';
 
 @Component({
   selector: 'app-recruitment-overview',
@@ -12,9 +17,11 @@ import { JobPostTable } from 'src/app/shared/models/job-data';
 })
 export class RecruitmentOverviewComponent implements OnInit {
 
+  employeeList: any[] = [];
+  departmentList: any[] = [];
+  jobRoles: any[] = [];
   displayedColumns: any[];
   dataSource: MatTableDataSource<JobPostTable>;
-
 
   jobPostSummary: any[] = [
     {
@@ -54,7 +61,7 @@ export class RecruitmentOverviewComponent implements OnInit {
       sortable: false
     },
     {
-      key: "department",
+      key: "departmentName",
       label: "Department",
       order: 2,
       columnWidth: "12%",
@@ -121,54 +128,54 @@ export class RecruitmentOverviewComponent implements OnInit {
   ]
 
   tableData: JobPostTable[] = [
-    {
-      id: 1,
-      "Job ID": "MARK-2045",
-      "Job Title": "Marketing Analyst",
-      "Department": "Marketing",
-      "Applicants": 45,
-      "Job Type": "Full Time",
-      "Opening Date": "Feb 11, 2023",
-      "Closing Date": "Feb 27, 2023",
-      "Hiring Manager": "Simon Dowen",
-      "Status": "Expired"
-    },
-    {
-      id: 2,
-      "Job ID": "TECH-3445",
-      "Job Title": "Senior Analyst",
-      "Department": "Technology",
-      "Applicants": 89,
-      "Job Type": "Contract",
-      "Opening Date": "Mar 24, 2023",
-      "Closing Date": "April 27, 2023",
-      "Hiring Manager": "Chris Joyles",
-      "Status": "Active"
-    },
-    {
-      id: 3,
-      "Job ID": "HR-5645",
-      "Job Title": "HR Consultant",
-      "Department": "Human Resources",
-      "Applicants": 23,
-      "Job Type": "Full Time",
-      "Opening Date": "July 11, 2023",
-      "Closing Date": "July 15, 2023",
-      "Hiring Manager": "Simon Dowen",
-      "Status": "Active"
-    },
-    {
-      id: 4,
-      "Job ID": "ACC-3445",
-      "Job Title": "Finance Officer",
-      "Department": "Accounts",
-      "Applicants": 45,
-      "Job Type": "Part Time",
-      "Opening Date": "Sep 12, 2023",
-      "Closing Date": "Sep 14, 2023",
-      "Hiring Manager": "Simon Dowen",
-      "Status": "Expired"
-    },
+    // {
+    //   id: 1,
+    //   "Job ID": "MARK-2045",
+    //   "Job Title": "Marketing Analyst",
+    //   "Department": "Marketing",
+    //   "Applicants": 45,
+    //   "Job Type": "Full Time",
+    //   "Opening Date": "Feb 11, 2023",
+    //   "Closing Date": "Feb 27, 2023",
+    //   "Hiring Manager": "Simon Dowen",
+    //   "Status": "Expired"
+    // },
+    // {
+    //   id: 2,
+    //   "Job ID": "TECH-3445",
+    //   "Job Title": "Senior Analyst",
+    //   "Department": "Technology",
+    //   "Applicants": 89,
+    //   "Job Type": "Contract",
+    //   "Opening Date": "Mar 24, 2023",
+    //   "Closing Date": "April 27, 2023",
+    //   "Hiring Manager": "Chris Joyles",
+    //   "Status": "Active"
+    // },
+    // {
+    //   id: 3,
+    //   "Job ID": "HR-5645",
+    //   "Job Title": "HR Consultant",
+    //   "Department": "Human Resources",
+    //   "Applicants": 23,
+    //   "Job Type": "Full Time",
+    //   "Opening Date": "July 11, 2023",
+    //   "Closing Date": "July 15, 2023",
+    //   "Hiring Manager": "Simon Dowen",
+    //   "Status": "Active"
+    // },
+    // {
+    //   id: 4,
+    //   "Job ID": "ACC-3445",
+    //   "Job Title": "Finance Officer",
+    //   "Department": "Accounts",
+    //   "Applicants": 45,
+    //   "Job Type": "Part Time",
+    //   "Opening Date": "Sep 12, 2023",
+    //   "Closing Date": "Sep 14, 2023",
+    //   "Hiring Manager": "Simon Dowen",
+    //   "Status": "Expired"
+    // },
   ]
 
   Highcharts: typeof Highcharts = Highcharts;
@@ -218,12 +225,53 @@ export class RecruitmentOverviewComponent implements OnInit {
     ]
   }
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog,
+    private datePipe: DatePipe,
+    private hrService: HumanResourcesService,     
+    private notifyService: NotificationService,
+  ) { }
 
   ngOnInit(): void {
+    this.getPageData();
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
-    this.dataSource = new MatTableDataSource(this.tableData);
+  }
+
+  getPageData = async () => {
+    this.employeeList = await this.hrService.getEmployees().toPromise();
+    this.departmentList = await this.hrService.getDepartments().toPromise();
+    this.jobRoles = await this.hrService.getJobRoles().toPromise();
+    console.log(this.jobRoles['data']);
+
+    this.dataSource = new MatTableDataSource(this.jobRoles['data']);
+    // this.designationList = await this.hrService.getDesignations().toPromise();
+    // this.dataSource.sort = this.sort;
+  }
+
+  addNewJobPost() {
+    const dialogRef = this.dialog.open(JobPostInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        isExisting: false,
+        employeeList: this.employeeList['data'],
+        departmentList: this.departmentList['data'],
+      },
+    });
+  }
+
+  strToDate(dateVal: string, key:string) {
+    if(key == 'date') {
+      let newFormat = new Date(dateVal);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }
+    else if(key = 'checked') {
+      let newFormat = new Date(dateVal);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'shortTime')
+    }
   }
 
 }

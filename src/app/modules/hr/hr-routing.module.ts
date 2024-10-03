@@ -20,14 +20,22 @@ import { ExpenseManagementComponent } from './expense-management/expense-managem
 import { PayrollDetailsComponent } from './payroll/payroll-details/payroll-details.component';
 import { PayrollPortalComponent } from './payroll/payroll-portal/payroll-portal.component';
 import { AppraisalFormComponent } from './appraisals/appraisal-form/appraisal-form.component';
+import { CalendarComponent } from './calendar/calendar/calendar.component';
+import { AttendanceListComponent } from './attendance/attendance-list/attendance-list.component';
+import { RecruitmentMasterListComponent } from './recruitment/recruitment-master-list/recruitment-master-list.component';
+import { DashboardComponent } from './dashboard/dashboard/dashboard.component';
 
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'employees',
+    redirectTo: 'dashboard',
     pathMatch: 'full'
     //component: EmployeesListComponent
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent
   },
   {
     path: 'employees',
@@ -109,6 +117,10 @@ const routes: Routes = [
         component: RecruitmentJobBoardComponent
       },
       {
+        path : 'master-list',
+        component: RecruitmentMasterListComponent
+      },
+      {
         path: 'applicant-screening',
         component: RecruitmentScreeningComponent
       },
@@ -127,12 +139,20 @@ const routes: Routes = [
     component: ExpenseManagementComponent
   },
   {
+    path: 'calendar',
+    component: CalendarComponent
+  },
+  {
     path: 'appraisals',
     component: GeneralAppraisalComponent
   },
   {
     path: 'appraisals/:id',
     component: AppraisalFormComponent
+  },
+  {
+    path: 'attendance',
+    component: AttendanceListComponent
   },
   {
     path: 'visitors-log',

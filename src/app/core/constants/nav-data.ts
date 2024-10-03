@@ -1,15 +1,20 @@
 // Super Admin Menu Items
 export const navbarData = [
+    // {
+    //     routeLink: '/dashboard',
+    //     icon: 'bi bi-grid-fill',
+    //     label: 'Dashboard'
+    // },
     {
-        routeLink: '/dashboard',
-        icon: 'bi bi-grid-fill',
-        label: 'Dashboard'
-    },
-    {
-        routeLink: 'human-resources/employees',
+        routeLink: 'human-resources/dashboard',
         icon: 'bi bi-person-vcard-fill',
         label: 'Human Resources',
         subMenu: [
+            {
+                routeLink: 'human-resources/dashboard',
+                icon: 'bi bi-grid-fill',
+                label: 'Dashboard',
+            },
             {
                 routeLink: 'human-resources/employees',
                 icon: 'bi bi-people-fill',
@@ -46,7 +51,12 @@ export const navbarData = [
                 label: 'Recruitment',
             },
             {
-                routeLink: 'human-resources/document-management',
+                routeLink: 'human-resources/calendar',
+                icon: 'bi bi-calendar2-week-fill',
+                label: 'Calendar'
+            },
+            {
+                routeLink: 'human-resources/attendance',
                 icon: 'bi bi-file-earmark-text-fill',
                 label: 'Attendance'
             },
@@ -57,26 +67,63 @@ export const navbarData = [
             }
         ]
     },
+    // {
+    //     routeLink: 'accounting',
+    //     icon: 'bi bi-calculator-fill',
+    //     label: 'Accounting'
+    // },
+    // {
+    //     routeLink: 'project-management',
+    //     icon: 'bi bi-folder-fill',
+    //     label: 'Projects'
+    // },
     {
-        routeLink: 'accounting',
-        icon: 'bi bi-calculator-fill',
-        label: 'Accounting'
-    },
-    {
-        routeLink: 'project-management',
-        icon: 'bi bi-folder-fill',
-        label: 'Projects'
-    },
-    {
-        routeLink: 'customer-relationship-management',
+        routeLink: 'crm',
         icon: 'bi bi-microsoft-teams',
-        label: 'CRM'
+        label: 'CRM',
+        subMenu: [
+            {
+                routeLink: 'crm/dashboard',
+                icon: 'bi bi-grid-fill',
+                label: 'Dashboard',
+            },
+            {
+                routeLink: 'crm/contacts',
+                icon: 'bi bi-person-vcard-fill',
+                label: 'Contacts',
+            },
+            {
+                routeLink: 'crm/leads',
+                icon: 'bi bi-person-fill-up',
+                label: 'Leads',
+            },
+            {
+                routeLink: 'crm/support',
+                icon: 'bi bi-headset',
+                label: 'Support',
+            },
+            {
+                routeLink: 'crm/sales',
+                icon: 'bi bi-receipt-cutoff',
+                label: 'Sales',
+            },
+            {
+                routeLink: 'crm/agents',
+                icon: 'bi bi-person-square',
+                label: 'Agents',
+            },
+            {
+                routeLink: 'crm/reports',
+                icon: 'bi bi-clipboard2-data-fill',
+                label: 'Reports',
+            },
+        ]
     },
-    {
-        routeLink: 'supply-chain',
-        icon: 'bi bi-ubuntu',
-        label: 'Supply Chain'
-    },
+    // {
+    //     routeLink: 'supply-chain',
+    //     icon: 'bi bi-ubuntu',
+    //     label: 'Supply Chain'
+    // },
     {
         routeLink: 'settings',
         icon: 'bi bi-gear-fill',
@@ -92,26 +139,26 @@ export const navbarData = [
                 icon: 'bi bi-people-fill',
                 label: 'Human Resources',
             },
-            {
-                routeLink: 'settings/accounting',
-                icon: 'bi bi-calculator-fill',
-                label: 'Accounting'
-            },
-            {
-                routeLink: 'settings/project-management',
-                icon: 'bi bi-folder-fill',
-                label: 'Projects'
-            },
+            // {
+            //     routeLink: 'settings/accounting',
+            //     icon: 'bi bi-calculator-fill',
+            //     label: 'Accounting'
+            // },
+            // {
+            //     routeLink: 'settings/project-management',
+            //     icon: 'bi bi-folder-fill',
+            //     label: 'Projects'
+            // },
             {
                 routeLink: 'settings/customer-relationship-management',
                 icon: 'bi bi-microsoft-teams',
                 label: 'CRM'
             },
-            {
-                routeLink: 'settings/supply-chain',
-                icon: 'bi bi-ubuntu',
-                label: 'Supply Chain'
-            },
+            // {
+            //     routeLink: 'settings/supply-chain',
+            //     icon: 'bi bi-ubuntu',
+            //     label: 'Supply Chain'
+            // },
         ]
     }
 
@@ -120,7 +167,7 @@ export const navbarData = [
 // Employee Menu Items
 export const navbarDataReg = [
     {
-        routeLink: '/dashboard',
+        routeLink: 'human-resources/dashboard',
         icon: 'bi bi-grid-fill',
         label: 'Dashboard'
     },
@@ -150,21 +197,21 @@ export const navbarDataReg = [
         label: 'Appraisal Requests',
     },
     {
+        routeLink: 'human-resources/calendar',
+        icon: 'bi bi-calendar2-week-fill',
+        label: 'Calendar'
+    },
+    {
         routeLink: 'human-resources/visitors-log',
         icon: 'bi bi-stickies-fill',
         label: 'Visitors Log'
     },
-    {
-        routeLink: 'human-resources/self-service/induction',
-        icon: 'bi bi-person-workspace',
-        label: 'Induction'
-    }
 ]
 
 // Manager Menu Items
 export const navbarDataManager = [
     {
-        routeLink: '/dashboard',
+        routeLink: 'human-resources/dashboard',
         icon: 'bi bi-grid-fill',
         label: 'Dashboard'
     },
@@ -209,15 +256,20 @@ export const navbarDataManager = [
         label: 'Appraisal Management',
     },
     {
+        routeLink: 'human-resources/calendar',
+        icon: 'bi bi-calendar2-week-fill',
+        label: 'Calendar'
+    },
+    {
         routeLink: 'human-resources/visitors-log',
         icon: 'bi bi-stickies-fill',
         label: 'Visitors Log'
     },
-    {
-        routeLink: 'human-resources/self-service/induction',
-        icon: 'bi bi-person-workspace',
-        label: 'Induction'
-    }
+    // {
+    //     routeLink: 'human-resources/self-service/induction',
+    //     icon: 'bi bi-person-workspace',
+    //     label: 'Induction'
+    // }
 ]
 
 export interface INavbarData {

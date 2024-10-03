@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgChartsModule } from 'ng2-charts';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule }  from '@angular/material/table';
@@ -25,6 +26,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import { LeaveReviewComponent } from './components/leave-review/leave-review.component';
 import { PaymentInfoComponent } from './components/payment-info/payment-info.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
 
 const SHARED_COMP = [
   MatIconModule,
@@ -44,7 +46,7 @@ const SHARED_COMP = [
 ];
 
 @NgModule({
-  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent, LeaveReviewComponent, PaymentInfoComponent, DashboardComponent],
+  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent, LeaveReviewComponent, PaymentInfoComponent, DashboardComponent, LandingPageComponent],
 
   exports: [
     ...SHARED_COMP,
@@ -58,7 +60,8 @@ const SHARED_COMP = [
     ReactiveFormsModule,
     FormsModule,
     NgChartsModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    NgxMaterialTimepickerModule
   ],
   providers : [
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },

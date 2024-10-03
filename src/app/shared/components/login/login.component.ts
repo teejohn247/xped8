@@ -51,6 +51,7 @@ export class LoginComponent implements OnInit {
   setPass: boolean = false;
   userToken: string;
   authDetails: any;
+  apiLoading: boolean = false;
 
   selectedIndex = 0;
   slideInterval = 5000;
@@ -161,6 +162,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    this.apiLoading = true;
     this.submitted = true;
     if(this.loginForm.valid) {
       if(this.existingUser) {
@@ -169,16 +171,19 @@ export class LoginComponent implements OnInit {
             console.log(res);
             if(res.status == 200) {
               if(res.data.isSuperAdmin) {
+                this.apiLoading = false
                 if(!res.data.activeStatus) this.route.navigate(['app/settings']);
-                else this.route.navigate(['/dashboard']);
+                else this.route.navigate(['/welcome']);
               }
               else {
-                this.route.navigate(['/dashboard']);
+                this.apiLoading = false
+                this.route.navigate(['app/human-resources/dashboard']);
               }
             }
           },
           error: err => {
             console.log(err)
+            this.apiLoading = false;
             this.notify.showError(err.error.error);
           }          
         })
@@ -189,12 +194,14 @@ export class LoginComponent implements OnInit {
           next: res => {
             console.log(res);
             if(res.status == 200) {
+              this.apiLoading = false;
               this.notify.showSuccess(res.message);
               // this.route.navigate(['/app']);
             }
           },
           error: err => {
             console.log(err)
+            this.apiLoading = false;
             this.notify.showError(err.error.error);
           }
         })      

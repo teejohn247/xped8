@@ -1,0 +1,467 @@
+<div *ngIf="userDetails.isSuperAdmin" class="content-wrap">
+    <!-- <div class="row-section d-flex justify-content-between align-items-center">
+        <div class="page-header">HR Dashboard</div>
+        <div class="main-actions d-flex justify-content-start align-items-center">
+            <div class="cta primary-bkg icon md"><i class="bi bi-signpost-2-fill"></i>New Job Post</div>
+        </div>
+    </div> -->
+
+    <div class="row-section">
+        <div class="inner-row-hld d-flex align-items-start justify-content-between">
+            <div class="col-card card-xxl card-yxl d-flex justify-content-between align-items-start">
+                <div class="row-card d-flex justify-content-between card-xmlg card-yxl">
+                    
+                    <div class="cont card-xmmd slides" style="background-image: url('./assets/images/illustrations/fragment.png');">
+                        <div class="top">
+                            <div class="major">Welcome <img class="pb-2" src="https://silo-inc.com/wp-content/themes/wp-silo/dist/img/waving_hand.gif" alt=""></div>
+                            <div class="minor">{{userDetails.companyName}}</div>
+                        </div>
+                        <div class="btm">
+                            <div class="date">
+                                <span>{{dateTime | date: 'hh:mm a'}}</span>
+                                <span>{{dateTime | date: 'EEEE, MMM d'}}</span>
+                            </div>
+
+                            <div class="image">
+                                <img src="./assets/images/illustrations/entity.png" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inner-col card-xmmd card-yxl d-flex flex-column justify-content-between">
+                        <div *ngFor="let item of cardsSummary" class="cont status-card d-flex flex-column justify-content-center card-ymmd">
+                            <div class="card-det d-flex align-items-center">
+                                <div class="icon lg" [ngStyle]="{'color': item.colorDark}"><i class="{{item.icon}}"></i></div>
+                                <div class="card-title thin">{{item.name}}</div>
+                                <div class="fraction"><span class="lg">{{item.count}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row-card card-xmd card-yxl">
+                    <div class="cont" style="min-height: 20rem;">
+                        <div class="card-title clr">Upcoming Events</div>
+                        <div class="listed-items mt-lg-3">
+                            <div *ngFor="let item of upcomingEvents | slice:0:5;" class="item">
+                                <div *ngIf="item.type == 'holiday'" class="content">
+                                    <div class="det">
+                                        <div class="major bd">{{item.holidayName}}</div>
+                                        <div class="minor">Holiday</div>
+                                    </div>
+                                    <div class="det right">
+                                        <div class="major">{{item.date | date:'MMM d'}}</div>
+                                        <div class="minor sm"></div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="item.type == 'meeting'" class="content">
+                                    <div class="det">
+                                        <div class="major bd">{{item.meetingTitle}}</div>
+                                        <div *ngIf="item.zoomLink" class="minor">Meeting : <a target="_blank" [href]="item.zoomLink.start_url">Join Meeting</a></div>
+                                        <div *ngIf="!item.zoomLink" class="minor text-capitalize">{{item.location}}</div>
+                                    </div>
+                                    <div class="det right">
+                                        <div class="major">{{item.meetingStartTime | date:'MMM d'}}</div>
+                                        <div class="minor sm">{{item.meetingStartTime | date:'h:mm a'}} - {{item.meetingEndTime | date:'h:mm a'}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="row-section mt-lg-4">
+        <div class="inner-row-hld d-flex justify-content-between">
+
+            <div class="row-card card-xmlg card-yxl">
+                <div class="cont">
+                    <div class="hdr d-flex justify-content-between align-items-center mt-lg-1 mb-lg-3">
+                        <div class="title">
+                            <div class="card-title">Payroll Monthly</div>
+                            <div class="preamble">Values throughout the year</div>
+                        </div>
+
+                        <div class="actions-info">
+                            <div class="dropdown-trigger"> Select Year <i class="bi bi-chevron-down"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-card card-xxl">
+                        <highcharts-chart
+                            [Highcharts]="AreaHighcharts"
+                            [options]="areaChartOptions"
+                            style="width: 100%; max-width: 100%; height: 250px; display: block;"
+                        >
+                        </highcharts-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-card card-xmd card-yxl">
+                <div class="cont">
+                    <div class="hdr d-flex justify-content-between align-items-center mt-lg-1 mb-lg-3">
+                        <div class="title">
+                            <div class="card-title">Payroll by Departments</div>
+                            <div class="preamble">On the basis of departments</div>
+                            <ul class="legend general d-flex mt-2">
+                                <!-- <li [class]="item.status" *ngFor="let item of invoiceStatus">{{item.name}}</li> -->
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-card card-xxl d-flex justify-content-center align-items-center">
+                        <div class="donut-chart">
+                            <!-- <canvas #doughnutCanvas></canvas> -->
+                            <div class="chart-title">
+                                <span>NET SALARY <br> BY DEPARTMENT</span>
+                            </div>
+                            <highcharts-chart
+                                [Highcharts]="Highcharts"
+                                [options]="chartOptions"
+                                style="width: 300px; max-width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; background: transparent;"
+                            >
+                            </highcharts-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row-section mt-lg-4">
+        <div class="inner-row-hld d-flex justify-content-between">
+
+            <div class="row-card card-xmd card-yxl">
+                <div class="cont">
+                    <div class="card-title">Recent Approval Requests</div>
+                    <div class="listed-items mt-lg-3">
+                        <div class="item">
+                            <div class="icon"><i class="bi bi-rocket-takeoff"></i></div>
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Leave Request</div>
+                                    <div class="minor">Ibrahim Babatunde</div>
+                                </div>
+                                <div class="det">
+                                    <div class="status sm approved">Approved</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="item">
+                            <div class="icon"><i class="bi bi-coin"></i></div>
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Reimbursement</div>
+                                    <div class="minor">Matthew Reynolds</div>
+                                </div>
+                                <div class="det">
+                                    <div class="status sm pending">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="icon"><i class="bi bi-stars"></i></div>
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Appraisal Request</div>
+                                    <div class="minor">Greg Buntler</div>
+                                </div>
+                                <div class="det">
+                                    <div class="status sm pending">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="icon"><i class="bi bi-rocket-takeoff"></i></div>
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Leave Request</div>
+                                    <div class="minor">Ibrahim Babatunde</div>
+                                </div>
+                                <div class="det">
+                                    <div class="status sm approved">Approved</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="icon"><i class="bi bi-stars"></i></div>
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Appraisal Request</div>
+                                    <div class="minor">Gartley Romart</div>
+                                </div>
+                                <div class="det">
+                                    <div class="status sm approved">Reviewed</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="item">
+                            <div class="icon"><i class="bi bi-coin"></i></div>
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major">Reimbursement</div>
+                                    <div class="minor">Matthew Reynolds</div>
+                                </div>
+                                <div class="det">
+                                    <div class="status sm pending">Pending</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-card card-xmlg card-yxl">
+                <div class="cont">
+                    <div class="hdr d-flex justify-content-between align-items-center mt-lg-1 mb-lg-3">
+                        <div class="title">
+                            <div class="card-title">Expense Analysis</div>
+                            <div class="preamble">Monthly trends of expenses</div>
+                        </div>
+                        <div class="actions-info">
+                            <div class="dropdown-trigger"> Select Year <i class="bi bi-chevron-down"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-card card-xxl">
+                        <ngx-charts-bar-vertical
+                            [view]="[620, 300]"
+                            [scheme]="colorScheme"
+                            [results]="expenseData"
+                            [gradient]="true"
+                            [xAxis]="false"
+                            [yAxis]="true"
+                            [legend]="false"
+                            [showXAxisLabel]="true"
+                            [showYAxisLabel]="true"
+                            [xAxisLabel]="'Months'"
+                            [yAxisLabel]="'Expenses'"
+                        >
+                        </ngx-charts-bar-vertical>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<div *ngIf="!userDetails.isSuperAdmin" class="content-wrap">
+    <div class="row-section">
+        <div class="inner-row-hld d-flex align-items-start justify-content-between">
+            <div class="col-card card-xxl card-yxl d-flex justify-content-between align-items-start">
+                <div class="row-card d-flex justify-content-between card-xmlg card-yxl">
+                    
+                    <div class="cont card-xmmd slides" style="background-image: url('./assets/images/illustrations/fragment.png');">
+                        <div class="top">
+                            <div class="major">Welcome back <img class="pb-2" src="https://silo-inc.com/wp-content/themes/wp-silo/dist/img/waving_hand.gif" alt=""></div>
+                            <div class="minor">{{userDetails.firstName}}</div>
+                        </div>
+                        <div class="btm">
+                            <div class="date">
+                                <span>{{dateTime | date: 'hh:mm a'}}</span>
+                                <span>{{dateTime | date: 'EEEE, MMM d'}}</span>
+                            </div>
+
+                            <div class="image user">
+                                <img src="{{userDetails?.profilePic}}" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inner-col card-xmmd card-yxl d-flex flex-column justify-content-between">
+                        <div class="cont status-card attendance bkg-success-light d-flex flex-column justify-content-center card-xxl card-ymmd px-lg-4">
+                            <div (click)="manualCheckAction('checkIn')" class="card-det d-flex justify-content-center align-items-center">
+                                <div class="icon"><i class="bi bi-door-open"></i></div>
+                                <div class="det">
+                                    <div class="title"></div>
+                                    <div class="time"><span class="md">Check In</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cont status-card attendance bkg-warning-light d-flex flex-column justify-content-center card-xxl card-ymmd px-lg-4">
+                            <div (click)="manualCheckAction('checkOut')" class="card-det d-flex justify-content-center align-items-center">
+                                <div class="icon"><i class="bi bi-door-closed"></i></div>
+                                <div class="det">
+                                    <div class="title"></div>
+                                    <div class="time"><span class="md">Check Out</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cont status-card map d-flex flex-column justify-content-center card-ymmd">
+                            <div class="google_map_container">
+                                <!-- the google map component goes here -->
+                                <google-map [zoom]="mapZoom" [center]="mapCenter" [options]="mapOptions">
+                                    <map-marker
+                                      #marker="mapMarker"
+                                      [position]="mapCenter"
+                                      [options]="markerOptions"
+                                    >
+                                    </map-marker>
+                                </google-map>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row-card card-xmd card-yxl">
+                    <div class="cont">
+                        <div class="card-title clr">Notifications</div>
+                        <div class="listed-items mt-lg-3">
+                            
+                            <div class="item">
+                                <div class="icon"><i class="bi bi-bell"></i></div>
+                                <div class="content">
+                                    <div class="det">
+                                        <div class="major">Weekly update meeting has been postponed till next week</div>
+                                        <div class="minor">12 mins ago</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="item">
+                                <div class="icon"><i class="bi bi-chat-right-text"></i></div>
+                                <div class="content">
+                                    <div class="det">
+                                        <div class="major">Kenneth Drakes just applied for a leave</div>
+                                        <div class="action">
+                                            <span class="status sm approved">Approve</span>
+                                            <span class="status sm rejected">Decline</span>
+                                        </div>
+                                        <div class="minor">24 mins ago</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="icon adobe"><i class="bi bi-file-earmark-pdf"></i></div>
+                                <div class="content">
+                                    <div class="det">
+                                        <div class="major">Safety Document just uploaded</div>
+                                        <div class="minor">25 October, 2019 at 7:35AM</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="item">
+                                <div class="content">
+                                    <div class="det">
+                                        <div class="major bd">Upcoming Meeting</div>
+                                        <div class="minor">Ibrahim Babatunde</div>
+                                    </div>
+                                    <div class="det right">
+                                        <div class="major">Apr 20</div>
+                                        <div class="minor sm">12:30pm - 12:45pm</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="row-section mt-lg-4">
+        <div class="inner-row-hld d-flex justify-content-between">
+
+            <div class="row-card card-xmd">
+                <div class="cont">
+                    <div class="hdr d-flex justify-content-between align-items-center mt-lg-1 mb-lg-3">
+                        <div class="title">
+                            <div class="card-title">Leave Days</div>
+                            <div class="preamble">Summary of your used leave days</div>
+                        </div>
+                    </div>
+                    <div class="donut-chart" style="height: fit-content;">
+                        <!-- <canvas #doughnutCanvas></canvas> -->
+                        <div class="chart-title leave">
+                            <span>{{totalLeaveDays}}</span>
+                            <span>Leave Balance <br> (Days)</span>
+                        </div>
+                        <highcharts-chart
+                            [Highcharts]="Highcharts"
+                            [options]="leaveChartOptions"
+                            style="width: 100%; max-width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; background: transparent;"
+                        >
+                        </highcharts-chart>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-card card-xsm card-yxl">
+                <div class="cont">
+                    <div class="hdr d-flex justify-content-between align-items-center mt-lg-1 mb-lg-3">
+                        <div class="title">
+                            <div class="card-title">Payroll Periods</div>
+                            <div class="preamble">Download your payslip for last 5 periods</div>
+                        </div>
+                    </div>
+                    <div class="listed-items mt-lg-3">
+                        <div *ngFor="let item of payrollPeriods['data']" class="item">
+                            <div class="content">
+                                <div class="det">
+                                    <div class="major bd">{{item.payrollPeriodName}} Period</div>
+                                    <div class="minor">{{item.startDate | date}} - {{item.endDate | date}}</div>
+                                </div>
+                                <div class="det">
+                                    <div class="cta primary-light-bkg xs">Download</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-card card-xmd card-yxl">
+                <div class="cont">
+                    <div class="hdr d-flex flex-column gap-2 align-items-start mt-lg-1 mb-lg-3">
+                        <div class="title">
+                            <div class="card-title">Appraisal Performance Score</div>
+                            <div class="preamble">Average of your performance on the last appraisal</div>
+                        </div>
+
+                        <div class="actions-info w-100">
+                            <div class="dropdown-trigger" style="width: 70%;"> Select Appraisal Period <i class="bi bi-chevron-down"></i></div>
+                        </div>
+                    </div>
+                    <div class="w-100 guage-chart d-flex flex-column justify-content-center align-items-center">
+                        <ngx-gauge 
+                            size="280" 
+                            type="semi" 
+                            thick="15" 
+                            value="68.2" 
+                            cap="round" 
+                            append="%" 
+                            foregroundColor="#00a4ef"
+                            backgroundColor="#ecf0f1">
+                        </ngx-gauge>
+                        <div class="nav-actions">
+                            <div class="action d-flex align-items justify-content-center gap-3 text-center">
+                                <span><i class="bi bi-chevron-left"></i></span>
+                                <span>July 2024</span>
+                                <span><i class="bi bi-chevron-right"></i></span>
+                            </div>
+                            <div class="info">Navigate previous and next periods</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="standalone">
+
+    <div class="content-wrap">
+
+        <div class="row-section d-flex justify-content-between align-items-center">
+            <div class="page-header">Application Form</div>
+            <!-- <div class="main-actions d-flex justify-content-start align-items-center">
+                <div (click)="addNewEmployee()" class="cta primary-bkg icon md"><i class="bi bi-person-fill-add"></i>Add Employee</div>
+                <div (click)="addBulkEmployees()" class="cta trans-bkg icon md ms-lg-3"><i class="bi bi-box-arrow-down"></i> Import</div>
+                <div class="cta trans-bkg icon md ms-lg-3"><i class="bi bi-box-arrow-up"></i> Export</div>
+            </div> -->
+        </div>
+
+        <div class="row-section">
+            <form [formGroup]="applicationForm" novalidate autocomplete="off">
+
+                <div class="input-hld">
+                    <label>First Name</label>
+                    <input type="text" class="form-control form-control-lg" formControlName="firstName" placeholder="Enter your first name">
+                </div>
+
+                <div class="input-hld">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control form-control-lg" formControlName="lastName" placeholder="Enter your last name">
+                </div>
+
+                <div class="input-hld">
+                    <label>Email</label>
+                    <input type="email" class="form-control form-control-lg" formControlName="email" placeholder="Enter your email address">
+                </div>
+
+                <div class="input-hld">
+                    <label>Phone</label>
+                    <input type="text" class="form-control form-control-lg" formControlName="phone" placeholder="Enter your phone number">
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

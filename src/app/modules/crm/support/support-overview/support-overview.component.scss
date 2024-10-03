@@ -1,0 +1,186 @@
+.active-status {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--warning);
+    display: inline-block;
+    transform: scale(1);
+    animation: live-pulse-red 1.5s infinite;
+    box-shadow: 0 0 0 0 var(--warning);
+
+    &.medium {
+        background-color: var(--pending);
+        box-shadow: unset;
+        animation: unset;
+    }
+
+    &.low {
+        background-color: var(--primary-light);
+        box-shadow: unset;
+        animation: unset;
+    }
+}
+
+.tickets-wrap {
+    width: 84%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem 0;
+
+    .ticket-card {
+        width: 17rem;
+        height: 17rem;
+        padding: 0.5rem;
+        cursor: pointer;
+        border-radius: var(--radius-md);
+        box-shadow: var(--card-shadow);
+
+        &.primary {
+            border: 1px solid var(--primary-light);
+            background-color: var(--primary-lightest);
+        }
+
+        &.completed {
+            border: 1px solid var(--approved-light);
+            background-color: var(--approved-lightest);
+        }
+
+        &.investigating {
+            border: 1px solid var(--pending-light);
+            background-color: var(--pending-lightest);
+        }
+
+        &.pending {
+            border: 1px solid var(--warning-light);
+            background-color: var(--warning-lightest)
+        }
+    
+        .inner-wrap {
+            width: 100%;
+            height: 100%;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            border-radius: var(--radius-md);
+            border: 1px dashed var(--primary-light);
+    
+            .row-det {
+    
+                &:first-child {
+                    display: flex;
+                    align-items: center;
+    
+                    span {
+    
+                        &:nth-child(2) {
+                            font-size: 1rem;
+                            font-weight: 600;
+                            letter-spacing: 0.02rem;
+                            margin-left: 1rem;
+                            
+                        }
+                    }
+    
+                    .status {
+                        font-size: 0.75rem;
+                        letter-spacing: 0.03rem;
+                        padding: 0.1rem 0.6rem;
+                        margin-left: auto;
+
+                        &.completed {
+                            background-color: var(--approved);
+                        }
+                
+                        &.investigating {
+                            background-color: var(--pending);
+                        }
+                
+                        &.pending {
+                            background-color: var(--warning)
+                        }
+                    }
+                }
+    
+                &:nth-child(2) {
+                    margin-top: 1.5rem;
+    
+                    .title {
+                        font-size: 1rem;
+                        font-weight: 500;
+                    }
+                    .details {
+                        font-size: 0.75rem;
+                        letter-spacing: 0.02rem;
+                        margin-top: 0.3rem;
+                        color: var(--black-tint);
+                    }
+                }
+    
+                &:last-child {
+                    display: flex;
+                    align-items: center;
+                    margin-top: auto;
+                    gap: 0.5rem;
+    
+                    .image {
+    
+                        .card-img {
+                            width: 3rem;
+                            height: 3rem;
+                            border-radius: 50%;
+                            display: inline-block;
+                            background-position: center;
+                            background-size: cover;
+                            background-repeat: no-repeat;
+                        }
+                    }
+    
+                    .info {
+                        font-size: 0.7rem;
+                        line-height: 1.5;
+                        letter-spacing: 0.02rem;
+    
+                        .name {
+                            font-weight: 600;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.tickets-creation {
+    flex: 1;        
+}
+
+.tab-wrap {
+    width: 100%;
+    padding: 0.6rem 0;
+
+    ul {
+
+        li {
+
+            a {
+                font-weight: 600;
+                cursor: pointer;
+                align-items: center;
+
+                span {
+
+                    &:last-child {
+                        font-weight: 500;
+                        color: white;
+                        background: var(--primary);
+                        border-radius: 0.3rem;
+                        padding: 0rem 0.3rem;
+                        display: inline-block;
+                        margin-left: 0.3rem;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -21,7 +21,7 @@
             
         </div>
     </div> -->
-    <div class="col-wrap" style="background-image: url('../../../../assets/images/illustrations/erp-bkg.jpeg');">
+    <div class="col-wrap" style="background-image: url('./assets/images/illustrations/erp-bkg.jpeg');">
         <div class="overlay"></div>
         <div class="login-container">
             <div class="logo">
@@ -91,7 +91,10 @@
                     <p (click)="routeToforgotPassword()" class="forgot"><span>Forgot Password?</span></p>                
     
                     <div class="btn-hld">
-                        <button type="submit" class="cta primary-bkg icon lg"><i class="bi bi-person-bounding-box"></i>{{existingUser ? 'Login' : 'Create Account'}}</button>
+                        <button type="submit" class="cta primary-bkg icon lg">
+                            <i class="bi bi-person-bounding-box"></i>{{existingUser ? 'Login' : 'Create Account'}}
+                            <span *ngIf="apiLoading" class="apiLoader"></span>
+                        </button>
                         <p *ngIf="existingUser" class="accountcheck mt-lg-2">Don't have an account? <span (click)="existingUser = !existingUser">Create Account</span></p>
                         <p *ngIf="!existingUser" class="accountcheck mt-lg-2">Have an account? <span (click)="existingUser = !existingUser">Login</span></p>
                     </div>

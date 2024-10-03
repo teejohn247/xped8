@@ -1,0 +1,32 @@
+.order-wrap {
+    width: 100%;
+    height: auto;
+    max-height: 12rem;
+    overflow-y: auto;
+}
+
+.order-hld {
+    width: 100%;
+    display: inline-flex;
+    gap: 2%;
+
+    .remove {
+        width: 2rem;
+        height: 1.7rem;
+        margin-top: 0.4rem;
+        background: white;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--warning);
+    }
+}
+
+.order-hdr {
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0.4rem 0 1rem 0;
+    letter-spacing: 0.03rem;
+}

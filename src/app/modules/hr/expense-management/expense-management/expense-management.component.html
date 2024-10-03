@@ -38,70 +38,19 @@
                 <div class="cont">
                     <div class="card-title clr">Expense Requests Approvals</div>
                     <div class="listed-items mt-lg-3">
-                        <div class="item">
+                        <div *ngFor="let request of approvedRequests | slice:0:5;" class="item">
                             <div class="content">
                                 <div class="det">
-                                    <div class="major bd">Ibrahim Babatunde</div>
-                                    <div class="minor">Reimbursement</div>
+                                    <div class="major bd">{{request.employeeName}}</div>
+                                    <div class="minor">{{request.expenseTypeName}}</div>
                                 </div>
                                 <div class="det right">
-                                    <div class="major">£ 1,000</div>
+                                    <div class="major">NGN {{request.amount.toLocaleString()}}</div>
                                     <!-- <div class="minor sm">Apr 20 -28</div> -->
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="item">
-                            <div class="content">
-                                <div class="det">
-                                    <div class="major bd">Remi Olubode</div>
-                                    <div class="minor">Card Renewal</div>
-                                </div>
-                                <div class="det right">
-                                    <div class="major">7 March, 2024</div>
-                                    <!-- <div class="minor sm">1:10pm - 2:45pm</div> -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="content">
-                                <div class="det">
-                                    <div class="major bd">Matt Greg</div>
-                                    <div class="minor">Increase Card Limit</div>
-                                </div>
-                                <div class="det right">
-                                    <div class="major">£ 5,000</div>
-                                    <!-- <div class="minor sm">4:10pm - 4:25pm</div> -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="content">
-                                <div class="det">
-                                    <div class="major bd">Rita Mreace</div>
-                                    <div class="minor">Reimbursement</div>
-                                </div>
-                                <div class="det right">
-                                    <div class="major">$ 5,000</div>
-                                    <!-- <div class="minor sm">9:30am - 10:45am</div> -->
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="item">
-                            <div class="content">
-                                <div class="det">
-                                    <div class="major bd">Spence Holderyne</div>
-                                    <div class="minor">Reimbursement</div>
-                                </div>
-                                <div class="det right">
-                                    <div class="major">£ 900</div>
-                                    <!-- <div class="minor sm">10:30am - 10:45am</div> -->
-                                </div>
-                            </div>
-                        </div>
+                    
                     </div>
                 </div>
             </div>

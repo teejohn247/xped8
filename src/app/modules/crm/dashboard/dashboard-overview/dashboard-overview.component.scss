@@ -1,0 +1,264 @@
+.status-card-wrap {
+
+    .status-card {
+        //cursor: pointer;
+
+        // &:hover {
+
+        //     .cont {
+
+        //         .det {
+
+        //             .icon {
+        //                 transform: scale(1.1);
+        //             }
+        //         }
+        //     }
+        // }
+
+        .cont {
+            padding: 1rem 7% 1.1rem;
+            border-radius: var(--radius-md);
+            //background-color: var(--primary-lightest);
+            border: 1px solid white;
+
+            // &.total {
+            //     background-color: var(--primary-lightest);
+            // }
+
+            &.active {
+                border: 1px solid var(--approved-light);
+                background-color: var(--approved-lightest);
+            }
+
+            &.pending {
+                border: 1px solid var(--pending-light);
+                background-color: var(--pending-lightest);
+            }
+
+            &.primary {
+                border: 1px solid var(--primary-light);
+                background-color: var(--primary-lightest)
+                //background-color: var(--pending-lightest);
+            }
+
+            &.danger {
+                border: 1px solid var(--warning-light);
+                background-color: var(--warning-lightest)
+                //background-color: var(--pending-lightest);
+            }
+
+
+            .det {
+                position: relative;
+
+                .title {
+                    display: flex;
+                    //justify-content: space-between;
+                    font-size: 1rem;
+                    font-weight: 400;
+                    letter-spacing: 0.03rem;
+                    color: var(--darker);
+                    gap: 0.5rem;
+                }
+
+                .date {
+                    margin-top: 0.2rem;
+
+                    span {
+                        font-size: 0.7rem;
+                        letter-spacing: 0.03rem;
+
+                        i {
+                            font-size: 0.75rem;
+                            color: var(--darker);
+                            margin-right: 0.3rem;
+                        }
+                    }
+                }
+
+                .count {
+                    font-size: 0.75rem;
+                    letter-spacing: 0.03rem;
+                    
+                    span {
+                        font-size: 1.6rem;
+                        font-weight: 600;
+                        color: var(--black-tint);
+                        margin-right: 0.4rem;
+                    }
+                }
+
+                .icon {
+                    width: 30%;
+                    font-size: 1.8rem;
+                    display: inline-block;
+                    transition: all 0.4s ease;
+                    //font-weight: 600;
+                    //color: var(--darker);
+                    text-align: left;
+
+                    &.primary {
+                        color: var(--primary);
+                    }
+
+                    &.active {
+                        color: var(--approved);
+                    }
+
+                    &.danger {
+                        color: var(--warning);
+                    }
+
+                    &.pending {
+                        color: var(--pending);
+                    }
+                }
+
+                &:last-child {
+                    display: flex;
+                    margin-top: 2rem;
+                    align-items: flex-end;
+                    justify-content: space-between;
+                }
+            }
+        }
+
+    }
+}
+
+.active-status {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--warning);
+    display: inline-block;
+    transform: scale(1);
+    animation: live-pulse-red 1.5s infinite;
+    box-shadow: 0 0 0 0 var(--warning);
+
+    &.medium {
+        background-color: var(--pending);
+        box-shadow: unset;
+        animation: unset;
+    }
+
+    &.low {
+        background-color: var(--primary-light);
+        box-shadow: unset;
+        animation: unset;
+    }
+}
+
+::ng-deep .ngx-charts g .grid-panel.odd rect {
+  fill: none;
+}
+
+.row-card {
+
+    .hdr {
+        .card-title {
+            font-size: 0.95rem;
+            letter-spacing: 0.03rem;
+            font-weight: 600;
+        }
+        .preamble {
+            font-size: 0.8rem;
+            letter-spacing: 0.04rem;
+            color: var(--text-grey);
+            margin-top: 0.2rem;
+        }
+
+        .actions-info {
+
+            .dropdown-trigger {
+                width: 10rem;
+                display: inline-flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.75rem;
+                letter-spacing: 0.03rem;
+                padding: 0.2rem 0.7rem;
+                border-radius: var(--radius-xs);
+                transition: var(--transition-norm);
+                border: 1px solid var(--border-black-lightest);
+                cursor: pointer;
+
+                i {
+                    margin-left: 0.6rem;
+                }
+            }
+        }
+
+        .legend {
+            flex-wrap: wrap;
+
+            &.general {
+                gap: 0.1rem 1rem;
+
+                li {
+                    font-size: 0.72rem;
+                    white-space: nowrap;
+                    letter-spacing: 0.02rem;
+                    color: var(--black-tint);
+                    padding-left: 1rem;
+                    position: relative;
+
+                    &.complete {
+
+                        &:before {
+                            background: var(--approved);
+                        }
+                    }
+
+                    &.pending {
+
+                        &:before {
+                            background: var(--pending);
+                        }
+                    }
+
+                    &.warning {
+
+                        &:before {
+                            background: var(--warning);
+                        }
+                    }
+
+                    &.awaiting {
+
+                        &:before {
+                            background: var(--primary);
+                        }
+                    }
+
+                    &.contacts {
+
+                        &:before {
+                            background: #9370DB;
+                        }
+                    }
+
+                    &.leads {
+                        &:before {
+                            background: #87CEFA;
+                        }
+                    }
+
+                    &:before {
+                        content: '';
+                        width: 0.6rem;
+                        height: 0.6rem;
+                        border-radius: 50%;
+                        position: absolute;
+                        transform: translateY(-50%);
+                        left: 0;
+                        top: 50%;
+                    }
+                }
+            }
+        }
+    }
+
+    
+}

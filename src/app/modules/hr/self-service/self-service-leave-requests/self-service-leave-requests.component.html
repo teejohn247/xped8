@@ -10,7 +10,7 @@
             <div class="col-card card-yxl d-flex justify-content-between align-items-start">
                 <div class="row-card d-flex justify-content-between card-xmlg card-yxl">
                     <div class="cont card-xmmd">
-                        <div class="donut-chart">
+                        <div class="donut-chart" style="height: fit-content;">
                             <!-- <canvas #doughnutCanvas></canvas> -->
                             <div class="chart-title">
                                 <span>{{totalLeaveDays}}</span>
@@ -128,12 +128,12 @@
 
                         <ng-container *ngIf="column.key == 'status'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
-                            <td mat-cell *matCellDef="let row">
+                            <td mat-cell 
+                                *matCellDef="let row">
                                 <span class="status approved" *ngIf="row[column.key] == 'Approved'">{{ row[column.key] }}</span>
-                                <span class="status pending" *ngIf="row['column.key'] == 'Pending'">{{ row[column.key] }}</span>
+                                <span class="status pending" *ngIf="row[column.key] == 'Pending'">{{ row[column.key] }}</span>
                                 <span class="status rejected" *ngIf="row[column.key] == 'Declined'">{{ row[column.key] }}</span>
                             </td>
-
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'actions'">

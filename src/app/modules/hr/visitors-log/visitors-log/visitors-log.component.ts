@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { TableColumn } from 'src/app/shared/models/table-columns';
 import { MatTableDataSource } from '@angular/material/table';
 import { VisitorsTable } from 'src/app/shared/models/visitor-data';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { RegisterGuestComponent } from 'src/app/shared/components/register-guest/register-guest.component';
 
 @Component({
@@ -14,43 +17,14 @@ import { RegisterGuestComponent } from 'src/app/shared/components/register-guest
 export class VisitorsLogComponent implements OnInit {
 
   displayedColumns: any[];
-  dataSource: MatTableDataSource<VisitorsTable>;
-  selection = new SelectionModel<VisitorsTable>(true, []);
+  dataSource: MatTableDataSource<any>;
+  selection = new SelectionModel<any>(true, []);
+  todaysDate = new  Date();
 
-  visitorSummary = [
-    {
-      id: 1,
-      visitorType: "Total Visitors",
-      referenceDate: "Feb 11, 2023",
-      visitorCount: 45,
-      icon: "bi bi-people-fill",
-      status: "total"
-    },
-    {
-      id: 2,
-      visitorType: "Active Visitors",
-      referenceDate: "Feb 11, 2023",
-      visitorCount: 15,
-      icon: "bi bi-person-fill-check",
-      status: "active"
-    },
-    {
-      id: 3,
-      visitorType: "Overstay Visitors",
-      referenceDate: "Feb 11, 2023",
-      visitorCount: 5,
-      icon: "bi bi-person-fill-exclamation",
-      status: "overstay"
-    },
-    {
-      id: 4,
-      visitorType: "Expected Visitors",
-      referenceDate: "Feb 11, 2023",
-      visitorCount: 20,
-      icon: "bi bi-person-fill-slash",
-      status: "expected"
-    },
-  ]
+  employeeList: any[] = [];
+  guestsList: any[] = [];
+
+  visitorSummary: any[] = []
 
   //Visitor Log Table Column Names
   tableColumns: TableColumn[] = [
@@ -79,7 +53,7 @@ export class VisitorsLogComponent implements OnInit {
       sortable: true
     },
     {
-      key: "name",
+      key: "guestName",
       label: "Name",
       order: 3,
       columnWidth: "12%",
@@ -87,7 +61,7 @@ export class VisitorsLogComponent implements OnInit {
       sortable: true
     },
     {
-      key: "host",
+      key: "employeeName",
       label: "Host",
       order: 5,
       columnWidth: "10%",
@@ -103,7 +77,7 @@ export class VisitorsLogComponent implements OnInit {
       sortable: true
     },
     {
-      key: "checkin",
+      key: "checkIn",
       label: "Check In",
       order: 7,
       columnWidth: "12%",
@@ -111,7 +85,7 @@ export class VisitorsLogComponent implements OnInit {
       sortable: true
     },
     {
-      key: "checkout",
+      key: "checkOut",
       label: "Check Out",
       order: 8,
       columnWidth: "12%",
@@ -129,7 +103,7 @@ export class VisitorsLogComponent implements OnInit {
 
   ]
 
-  tableData: VisitorsTable[] = [
+  tableData: any[] = [
     {
       id: 1,
       "Name": "Diane Bell",
@@ -176,12 +150,68 @@ export class VisitorsLogComponent implements OnInit {
     },
   ]
 
-  constructor(public dialog: MatDialog,) { }
+  constructor(
+    public dialog: MatDialog,
+    private datePipe: DatePipe,
+    private hrService: HumanResourcesService,     
+    private notifyService: NotificationService,
+  ) { }
 
   ngOnInit(): void {
+    this.getPageData();
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
-    this.dataSource = new MatTableDataSource(this.tableData);
+  }
+
+  getPageData = async () => {
+    this.employeeList = await this.hrService.getEmployees().toPromise();
+    this.guestsList = await this.hrService.getGuestsList().toPromise();
+    console.log(this.guestsList);
+    this.generateVisitorSummary();
+    // this.departmentList = await this.hrService.getDepartments().toPromise();
+    // this.designationList = await this.hrService.getDesignations().toPromise();
+    this.dataSource = new MatTableDataSource(this.guestsList['data']);
+    // this.dataSource.sort = this.sort;
+  }
+
+  generateVisitorSummary() {
+    this.visitorSummary = [
+      {
+        id: 1,
+        visitorType: "Total Visitors",
+        referenceDate: this.todaysDate,
+        visitorCount: this.guestsList['data'].length,
+        icon: "bi bi-people-fill",
+        status: "total"
+      },
+      {
+        id: 2,
+        visitorType: "Active Visitors",
+        referenceDate: this.todaysDate,
+        visitorCount: this.guestsList['data'].filter(x => {return x.status == 'Active'}).length,
+        icon: "bi bi-person-fill-check",
+        status: "active"
+      },
+      {
+        id: 3,
+        visitorType: "Overstay Visitors",
+        referenceDate: this.todaysDate,
+        visitorCount: this.guestsList['data'].filter(x => {return x.status == 'Overstay'}).length,
+        icon: "bi bi-person-fill-exclamation",
+        status: "overstay"
+      },
+      {
+        id: 4,
+        visitorType: "Expected Visitors",
+        referenceDate: this.todaysDate,
+        visitorCount: this.guestsList['data'].filter(x => {return x.status == 'Expected'}).length,
+        icon: "bi bi-person-fill-slash",
+        status: "expected"
+      },
+    ]
+    this.guestsList['data'].map(guest => {
+
+    })
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -196,10 +226,102 @@ export class VisitorsLogComponent implements OnInit {
     this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
+  strToDate(dateVal: string, key:string) {
+    if(key == 'visitDate') {
+      let newFormat = new Date(dateVal);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }
+    else if(key = 'checked') {
+      let newFormat = new Date(dateVal);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'shortTime')
+    }
+    else {
+      const [day, month, year] = dateVal.split('-');
+      let newFormat = new Date(+year, +month - 1, +day);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }    
+  }
+
   addNewVisitor() {
     const dialogRef = this.dialog.open(RegisterGuestComponent, {
       width: '30%',
       height: 'auto',
+      data: {
+        isExisting: false,
+        employeeList: this.employeeList['data']
+      },
+    });
+  }
+
+  checkInVisitor(bookingId: string) {
+    let currentDate = new Date();
+    let data = {
+      checkInTime: currentDate,
+    }
+    console.log(data);
+    this.hrService.checkInVisitor(data, bookingId).subscribe({
+      next: res => {
+        console.log(res);
+        if(res.status == 200) {
+          this.notifyService.showSuccess('This visitor has been checked in successfully');
+          this.getPageData();
+        }
+      },
+      error: err => {
+        console.log(err)
+        this.notifyService.showError(err.error.error);
+      } 
+    })
+  }
+
+  checkOutVisitor(bookingId: string) {
+    let currentDate = new Date();
+    let data = {
+      checkOutTime: currentDate,
+    }
+    console.log(data);
+    this.hrService.checkOutVisitor(data, bookingId).subscribe({
+      next: res => {
+        console.log(res);
+        if(res.status == 200) {
+          this.notifyService.showSuccess('This visitor has been checked out successfully');
+          this.getPageData();
+        }
+      },
+      error: err => {
+        console.log(err)
+        this.notifyService.showError(err.error.error);
+      } 
+    })
+  }
+
+  //Delete a visitor
+  deleteMeeting(info: any) {
+    console.log(info);
+    this.notifyService.confirmAction({
+      title: 'Cancel Meeting',
+      message: 'Are you sure you want to cancel this visitor?',
+      confirmText: 'Cancel Meeting',
+      cancelText: 'Keep Meeting',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteMeeting(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('This meeting has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
     });
   }
 

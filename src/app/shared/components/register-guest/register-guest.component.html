@@ -52,7 +52,7 @@
                                     panelClass="matDropdown"
                                     [formControlName]="field.controlName"
                                 >
-                                    <mat-option *ngFor="let option of field.selectOptions | keyvalue" [value]="option.value">{{option.key}}</mat-option>
+                                    <mat-option *ngFor="let option of field.selectOptions | keyvalue" [value]="option.key">{{option.value}}</mat-option>
                                 </mat-select>
                                 <mat-error *ngIf="visitorForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>
                             </mat-form-field>
@@ -67,11 +67,18 @@
                                 <mat-error *ngIf="visitorForm.get(field.controlName)?.hasError('date')">{{field.controlLabel}} is invalid</mat-error>
                             </mat-form-field>
 
+                            <mat-form-field *ngSwitchCase="'time'" color="accent" class="mb-lg-2" [style.width]="field.controlWidth" appearance="fill">
+                                <mat-label>{{field.controlLabel}}</mat-label>
+                                <input [ngxTimepicker]="default" matInput [formControlName]="field.controlName">
+                                <ngx-material-timepicker #default></ngx-material-timepicker>
+                                <mat-error *ngIf="visitorForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>                                
+                            </mat-form-field>
+
                         </ng-container>
                     </ng-container>
 
                     <div class="btn-hld d-flex justify-content-end mt-lg-3" style="width: 100%">
-                        <div class="cta primary-bkg mmd text-uppercase" style="min-width: 30%" type="submit">Submit</div>
+                        <div (click)="onSubmit()" class="cta primary-bkg mmd text-uppercase" style="min-width: 30%" type="submit">Submit</div>
                     </div>
 
                 </form>

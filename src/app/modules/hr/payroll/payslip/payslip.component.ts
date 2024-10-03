@@ -48,10 +48,16 @@ export class PayslipComponent implements OnInit {
 
   generatePdf() {
     const elementToPrint = document.getElementById('payslip');
-    htmltocanvas(elementToPrint, {scale: 2}).then((canvas) => {
-      const pdf = new jsPDF();
+    htmltocanvas(elementToPrint, {scale: 2, useCORS: true, allowTaint : true}).then((canvas) => {
+      const pdf = new jsPDF("p", "mm", "a4");
       // pdf.addImage();
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, 250, 100);
+      var w: number
+      var h: number
+      var img = canvas.toDataURL('image/jpeg', [w = canvas.width, h=canvas.height])
+      var hratio = h / w
+      var height = 210 * hratio
+      var imgData = canvas.toDataURL('image/jpeg', 1.0);
+      pdf.addImage(imgData, 'JPEG', 0, 0, 210, height);
 
       pdf.setProperties({
         title: this.dialogData.modalInfo[0].payrollPeriodName,
@@ -59,7 +65,7 @@ export class PayslipComponent implements OnInit {
 
       pdf.setFontSize(8);
 
-      pdf.save('payslip.pdf');
+      pdf.save(`${this.dialogData.modalInfo[0].payrollPeriodName}-payslip.pdf`);
     })
   }
 

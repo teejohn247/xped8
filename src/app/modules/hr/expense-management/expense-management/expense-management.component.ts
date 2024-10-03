@@ -26,6 +26,7 @@ export class ExpenseManagementComponent implements OnInit {
   dataSource: MatTableDataSource<ReimbursementTable>;
   requestedApprovals: any[] = [];
   expenseTypeList: any[] = [];
+  approvedRequests: any[] = [];
 
   AreaHighcharts: typeof Highcharts = Highcharts;
   areaChartOptions: Highcharts.Options = {
@@ -239,6 +240,9 @@ export class ExpenseManagementComponent implements OnInit {
     this.requestedApprovals = await this.hrService.getRequestedExpenseApprovals().toPromise();
     this.expenseTypeList = await this.hrService.getExpenseTypes().toPromise();
     // console.log(this.leaveTypeList);
+    this.approvedRequests = this.requestedApprovals['data'].filter(item => {
+      return item.status === 'Approved';
+    })
     this.dataSource = new MatTableDataSource(this.requestedApprovals['data']);
     console.log(this.requestedApprovals);
   }

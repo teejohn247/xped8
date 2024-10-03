@@ -452,4 +452,74 @@ export class HumanResourcesService {
     return this.http.get<any>(`${this.path}/fetchAppraisalRequests`, this.requestOptions);
   }
 
+  /*************** VISITOR MANAGEMENT RELATED ACTIONS ***************/
+
+  //Book a new visitor
+  public bookVisitor(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/bookVisitor`, info, this.requestOptions);
+  }
+
+  //Get the list of all booked visitors
+  public getGuestsList(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchVisits`, this.requestOptions);
+  }
+
+  //Check in a visitor
+  public checkInVisitor(info: any, bookingId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/checkIn/${bookingId}`, info, this.requestOptions);
+  }
+
+  //Check out a visitor
+  public checkOutVisitor(info: any, bookingId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/checkOut/${bookingId}`, info, this.requestOptions);
+  }
+
+  /*************** CALENDAR RELATED ACTIONS ***************/
+  //Book a new meeting
+  public bookMeeting(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createMeeting`, info, this.requestOptions);
+  }
+
+  //Get the list of all booked visitors
+  public getCalendar(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchCalendar`, this.requestOptions);
+  }
+
+  //Delete meeting
+  public deleteMeeting(meetingId: string): Observable<any> {
+    return this.http.delete<any>(`${this.path}/deleteMeeting/${meetingId}`, this.requestOptions);
+  }
+
+  /*************** RECRUITMENT RELATED ACTIONS ***************/
+
+  //Create a new job role
+  public createJobRole(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/createJobListing`, info, this.requestOptions);
+  }
+
+  //Get the list of all Job Roles
+  public getJobRoles(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchJobListings`, this.requestOptions);
+  }
+
+  //Get the list of all applicants
+  public getMasterList(): Observable<any> {
+    return this.http.get<any>(`${this.path}/masterList`, this.requestOptions);
+  }
+
+  //Publish a job post
+  public publishJobPost(info: any, jobId: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/publishJob/${jobId}`, info, this.requestOptions);
+  }
+
+  /*************** ATTENDANCE RELATED ACTIONS ***************/
+  //Get the attendance list
+  public getAttendanceList(): Observable<any> {
+    return this.http.get<any>(`${this.path}/fetchAttendance`, this.requestOptions);
+  }
+
+  //Staff Check in or check out
+  public staffCheckInOut(info: any): Observable<any> {
+    return this.http.patch<any>(`${this.path}/checkInOut`, info, this.requestOptions);
+  }
 }

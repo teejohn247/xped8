@@ -1,0 +1,29 @@
+.tab-wrap {
+    width: fit-content;
+    padding: 0.6rem 0;
+
+    ul {
+
+        li {
+
+            a {
+                font-weight: 500;
+                cursor: pointer;
+                align-items: center;
+
+                span {
+
+                    &:last-child {
+                        font-weight: 500;
+                        color: white;
+                        background: var(--primary);
+                        border-radius: 0.3rem;
+                        padding: 0rem 0.3rem;
+                        display: inline-block;
+                        margin-left: 0.3rem;
+                    }
+                }
+            }
+        }
+    }
+}

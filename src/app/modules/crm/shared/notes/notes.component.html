@@ -1,0 +1,43 @@
+<div class="content-wrap">
+
+    <div class="row-section d-flex justify-content-between align-items-center">
+        <div class="page-header">Notes</div>
+        <div class="main-actions d-flex justify-content-start align-items-center">
+            <div (click)="createNewNote()" class="cta primary-bkg icon md"><i class="bi bi-stickies"></i>Create New Note</div>
+        </div>
+    </div>
+
+
+    <div class="row-section mt-lg-4">
+        <div class="inner-row w-100 d-flex justify-content-between mt-lg-2">
+
+            <div class="notes-wrap">
+                <div [class]="item.priority" *ngFor="let item of notesList" class="notes-card">
+                    <div class="inner-wrap">
+                        <div class="row-det d-flex justify-content-between align-items-center">
+                            <span class="title text-capitalize">{{item.title}}</span>
+                            <span class="date">{{item.dateCreated}}</span>
+                        </div>
+                        <div class="row-det mt-3">
+                            <div class="details">
+                                <p>{{item.content}}</p>
+                            </div>
+                        </div>
+                        <div class="row-det">
+                            <div class="info">
+                                <div class="name">{{item.createdBy}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="tickets-creation">
+
+            </div>
+
+            
+        </div>
+    </div>
+</div>

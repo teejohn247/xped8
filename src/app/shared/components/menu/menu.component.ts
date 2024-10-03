@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { navbarData, navbarDataReg, navbarDataManager } from 'src/app/core/constants/nav-data';
 import { AuthenticationService } from '../../services/utils/authentication.service';
 import { NotificationService } from '../../services/utils/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -16,9 +17,10 @@ export class MenuComponent implements OnInit {
   regMenuData = navbarDataReg;
   managerMenuData = navbarDataManager;
 
-  currentLink = 'General';
+  currentLink = 'Human Resources';
 
   constructor(
+    private route: Router,
     private authService: AuthenticationService, 
     private notifyService: NotificationService,
   ) { }
@@ -27,8 +29,13 @@ export class MenuComponent implements OnInit {
     console.log(this.userDetails);
     if(this.userDetails.data.isSuperAdmin) {
       this.collapsed = false;
-      this.currentLink = 'Dashboard';
+      this.currentLink = 'Human Resources';
     };
+    let urlsplit = this.route.url?.split("/");
+    console.log(urlsplit);
+    if(urlsplit[2] == 'human-resources') this.currentLink = 'Human Resources';
+    if(urlsplit[2] == 'crm') this.currentLink = 'CRM';
+    if(urlsplit[2] == 'settings') this.currentLink = 'Settings';
   }
 
 

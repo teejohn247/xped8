@@ -17,6 +17,10 @@ export class RecruitmentPortalComponent implements OnInit {
       label: 'Job Board',
     },
     {
+      routeLink: 'master-list',
+      label: 'Master List',
+    },
+    {
       routeLink: 'applicant-screening',
       label: 'Applicant Screening',
     },
