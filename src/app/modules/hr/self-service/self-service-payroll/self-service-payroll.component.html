@@ -36,7 +36,7 @@
 
             <div class="row-card card-xsm" style="height: 95%;">
                 <div class="cont">
-                    <div class="cta quick primary-bkg xs">Edit Info</div>
+                    <div (click)="editPaymentInfo()" class="cta quick primary-bkg xs">Edit Info</div>
                     <div class="card-title">Payment Information</div>
                     <div class="listed-items mt-lg-4">
                         <div class="item">
@@ -45,7 +45,7 @@
                                     <div class="major">Bank Name:</div>
                                 </div>
                                 <div class="det">
-                                    <div class="minor">Barclays Bank</div>
+                                    <div class="minor">{{employeeDetails.paymentInformation[0]?.bankName}}</div>
                                 </div>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                     <div class="major">Account Name:</div>
                                 </div>
                                 <div class="det">
-                                    <div class="minor">Olivia Emmanuel</div>
+                                    <div class="minor">{{employeeDetails.paymentInformation[0]?.accountName}}</div>
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                                     <div class="major">Account Number:</div>
                                 </div>
                                 <div class="det">
-                                    <div class="minor">011233445</div>
+                                    <div class="minor">{{employeeDetails.paymentInformation[0]?.accountNumber}}</div>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                                     <div class="major">Bank Address:</div>
                                 </div>
                                 <div class="det">
-                                    <div class="minor">4 Skerriel Lane, Bromford City</div>
+                                    <div class="minor">{{employeeDetails.paymentInformation[0]?.bankAddress}}</div>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                                     <div class="major">Sort Code:</div>
                                 </div>
                                 <div class="det">
-                                    <div class="minor">03412-3334-2333</div>
+                                    <div class="minor">{{employeeDetails.paymentInformation[0]?.sortCode}}</div>
                                 </div>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
                                     <div class="major">Tax Identification No:</div>
                                 </div>
                                 <div class="det">
-                                    <div class="minor">434455678</div>
+                                    <div class="minor">{{employeeDetails.paymentInformation[0]?.taxIdentificationNumber}}</div>
                                 </div>
                             </div>
                         </div>
@@ -132,11 +132,16 @@
                     <!-- Table Columns -->
                     <ng-container *ngFor="let column of tableColumns" [matColumnDef]="column.label">
 
-                        <ng-container *ngIf="column.key == 'grossPay'">
+                        <ng-container *ngIf="column.key == 'payPeriod'">
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
+                            <td mat-cell *matCellDef="let row"> {{strToDate(row.startDate, 'startDate')}} - {{strToDate(row.endDate, 'endDate')}}</td>
+                        </ng-container>
+
+                        <ng-container *ngIf="column.key == 'totalEarnings'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
                             <td mat-cell 
                                 *matCellDef="let row">
-                                <span class="icon" style="color: green;"> +{{ row[column.label] }}</span>
+                                <span class="icon" style="color: green;"> +{{ row[column.key] }}</span>
                             </td>
                         </ng-container>
 
@@ -144,17 +149,16 @@
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
                             <td mat-cell 
                                 *matCellDef="let row">
-                                <span class="icon" style="color: red;"> -{{ row[column.label] }}</span>
+                                <span class="icon" style="color: red;"> -{{ row[column.key] }}</span>
                             </td>
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'status'">
-                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.label}}</th>
+                            <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{column.key}}</th>
                             <td mat-cell 
                                 *matCellDef="let row">
-                                <span class="status approved" *ngIf="row[column.label] == 'Completed'">{{ row[column.label] }}</span>
-                                <span class="status pending" *ngIf="row[column.label] == 'Processing'">{{ row[column.label] }}</span>
-                                
+                                <span class="status approved" *ngIf="row[column.key] == 'Completed'">{{ row[column.key] }}</span>
+                                <span class="status pending" *ngIf="row[column.key] == 'Pending'">{{ row[column.key] }}</span>
                             </td>
                         </ng-container>
 
@@ -162,13 +166,13 @@
                             <th style="width:5%" mat-header-cell *matHeaderCellDef>
                             </th>
                             <td style="white-space: nowrap;" mat-cell *matCellDef="let element">
-                                <span class="table-icon edit" style="font-size: 0.9rem;"><i class="bi bi-printer"></i></span>
+                                <span (click)="getPayrollDetails(element)" class="table-icon edit" style="font-size: 0.9rem;"><i class="bi bi-printer"></i></span>
                             </td>
                         </ng-container>
 
                         <ng-container>
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.key == 'image' || column.key == 'actions' ? "" : column.label }}</th>
-                            <td mat-cell *matCellDef="let row">{{ row[column.label] }}</td>
+                            <td mat-cell *matCellDef="let row">{{ row[column.key] }}</td>
                         </ng-container>
                         
                     </ng-container>

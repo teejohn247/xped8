@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
 import { TableColumn } from 'src/app/shared/models/table-columns';
 import { MatTableDataSource } from '@angular/material/table';
 import * as Highcharts from 'highcharts';
+import { DatePipe } from '@angular/common';
 import { PayrollSummary } from 'src/app/shared/models/payroll-data';
+import { MatDialog } from '@angular/material/dialog';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { SharedService } from 'src/app/shared/services/utils/shared.service';
+import { PayrollUploadComponent } from '../payroll-upload/payroll-upload.component';
+
 
 @Component({
   selector: 'app-payroll-summary',
@@ -11,38 +19,9 @@ import { PayrollSummary } from 'src/app/shared/models/payroll-data';
 })
 export class PayrollSummaryComponent implements OnInit {
 
-  payrollSummary: any[] = [
-    {
-      id: 1,
-      value: "132",
-      percentChange: "5%",
-      name: "Employees",
-      colorDark: "rgb(54,171,104)",
-      colorLight: "rgba(54,171,104,0.2)",
-      icon: "bi bi-arrow-up-right",
-      symbol: "bi bi-people-fill"
-    },
-    {
-      id: 2,
-      value: "$24,560.70",
-      percentChange: "21%",
-      name: "Gross Salary",
-      colorDark: "rgb(235, 87, 87)",
-      colorLight: "rgba(235, 87, 87, 0.2)",
-      icon: "bi bi-arrow-down-right",
-      symbol: "bi bi-pie-chart-fill"
-    },
-    {
-      id: 3,
-      value: "$20,360.10",
-      percentChange: "14%",
-      name: "Net Salary",
-      colorDark: "rgb(235, 87, 87)",
-      colorLight: "rgba(235, 87, 87, 0.2)",
-      icon: "bi bi-arrow-down-right",
-      symbol: "bi bi-layers-half"
-    }
-  ]
+  payrollPeriods: any[] = [];
+  periodInView: any;
+  payrollSummary: any[] = [];
 
   displayedColumns: any[];
   dataSource: MatTableDataSource<PayrollSummary>;
@@ -50,7 +29,7 @@ export class PayrollSummaryComponent implements OnInit {
   //Payroll Summary Table Column Names
   tableColumns: TableColumn[] = [
     {
-      key: "paymentReference",
+      key: "reference",
       label: "Reference",
       order: 1,
       columnWidth: "12%",
@@ -58,7 +37,7 @@ export class PayrollSummaryComponent implements OnInit {
       sortable: false
     },
     {
-      key: "payrollName",
+      key: "payrollPeriodName",
       label: "Payroll Name",
       order: 2,
       columnWidth: "12%",
@@ -74,8 +53,8 @@ export class PayrollSummaryComponent implements OnInit {
       sortable: true
     },
     {
-      key: "grossPay",
-      label: "Gross Pay",
+      key: "totalEarnings",
+      label: "Total Earnings",
       order: 6,
       columnWidth: "10%",
       cellStyle: "width: 100%",
@@ -90,8 +69,8 @@ export class PayrollSummaryComponent implements OnInit {
       sortable: true
     },
     {
-      key: "netPay",
-      label: "Net Pay",
+      key: "netEarnings",
+      label: "Net Earnings",
       order: 10,
       columnWidth: "10%",
       cellStyle: "width: 100%",
@@ -251,12 +230,122 @@ export class PayrollSummaryComponent implements OnInit {
       }
     ]
   }
-  constructor() { }
-
-  ngOnInit(): void {
-    this.tableColumns.sort((a,b) => (a.order - b.order));
-    this.displayedColumns = this.tableColumns.map(column => column.label);
-    this.dataSource = new MatTableDataSource(this.tableData);
+  constructor(
+    public dialog: MatDialog,
+    private route: Router,
+    private datePipe: DatePipe,
+    private hrService: HumanResourcesService,     
+    private notifyService: NotificationService,
+    private sharedService: SharedService,
+  ) {
+    this.getPageData();
   }
 
+  ngOnInit(): void {
+    
+  }
+
+  addNewPayrollFile() {
+    this.route.navigateByUrl('/dashboard/human-resources/payroll/payroll-details');
+  }
+
+  getPageData = async () => {
+    this.payrollPeriods = await this.hrService.getPayrollPeriods().toPromise();
+    console.log(this.payrollPeriods);
+    this.periodInView = this.payrollPeriods['data'][0];
+
+    this.periodInView = await this.hrService.getPayrollDetails(this.periodInView._id).toPromise();
+    this.periodInView = this.periodInView['data'][0];
+
+    console.log(this.periodInView);
+
+    this.tableColumns.sort((a,b) => (a.order - b.order));
+    this.displayedColumns = this.tableColumns.map(column => column.label);
+    this.dataSource = new MatTableDataSource(this.payrollPeriods['data']);
+
+    this.payrollSummary = [
+      {
+        id: 1,
+        value: this.periodInView.payrollPeriodData.length,
+        percentChange: "5%",
+        name: "Employees",
+        colorDark: "rgb(54,171,104)",
+        colorLight: "rgba(54,171,104,0.2)",
+        icon: "bi bi-arrow-up-right",
+        symbol: "bi bi-people-fill"
+      },
+      {
+        id: 2,
+        value: `£ ${this.periodInView.totalEarnings}`,
+        percentChange: "21%",
+        name: "Gross Salary",
+        colorDark: "rgb(235, 87, 87)",
+        colorLight: "rgba(235, 87, 87, 0.2)",
+        icon: "bi bi-arrow-down-right",
+        symbol: "bi bi-pie-chart-fill"
+      },
+      {
+        id: 3,
+        value: `£ ${this.periodInView.netEarnings}`,
+        percentChange: "14%",
+        name: "Net Salary",
+        colorDark: "rgb(235, 87, 87)",
+        colorLight: "rgba(235, 87, 87, 0.2)",
+        icon: "bi bi-arrow-down-right",
+        symbol: "bi bi-layers-half"
+      }
+    ]
+  }
+
+  strToDate(dateVal: string, key:string) {
+    // console.log(dateVal);
+    if(key == 'startDate' || key == 'endDate') {
+      let newFormat = new Date(dateVal);
+      // const [month, day, year] = dateVal.split('/');
+      // let newFormat = new Date(+year, +month - 1, +day);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMM, y')
+    }
+    else {
+      const [day, month, year] = dateVal.split('/');
+      let newFormat = new Date(+year, +month - 1, +day);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }    
+  }
+
+  viewPayrollDetails(info: any) {
+    this.route.navigateByUrl(`/dashboard/human-resources/payroll/payroll-details/${info._id}`);
+    // this.sharedService.setData(info);
+  }
+
+  //Delete a Payroll Period
+  deletePayrollPeriod(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Delete ' + info.payrollPeriodName,
+      message: 'Are you sure you want to remove this payroll period?',
+      confirmText: 'Yes, Delete',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deletePayrollPeriod(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('The period has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    });
+  }
+
+
+
 }
+

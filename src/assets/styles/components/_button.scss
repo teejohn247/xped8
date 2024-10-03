@@ -6,6 +6,13 @@
     cursor: pointer;
     align-items: center;
 
+    &.xxs {
+        font-size: 0.55rem;
+        letter-spacing: 0.04rem;
+        padding: 0rem 0.5rem;
+        border-radius: var(--radius-xs);
+    }
+
     &.xs {
         font-size: 0.655rem;
         letter-spacing: 0.04rem;
@@ -35,6 +42,21 @@
         }
     }
 
+    &.lg {
+        font-size: 0.885rem;
+        letter-spacing: 0.04rem;
+        padding: 0.6rem 1rem;
+        border-radius: var(--radius-md);
+
+        &.icon {
+
+            i {
+                font-size: 1.3rem;
+                margin-right: 0.5rem;
+            }
+        }
+    }
+
     &.mmd {
         font-size: 0.855rem;
         letter-spacing: 0.05rem;
@@ -52,15 +74,15 @@
     }
 
     &.primary-light-bkg {
-        border: 1px solid var(--black-tint-md);
+        //border: 1px solid var(--primary-light);
         background-color: var(--primary-light);
         color: var(--darkest);
 
-        &:hover {
-            border: 1px solid var(--primary);
-            background-color: var(--primary);
-            color: var(--white);
-        }
+        // &:hover {
+        //     //border: 1px solid var(--primary);
+        //     background-color: var(--primary);
+        //     color: var(--white);
+        // }
     }
 
     &.trans-bkg {
@@ -83,6 +105,24 @@
 
         &:hover {
             background-color: var(--primary-light);
+        }
+    }
+
+    &.warning-bkg {
+        background-color: var(--warning);
+        color: var(--white);
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
+    &.approved-bkg {
+        background-color: var(--approved);
+        color: var(--white);
+
+        &:hover {
+            opacity: 0.9;
         }
     }
 

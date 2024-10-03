@@ -26,6 +26,7 @@ export interface EmployeeFormData {
     controlType: string,
     controlLabel: string,
     controlWidth: string,
+    readonly?: boolean,
     initialValue: string,
     selectOptions?: {[key: string]: string},
     validators?: ValidatorFn[],

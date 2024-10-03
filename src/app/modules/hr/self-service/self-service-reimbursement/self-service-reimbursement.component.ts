@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { TableColumn } from 'src/app/shared/models/table-columns';
 import { MatTableDataSource } from '@angular/material/table';
+import { SafeUrl, DomSanitizer } from "@angular/platform-browser";
+import { DatePipe } from '@angular/common';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { ReimbursementTable } from 'src/app/shared/models/reimbursement-data';
 import { FormFields } from '../../../../shared/models/form-fields';
+import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { NotificationService } from 'src/app/shared/services/utils/notification.service';
+import { ExpenseRequestReviewComponent } from '../../expense-management/expense-request-review/expense-request-review.component';
 
 @Component({
   selector: 'app-self-service-reimbursement',
@@ -14,42 +19,51 @@ import { FormFields } from '../../../../shared/models/form-fields';
 })
 export class SelfServiceReimbursementComponent implements OnInit {
 
+  userDetails: any;
+  userId: string;
   displayedColumns: any[];
   dataSource: MatTableDataSource<ReimbursementTable>;
+  expenseRecords: any[] = [];
 
   expenseRequestFields: FormFields[];
   expenseForm!: FormGroup
 
+  expenseTypes: any[] = [];
+
+  attachmentFile: File;
+  attachmentName: string | SafeUrl = 'https://onburdstorageaccount.blob.core.windows.net/onburd/public/onburd_fe/assets/onburd-corporate/images/user_profile_icon.svg';
+
+
   //Leave Request Table Column Names
   tableColumns: TableColumn[] = [
     {
-      key: "expenseType",
-      label: "Expense Type",
+      key: "attachment",
+      label: "Attachment",
       order: 1,
-      columnWidth: "12%",
+      columnWidth: "3.5%",
+      cellStyle: "width: 100%",
+      sortable: true
+    },
+    {
+      key: "expenseTypeName",
+      label: "Expense Type",
+      order: 2,
+      columnWidth: "10%",
       cellStyle: "width: 100%",
       sortable: false
     },
     {
       key: "amount",
       label: "Amount",
-      order: 2,
+      order: 3,
       columnWidth: "6%",
       cellStyle: "width: 100%",
       sortable: false
     },
     {
-      key: "attachment",
-      label: "Attachment",
-      order: 4,
-      columnWidth: "10%",
-      cellStyle: "width: 100%",
-      sortable: true
-    },
-    {
       key: "dateRequested",
       label: "Date Requested",
-      order: 3,
+      order: 4,
       columnWidth: "10%",
       cellStyle: "width: 100%",
       sortable: true
@@ -151,12 +165,41 @@ export class SelfServiceReimbursementComponent implements OnInit {
     },
   ]
 
-  constructor(private fb: FormBuilder) { }
+  constructor(
+    private hrService: HumanResourcesService,
+    private notifyService: NotificationService,
+    private datePipe: DatePipe,
+    private sanitizer: DomSanitizer,
+    private fb: FormBuilder,
+    public dialog: MatDialog,
+  ) {
+    this.getPageData(); 
+  }
 
   ngOnInit(): void {
+    this.userDetails = JSON.parse(sessionStorage.getItem("loggedInUser"))['data'];
+    console.log(this.userDetails);
+    this.userId = this.userDetails._id;
+
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
-    this.dataSource = new MatTableDataSource(this.tableData);
+  }
+
+  //Converts amount to comma separated format
+  convertAmount(amount: string) {
+    return (Number(amount)).toLocaleString();
+  }
+
+  getPageData = async () => {
+    this.expenseTypes = await this.hrService.getExpenseTypes().toPromise();
+    this.expenseTypes = await this.expenseTypes['data'];
+
+    this.expenseRecords = await this.hrService.getExpenseRequests().toPromise();
+    this.dataSource = new MatTableDataSource(this.expenseRecords['data']);
+
+    console.log(this.expenseRecords);
+
+    // this.dataSource = new MatTableDataSource(this.leaveRecords['data']);
 
     this.expenseRequestFields = [
       {
@@ -165,11 +208,7 @@ export class SelfServiceReimbursementComponent implements OnInit {
         controlLabel: 'Expense Type',
         controlWidth: '48%',
         initialValue: '',
-        selectOptions: {
-          Transport: 'transport',
-          Purchase: 'purchase',
-          General: 'general'
-        },
+        selectOptions: this.arrayToObject(this.expenseTypes, 'expenseType'),
         validators: [Validators.required],
         order: 1
       },
@@ -189,10 +228,10 @@ export class SelfServiceReimbursementComponent implements OnInit {
         controlWidth: '26%',
         initialValue: '',
         selectOptions: {
-          '(#)Naira': 'naira',
-          '($)Dollar': 'dollar',
-          '(£)Pounds': 'pounds',
-          '(€)Euro': 'euro'
+          '(#)Naira': '(#)Naira',
+          '($)Dollar': '($)Dollar',
+          '(£)Pounds': '(£)Pounds',
+          '(€)Euro': '(€)Euro'
         },
         validators: [Validators.required],
         order: 3
@@ -208,12 +247,12 @@ export class SelfServiceReimbursementComponent implements OnInit {
       },
       {
         controlName: 'upload',
-        controlType: 'text',
+        controlType: 'file',
         controlLabel: 'Attachment',
         controlWidth: '48%',
         initialValue: null,
         validators: [Validators.required],
-        order: 4
+        order: 5
       },
       {
         controlName: 'description',
@@ -222,17 +261,8 @@ export class SelfServiceReimbursementComponent implements OnInit {
         controlWidth: '100%',
         initialValue: null,
         validators: [Validators.required],
-        order: 5
-      },
-      {
-        controlName: 'attachment',
-        controlType: 'upload',
-        controlLabel: 'Attachment',
-        controlWidth: '100%',
-        initialValue: null,
-        validators: [Validators.required],
         order: 6
-      },
+      }
     ]
 
     this.expenseRequestFields.sort((a,b) => (a.order - b.order));
@@ -242,6 +272,120 @@ export class SelfServiceReimbursementComponent implements OnInit {
       const formControl = this.fb.control(field.initialValue, field.validators)
       this.expenseForm.addControl(field.controlName, formControl)
     })
+  }
+
+  //Converts an array to an Object of key value pairs
+  arrayToObject(arrayVar, key:string) {
+    console.log(arrayVar);
+    let reqObj = {}
+    reqObj = arrayVar.reduce((agg, item, index) => {
+      agg[item['_id']] = item[key];
+      return agg;
+    }, {})
+    console.log(reqObj);
+    return reqObj;
+  }
+
+  attachmentUpload(event) {
+    this.attachmentFile = event.target.files[0];
+    this.attachmentName = this.sanitizer.bypassSecurityTrustUrl(
+      window.URL.createObjectURL(event.target.files[0])
+    );
+    console.log(this.attachmentFile.name);
+    this.expenseForm.controls.upload.setValue(this.attachmentFile.name);
+    // this.expenseForm.value.attachment = this.attachmentFile.name;
+    // this.fileName = this.employeesFile.name;
+  }
+
+  createExpenseRequest() {
+    console.log(this.attachmentFile);
+    if(this.expenseForm.valid) {
+      const formData = new FormData();
+
+      formData.append('expenseTypeId', this.expenseForm.value.expenseType);
+      formData.append('expenseDate', this.datePipe.transform(this.expenseForm.value.expenseDate, 'dd-MM-yyyy'));
+      formData.append('amount', this.expenseForm.value.amount);
+      formData.append('description', this.expenseForm.value.description);
+      formData.append('attachment', this.attachmentFile);
+      // let data = {
+      //   expenseTypeId: this.expenseForm.value.expenseType,
+      //   expenseDate: this.datePipe.transform(this.expenseForm.value.expenseDate, 'dd-MM-yyyy'),
+      //   amount: this.expenseForm.value.amount,
+      //   description: this.expenseForm.value.description,
+      //   attachment: this.attachmentFile
+      // }
+      this.hrService.createExpenseRequest(formData).subscribe({
+        next: res => {
+          console.log(res);
+          if(res.status == 200) {
+            this.notifyService.showSuccess('You expense request has been sent successfully');
+            this.getPageData();
+          }
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
+  }
+
+  //Edit an expense request
+  editExpenseRequest(details: any) {
+    this.dialog.open(ExpenseRequestReviewComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        id: details._id,
+        isExisting: true,
+        modalInfo: details,
+        expenseTypes: this.expenseTypes, 
+        forApproval: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPageData();
+    });
+  }
+
+  //Delete a leave request
+  deleteExpenseRequest(info: any) {
+    this.notifyService.confirmAction({
+      title: 'Delete Expense Request',
+      message: 'Are you sure you want to delete this expense request?',
+      confirmText: 'Delete Request',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.hrService.deleteExpenseRequest(info._id).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showInfo('This expense request has been deleted successfully');
+            }
+            this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
+    });
+  }
+
+  strToDate(dateVal: string, key:string) {
+    if(key == 'dateRequested') {
+      // const [day, month, year] = dateVal.split('/');
+      let newFormat = new Date(dateVal);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }
+    else {
+      const [day, month, year] = dateVal.split('-');
+      let newFormat = new Date(+year, +month - 1, +day);
+      // console.log(newFormat.toDateString());
+      return this.datePipe.transform(newFormat, 'd MMMM, y')
+    }    
   }
 
 }
