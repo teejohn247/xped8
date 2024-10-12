@@ -9,6 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { CrmService } from 'src/app/shared/services/crm/crm.service';
 import { TicketInfoComponent } from '../ticket-info/ticket-info.component';
 
 @Component({
@@ -17,6 +18,7 @@ import { TicketInfoComponent } from '../ticket-info/ticket-info.component';
   styleUrls: ['./support-overview.component.scss']
 })
 export class SupportOverviewComponent implements OnInit {
+  contactsList: any[] = [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -143,6 +145,7 @@ export class SupportOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    private crmService: CrmService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) { }
@@ -152,10 +155,12 @@ export class SupportOverviewComponent implements OnInit {
   }
 
   getPageData = async () => {
+    this.contactsList = await this.crmService.getContacts().toPromise();
+
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
     this.dataSource = new MatTableDataSource(this.tableData);
-    // console.log(this.contactsList);
+    console.log(this.contactsList);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -180,6 +185,7 @@ export class SupportOverviewComponent implements OnInit {
       height: 'auto',
       data: {
         isExisting: false,
+        contactsList: this.contactsList['data'],
       },
     });
   }

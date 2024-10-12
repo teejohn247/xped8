@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { CrmService } from 'src/app/shared/services/crm/crm.service';
 
 @Component({
   selector: 'app-ticket-info',
@@ -13,18 +14,24 @@ export class TicketInfoComponent implements OnInit {
 
   ticketFieldData: any[];
   employees: any[] = [];
+  contactsList: any[] = [];
+
   ticketForm!: FormGroup;
 
   fileName: string;
   ticketFile: File;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public dialogData: any,
     public dialogRef: MatDialogRef<TicketInfoComponent>,
     private fb: FormBuilder,
+    private crmService: CrmService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) {
+    this.contactsList = this.dialogData.contactsList;
+    console.log(this.contactsList);
+
     this.ticketFieldData = [
       {
         controlName: 'ticketNo',
@@ -59,10 +66,7 @@ export class TicketInfoComponent implements OnInit {
         controlLabel: 'Contact',
         controlWidth: '48%',
         initialValue: '',
-        selectOptions: {
-          Mark: 'Mark Thierry',
-          Rita: 'Rita Crosby'
-        },
+        selectOptions: this.arrayToObject(this.contactsList, 'firstName'),
         validators: [Validators.required],
         order: 3
       },
@@ -179,7 +183,7 @@ export class TicketInfoComponent implements OnInit {
   arrayToObject(arrayVar, key:string) {
     let reqObj = {}
     reqObj = arrayVar.reduce((agg, item, index) => {
-      agg[item['_id']] = item[key];
+      agg[item['_id']] = item[key] + ' ' + item['lastName'];
       return agg;
     }, {})
     console.log(reqObj);
@@ -209,23 +213,51 @@ export class TicketInfoComponent implements OnInit {
   }
 
   onSubmit() {
-    if(this.ticketForm.valid) {
-      let data = {
-      }
-      // console.log(data);
-      // this.hrService.bookVisitor(data).subscribe({
+    const formData = new FormData();
+
+    formData.append('attachment', this.ticketFile);
+    formData.append('ticketNumber', this.ticketForm.value.ticketNo);
+    formData.append('ticketTitle', this.ticketForm.value.ticketTitle);
+    formData.append('contactId', this.ticketForm.value.contact);
+    formData.append('stage', this.ticketForm.value.stage);
+    formData.append('priority', this.ticketForm.value.priority);
+    formData.append('closureTime', this.ticketForm.value.closureTime);
+    formData.append('source', this.ticketForm.value.source);
+    formData.append('creationDate', this.ticketForm.value.creationDate);
+    formData.append('associatedTickets', JSON.stringify(this.ticketForm.value.associatedTickets));
+
+
+    if(this.dialogData.isExisting) {
+      // this.hrService.updateEmployeeByAdmin(formData, this.employeeDetails._id).subscribe({
       //   next: res => {
       //     // console.log(res);
       //     if(res.status == 200) {
-      //       this.notifyService.showSuccess('This meeting has been booked successfully');
+      //       this.notifyService.showSuccess('This employee has been updated successfully');
       //       this.dialogRef.close();
       //     }
+      //     //this.getPageData();
       //   },
       //   error: err => {
       //     console.log(err)
       //     this.notifyService.showError(err.error.error);
       //   } 
       // })
+    }
+    else {
+      this.crmService.createTicket(formData).subscribe({
+        next: res => {
+          // console.log(res);
+          if(res.status == 200) {
+            this.notifyService.showSuccess('This ticket has been created successfully');
+            this.dialogRef.close();
+          }
+          //this.getPageData();
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
     }
   }
 

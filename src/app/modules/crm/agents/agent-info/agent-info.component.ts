@@ -3,7 +3,7 @@ import { DatePipe } from '@angular/common';
 import { SafeUrl, DomSanitizer } from "@angular/platform-browser";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { CrmService } from 'src/app/shared/services/crm/crm.service';
 import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { EmployeeFormData } from 'src/app/shared/models/employee-data';
@@ -28,18 +28,20 @@ export class AgentInfoComponent implements OnInit {
   departmentList: any[] = [];
   designationList: any[] = [];
   agentDetails: any;
+  loggedInUser: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private datePipe: DatePipe,
     public dialogRef: MatDialogRef<AgentInfoComponent>,
-    private hrService: HumanResourcesService,
+    private crmService: CrmService,
     private authService: AuthenticationService,     
     private notifyService: NotificationService,
     private sanitizer: DomSanitizer,
     private fb: FormBuilder
   ) {
-    this.agentDetails = this.dialogData.conatctDetails;
+    this.loggedInUser = authService.loggedInUser.data;
+    // this.agentDetails = this.dialogData.conatctDetails;
     // console.log(this.agentDetails);
     this.personalInfoForm = this.fb.group({})
     this.officialInfoForm = this.fb.group({})
@@ -78,7 +80,6 @@ export class AgentInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Company Email Address',
         controlWidth: '48%',
-        readonly: true,
         initialValue: this.agentDetails?.email,
         validators: [Validators.required, Validators.email],
         order: 3
@@ -331,8 +332,67 @@ export class AgentInfoComponent implements OnInit {
     return newFormat;     
   }
 
-  updateAgent() {
+  onSubmit() {
+    const formData = new FormData();
 
+    formData.append('profilePhoto', this.profileImgFile);
+    formData.append('firstName', this.officialInfoForm.value.firstName);
+    formData.append('lastName', this.officialInfoForm.value.lastName);
+    formData.append('email', this.officialInfoForm.value.officialEmail);
+    formData.append('phoneNumber', this.officialInfoForm.value.phoneNo);
+    formData.append('dateOfBirth', this.datePipe.transform(this.officialInfoForm.value.dateOfBirth, 'dd-M-yyyy'));
+    formData.append('gender', this.officialInfoForm.value.gender);
+    formData.append('departmentId', this.officialInfoForm.value.department);
+    formData.append('companyRole', this.officialInfoForm.value.role);
+    formData.append('employmentStartDate', this.datePipe.transform(this.officialInfoForm.value.employmentStartDate, 'dd-M-yyyy'));
+    formData.append('employmentType', this.officialInfoForm.value.employmentType);
+    formData.append('designationId', this.officialInfoForm.value.designation);
+    formData.append('agent', 'true');
+
+    formData.append('personalEmail', this.personalInfoForm.value.personalEmail ? this.personalInfoForm.value.personalEmail : '');
+    formData.append('personalPhone', this.personalInfoForm.value.personalPhoneNo ? this.personalInfoForm.value.personalPhoneNo : '');
+    formData.append('address', this.personalInfoForm.value.address ? this.personalInfoForm.value.address : '');
+    formData.append('city', this.personalInfoForm.value.city ? this.personalInfoForm.value.city : '');
+    formData.append('country', this.personalInfoForm.value.country ? this.personalInfoForm.value.country : '');
+    formData.append('maritalStatus', this.personalInfoForm.value.maritalStatus ? this.personalInfoForm.value.maritalStatus : '');
+    formData.append('nationality', this.personalInfoForm.value.nationality ? this.personalInfoForm.value.nationality : '');
+    formData.append('nextOfKinFullName', this.personalInfoForm.value.nextOfKinName ? this.personalInfoForm.value.nextOfKinName : '');
+    formData.append('nextOfKinRelationship', this.personalInfoForm.value.nextOfKinRelationship ? this.personalInfoForm.value.nextOfKinRelationship : '');
+    formData.append('nextOfKinPhoneNumber', this.personalInfoForm.value.nextOfKinPhoneNo ? this.personalInfoForm.value.nextOfKinPhoneNo : '');
+    formData.append('nextOfKinAddress', this.personalInfoForm.value.nextOfKinAddress ? this.personalInfoForm.value.nextOfKinAddress : '');
+
+    if(this.dialogData.isExisting) {
+      // this.hrService.updateEmployeeByAdmin(formData, this.employeeDetails._id).subscribe({
+      //   next: res => {
+      //     // console.log(res);
+      //     if(res.status == 200) {
+      //       this.notifyService.showSuccess('This employee has been updated successfully');
+      //       this.dialogRef.close();
+      //     }
+      //     //this.getPageData();
+      //   },
+      //   error: err => {
+      //     console.log(err)
+      //     this.notifyService.showError(err.error.error);
+      //   } 
+      // })
+    }
+    else {
+      this.crmService.createAgent(formData).subscribe({
+        next: res => {
+          // console.log(res);
+          if(res.status == 200) {
+            this.notifyService.showSuccess('This agent has been created successfully');
+            this.dialogRef.close();
+          }
+          //this.getPageData();
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
   }
 
 }

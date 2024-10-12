@@ -9,6 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { CrmService } from 'src/app/shared/services/crm/crm.service';
 import { AgentInfoComponent } from '../agent-info/agent-info.component';
 
 @Component({
@@ -28,6 +29,7 @@ export class AgentsOverviewComponent implements OnInit {
   contactsList: any[] = [];
   departmentList: any[] = [];
   designationList: any[] = [];
+  agentsList: any[] = [];
 
 
   //Agents Table Column Names
@@ -73,7 +75,7 @@ export class AgentsOverviewComponent implements OnInit {
       sortable: true
     },
     {
-      key: "totalContacts",
+      key: "contacts",
       label: "Total Contacts",
       order: 6,
       columnWidth: "10%",
@@ -81,7 +83,7 @@ export class AgentsOverviewComponent implements OnInit {
       sortable: true
     },
     {
-      key: "totalLeads",
+      key: "leads",
       label: "Total Leads",
       order: 7,
       columnWidth: "10%",
@@ -89,7 +91,7 @@ export class AgentsOverviewComponent implements OnInit {
       sortable: true
     },
     {
-      key: "totalTickets",
+      key: "tickets",
       label: "Total Tickets",
       order: 8,
       columnWidth: "10%",
@@ -97,7 +99,7 @@ export class AgentsOverviewComponent implements OnInit {
       sortable: true
     },
     {
-      key: "resolvedTickets",
+      key: "tickets",
       label: "Resolved Tickets",
       order: 9,
       columnWidth: "12%",
@@ -147,6 +149,7 @@ export class AgentsOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    private crmService: CrmService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) { }
@@ -156,17 +159,14 @@ export class AgentsOverviewComponent implements OnInit {
   }
 
   getPageData = async () => {
-    this.tableColumns.sort((a,b) => (a.order - b.order));
-    this.displayedColumns = this.tableColumns.map(column => column.label);
-    this.dataSource = new MatTableDataSource(this.tableData);
-    
-    // this.employeeDetails = await this.hrService.getEmployeeDetails(this.employeeId).toPromise();
-    // this.employeeDetails = this.employeeDetails['data'][0];
     this.departmentList = await this.hrService.getDepartments().toPromise();
     this.designationList = await this.hrService.getDesignations().toPromise();
+    this.agentsList = await this.crmService.getAgents().toPromise();
 
-    
-    // console.log(this.contactsList);
+    // console.log(this.agentsList);
+    this.tableColumns.sort((a,b) => (a.order - b.order));
+    this.displayedColumns = this.tableColumns.map(column => column.label);
+    this.dataSource = new MatTableDataSource(this.agentsList['data']);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -181,8 +181,9 @@ export class AgentsOverviewComponent implements OnInit {
     this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-  viewDetails(id: any) {
-    this.router.navigate([id], {relativeTo: this.route});
+  viewDetails(agentInfo: any) {
+    console.log(agentInfo);
+    this.editAgent();
   }
 
   addNewAgent() {
@@ -198,6 +199,48 @@ export class AgentsOverviewComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.getPageData();
     }); 
+  }
+
+  editAgent() {
+    let dialogRef = this.dialog.open(AgentInfoComponent, {
+      width: '35%',
+      height: 'auto',
+      data: {
+        departmentList: this.departmentList['data'],
+        designationList: this.designationList['data'],
+        isExisting: true
+      },
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.getPageData();
+    }); 
+  }
+
+  //Delete an agent
+  deleteAgent(info: any) {
+    console.log(info);
+    this.notifyService.confirmAction({
+      title: 'Remove Agent',
+      message: 'Are you sure you want to remove this employee as an agent?',
+      confirmText: 'Remove Agent',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        // this.hrService.deleteEmployee(info._id).subscribe({
+        //   next: res => {
+        //     // console.log(res);
+        //     if(res.status == 200) {
+        //       this.notifyService.showInfo('This employee has been removed as an agent successfully');
+        //     }
+        //     this.getPageData();
+        //   },
+        //   error: err => {
+        //     console.log(err)
+        //     this.notifyService.showError(err.error.error);
+        //   } 
+        // })
+      }
+    });
   }
 
 }

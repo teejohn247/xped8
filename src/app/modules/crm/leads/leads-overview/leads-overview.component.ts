@@ -9,6 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { CrmService } from 'src/app/shared/services/crm/crm.service';
 import { LeadsInfoComponent } from '../leads-info/leads-info.component';
 
 @Component({
@@ -27,6 +28,7 @@ export class LeadsOverviewComponent implements OnInit {
 
   leadsList: any[] = [];
   leadsSummary: any[] = [];
+  agentsList: any[] = [];
 
   // Leads Table Column Names
   tableColumns: any[] = [
@@ -164,6 +166,7 @@ export class LeadsOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    private crmService: CrmService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) { }
@@ -208,9 +211,12 @@ export class LeadsOverviewComponent implements OnInit {
   }
 
   getPageData = async () => {
+    this.agentsList = await this.crmService.getAgents().toPromise();
+    this.leadsList = await this.crmService.getLeads().toPromise();
+
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
-    this.dataSource = new MatTableDataSource(this.tableData);
+    this.dataSource = new MatTableDataSource(this.leadsList['data']);
     // console.log(this.contactsList);
   }
 
@@ -236,8 +242,35 @@ export class LeadsOverviewComponent implements OnInit {
       height: 'auto',
       data: {
         isExisting: false,
-        employeeList: []
+        agentsList: this.agentsList['data'],
       },
+    });
+  }
+
+  //Delete a lead
+  deleteLead(info: any) {
+    console.log(info);
+    this.notifyService.confirmAction({
+      title: 'Remove Lead',
+      message: 'Are you sure you want to remove this lead?',
+      confirmText: 'Remove Lead',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        // this.hrService.deleteEmployee(info._id).subscribe({
+        //   next: res => {
+        //     // console.log(res);
+        //     if(res.status == 200) {
+        //       this.notifyService.showInfo('This employee has been removed as an agent successfully');
+        //     }
+        //     this.getPageData();
+        //   },
+        //   error: err => {
+        //     console.log(err)
+        //     this.notifyService.showError(err.error.error);
+        //   } 
+        // })
+      }
     });
   }
 

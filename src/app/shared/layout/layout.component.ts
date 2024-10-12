@@ -16,7 +16,7 @@ export class LayoutComponent implements OnInit {
   constructor(private router: Router, private auth: AuthenticationService, private notify: NotificationService) { }
 
   ngOnInit(): void {
-    let urlsplit = this.router.url?.split("/dashboard");
+    let urlsplit = this.router.url?.split("/app");
     console.log(urlsplit);
 
     if(urlsplit[1] && urlsplit[1].includes('.')) {

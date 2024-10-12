@@ -3,6 +3,7 @@ import { DatePipe } from '@angular/common';
 import { SafeUrl, DomSanitizer } from "@angular/platform-browser";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { CrmService } from 'src/app/shared/services/crm/crm.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { AuthenticationService } from 'src/app/shared/services/utils/authentication.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
@@ -25,15 +26,15 @@ export class ContactInfoComponent implements OnInit {
   personalInfoFields: any;
   personalInfoForm!: FormGroup;
 
-  // departmentList: any[] = [];
-  // designationList: any[] = [];
   contactDetails: any;
+  agentsList: any[] = [];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
     private datePipe: DatePipe,
     public dialogRef: MatDialogRef<ContactInfoComponent>,
     private hrService: HumanResourcesService,
+    private crmService: CrmService,
     private authService: AuthenticationService,     
     private notifyService: NotificationService,
     private sanitizer: DomSanitizer,
@@ -51,6 +52,7 @@ export class ContactInfoComponent implements OnInit {
   }
 
   setUpForm() {
+    this.agentsList = this.dialogData.agentsList;
     // this.departmentList = this.dialogData.departmentList;
     // this.designationList = this.dialogData.designationList;
 
@@ -104,7 +106,7 @@ export class ContactInfoComponent implements OnInit {
         controlWidth: '48%',
         readonly: true,
         initialValue: this.contactDetails?.organization,
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required],
         order: 7
       },
       {
@@ -114,7 +116,7 @@ export class ContactInfoComponent implements OnInit {
         controlWidth: '48%',
         readonly: true,
         initialValue: this.contactDetails?.industry,
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required],
         order: 8
       },
       {
@@ -124,7 +126,7 @@ export class ContactInfoComponent implements OnInit {
         controlWidth: '48%',
         readonly: true,
         initialValue: this.contactDetails?.jobRole,
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required],
         order: 9
       },
       {
@@ -133,10 +135,7 @@ export class ContactInfoComponent implements OnInit {
         controlLabel: 'Contact Owner',
         controlWidth: '48%',
         initialValue: '',
-        selectOptions: {
-          Mark: 'Mark Thierry',
-          Rita: 'Rita Crosby'
-        },
+        selectOptions: this.arrayToObject(this.agentsList, 'fullName'),
         validators: [Validators.required],
         order: 10
       },
@@ -146,55 +145,10 @@ export class ContactInfoComponent implements OnInit {
         controlLabel: 'Assigned Agent',
         controlWidth: '48%',
         initialValue: '',
-        selectOptions: {
-          Mark: 'Mark Thierry',
-          Rita: 'Rita Crosby'
-        },
+        selectOptions: this.arrayToObject(this.agentsList, 'fullName'),
         validators: [Validators.required],
         order: 11
       },
-      // {
-      //   controlName: 'employmentType',
-      //   controlType: 'select',
-      //   controlLabel: 'Employment Type',
-      //   controlWidth: '48%',
-      //   initialValue: this.contactDetails?.employmentType,
-      //   selectOptions: {
-      //     Contract: 'Contract',
-      //     Permanent: 'Permanent'
-      //   },
-      //   validators: [Validators.required],
-      //   order: 10
-      // },
-      // {
-      //   controlName: 'designation',
-      //   controlType: 'select',
-      //   controlLabel: 'Designation',
-      //   controlWidth: '48%',
-      //   initialValue: this.contactDetails?.designationId,
-      //   selectOptions: {},
-      //   validators: [Validators.required],
-      //   order: 11
-      // },
-      // {
-      //   controlName: 'department',
-      //   controlType: 'select',
-      //   controlLabel: 'Department',
-      //   controlWidth: '48%',
-      //   initialValue: this.contactDetails?.departmentId,
-      //   selectOptions: {},
-      //   validators: [Validators.required],
-      //   order: 7
-      // },
-      // {
-      //   controlName: 'role',
-      //   controlType: 'text',
-      //   controlLabel: 'Role',
-      //   controlWidth: '48%',
-      //   initialValue: this.contactDetails?.companyRole,
-      //   validators: [Validators.required],
-      //   order: 8
-      // },
     ]
 
     this.contactInfoFields = [
@@ -203,7 +157,6 @@ export class ContactInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Email Address',
         controlWidth: '48%',
-        readonly: true,
         initialValue: this.contactDetails?.email,
         validators: [Validators.required, Validators.email],
         order: 1
@@ -255,22 +208,6 @@ export class ContactInfoComponent implements OnInit {
         validators: [],
         order: 6
       },
-      // {
-      //   controlName: 'maritalStatus',
-      //   controlType: 'select',
-      //   controlLabel: 'Marital Status',
-      //   controlWidth: '48%',
-      //   initialValue: this.contactDetails?.maritalStatus,
-      //   selectOptions: {
-      //     Single: 'Single',
-      //     Married: 'Married',
-      //     Divorced: 'Divorced',
-      //     Widow: 'Widow',
-      //     Widower: 'Widower'
-      //   },
-      //   validators: [],
-      //   order: 6
-      // },
       {
         controlName: 'zipCode',
         controlType: 'text',
@@ -289,42 +226,6 @@ export class ContactInfoComponent implements OnInit {
         validators: [],
         order: 9
       },
-      // {
-      //   controlName: 'nextOfKinName',
-      //   controlType: 'text',
-      //   controlLabel: 'Next of Kin Name',
-      //   controlWidth: '48%',
-      //   initialValue: this.contactDetails?.nextOfKinFullName,
-      //   validators: [],
-      //   order: 8
-      // },
-      // {
-      //   controlName: 'nextOfKinRelationship',
-      //   controlType: 'text',
-      //   controlLabel: 'Next of Kin Relationship',
-      //   controlWidth: '48%',
-      //   initialValue: this.contactDetails?.nextOfKinRelationship,
-      //   validators: [],
-      //   order: 9
-      // },
-      // {
-      //   controlName: 'nextOfKinPhoneNo',
-      //   controlType: 'text',
-      //   controlLabel: 'Next of Kin Phone No',
-      //   controlWidth: '48%',
-      //   initialValue: this.contactDetails?.nextOfKinPhoneNumber,
-      //   validators: [],
-      //   order: 10
-      // },
-      // {
-      //   controlName: 'nextOfKinAddress',
-      //   controlType: 'text',
-      //   controlLabel: 'Next of Kin Address',
-      //   controlWidth: '48%',
-      //   initialValue: this.contactDetails?.nextOfKinAddress,
-      //   validators: [],
-      //   order: 11
-      // },
     ]
 
     this.contactInfoFields.sort((a,b) => (a.order - b.order));
@@ -380,8 +281,61 @@ export class ContactInfoComponent implements OnInit {
     return newFormat;     
   }
 
-  updateContact() {
+  onSubmit() {
+    const formData = new FormData();
 
+    formData.append('profilePhoto', this.profileImgFile);
+    formData.append('firstName', this.personalInfoForm.value.firstName);
+    formData.append('lastName', this.personalInfoForm.value.lastName);
+    formData.append('contactType', this.personalInfoForm.value.contactType);
+    formData.append('onboardingDate', this.personalInfoForm.value.onboardingDate);
+    formData.append('organization', this.personalInfoForm.value.organization);
+    formData.append('industry', this.personalInfoForm.value.industry);
+    formData.append('jobRole', this.personalInfoForm.value.jobRole);
+    formData.append('contactOwnerId', this.personalInfoForm.value.contactOwner);
+    formData.append('assignedAgentId', this.personalInfoForm.value.assignedAgent);
+
+    formData.append('email', this.contactInfoForm.value.email);
+    formData.append('phoneNumber', this.contactInfoForm.value.phoneNo);
+    formData.append('address', this.contactInfoForm.value.address ? this.contactInfoForm.value.address : '');
+    formData.append('city', this.contactInfoForm.value.city ? this.contactInfoForm.value.city : '');
+    formData.append('state', this.contactInfoForm.value.state ? this.contactInfoForm.value.state : '');
+    formData.append('country', this.contactInfoForm.value.country ? this.contactInfoForm.value.country : '');
+    formData.append('postCode', this.contactInfoForm.value.postCode ? this.contactInfoForm.value.postCode : '');
+    formData.append('officeLocation', this.contactInfoForm.value.officeLocation ? this.contactInfoForm.value.officeLocation : '');
+
+    if(this.dialogData.isExisting) {
+      // this.hrService.updateEmployeeByAdmin(formData, this.employeeDetails._id).subscribe({
+      //   next: res => {
+      //     // console.log(res);
+      //     if(res.status == 200) {
+      //       this.notifyService.showSuccess('This employee has been updated successfully');
+      //       this.dialogRef.close();
+      //     }
+      //     //this.getPageData();
+      //   },
+      //   error: err => {
+      //     console.log(err)
+      //     this.notifyService.showError(err.error.error);
+      //   } 
+      // })
+    }
+    else {
+      this.crmService.createContact(formData).subscribe({
+        next: res => {
+          // console.log(res);
+          if(res.status == 200) {
+            this.notifyService.showSuccess('This agent has been created successfully');
+            this.dialogRef.close();
+          }
+          //this.getPageData();
+        },
+        error: err => {
+          console.log(err)
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
   }
 
 }

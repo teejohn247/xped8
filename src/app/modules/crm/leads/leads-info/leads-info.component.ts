@@ -3,6 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { CrmService } from 'src/app/shared/services/crm/crm.service';
 
 @Component({
   selector: 'app-leads-info',
@@ -13,15 +14,26 @@ export class LeadsInfoComponent implements OnInit {
 
   leadsFieldData: any[];
   employees: any[] = [];
-  leadsForm!: FormGroup
+  agentsList: any[] = [];
+
+  leadsForm!: FormGroup;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public dialogData: any,
     public dialogRef: MatDialogRef<LeadsInfoComponent>,
     private fb: FormBuilder,
-    private hrService: HumanResourcesService,     
+    private crmService: CrmService,     
     private notifyService: NotificationService,
   ) {
+    this.setUpForm(); 
+  }
+
+  ngOnInit(): void {
+  }
+
+  setUpForm() {
+    this.agentsList = this.dialogData.agentsList;
+
     this.leadsFieldData = [
       {
         controlName: 'firstName',
@@ -98,7 +110,7 @@ export class LeadsInfoComponent implements OnInit {
       {
         controlName: 'conversionProbability',
         controlType: 'text',
-        controlLabel: 'Conversion Probability',
+        controlLabel: 'Conversion Probability(%)',
         controlWidth: '48%',
         readonly: true,
         validators: [Validators.required],
@@ -123,28 +135,22 @@ export class LeadsInfoComponent implements OnInit {
         order: 8
       },
       {
-        controlName: 'leadOwner',
+        controlName: 'leadOwnerId',
         controlType: 'select',
         controlLabel: 'Lead Owner',
         controlWidth: '48%',
         initialValue: '',
-        selectOptions: {
-          Mark: 'Mark Thierry',
-          Rita: 'Rita Crosby'
-        },
+        selectOptions: this.arrayToObject(this.agentsList, 'fullName'),
         validators: [Validators.required],
         order: 9
       },
       {
-        controlName: 'assignedAgent',
+        controlName: 'assignedAgentId',
         controlType: 'select',
         controlLabel: 'Assigned Agent',
         controlWidth: '48%',
         initialValue: '',
-        selectOptions: {
-          Mark: 'Mark Thierry',
-          Rita: 'Rita Crosby'
-        },
+        selectOptions: this.arrayToObject(this.agentsList, 'fullName'),
         validators: [Validators.required],
         order: 10
       },
@@ -153,7 +159,7 @@ export class LeadsInfoComponent implements OnInit {
         controlType: 'text',
         controlLabel: 'Description',
         controlWidth: '100%',
-        initialValue: null,
+        initialValue: '',
         validators: [],
         order: 11
       },
@@ -166,9 +172,6 @@ export class LeadsInfoComponent implements OnInit {
       const formControl = this.fb.control(field.initialValue, field.validators)
       this.leadsForm.addControl(field.controlName, formControl)
     })
-  }
-
-  ngOnInit(): void {
   }
 
   //Converts an array to an Object of key value pairs
@@ -196,6 +199,56 @@ export class LeadsInfoComponent implements OnInit {
     const index = array.indexOf(toRemove);
     if (index !== -1) {
       array.splice(index, 1);
+    }
+  }
+
+  onSubmit() {
+    console.log(this.leadsForm.value);
+    if(this.leadsForm.valid) {
+      // let payload = {
+      //   firstName: this.leadsForm.value.firstName,
+      //   lastName: this.leadsForm.value.lastName,
+      //   leadType: this.leadsForm.value.leadType,
+      //   industry: this.leadsForm.value.industry,
+      //   leadPriority: this.leadsForm.value.leadPriority,
+      //   jobTitle: this.leadsForm.value.jobTitle,
+      //   expectedRevenue: this.leadsForm.value.expectedRevenue,
+      //   conversionProbability: this.leadsForm.value.expectedRevenue,
+      // }
+      console.log(this.dialogData);
+      if(this.dialogData.isExisting) {
+        // this.hrService.updateDesignation(data, this.data.id).subscribe({
+        //   next: res => {
+        //     // console.log(res);
+        //     if(res.status == 200) {
+        //       if(this.data.isExisting) this.notifyService.showSuccess('This designation has been updated successfully');
+        //       else this.notifyService.showSuccess('This designation has been created successfully');
+        //       this.dialogRef.close();
+        //     }
+        //     //this.getPageData();
+        //   },
+        //   error: err => {
+        //     console.log(err)
+        //     this.notifyService.showError(err.error.error);
+        //   } 
+        // })
+      }
+      else {
+        this.crmService.createLead(this.leadsForm.value).subscribe({
+          next: res => {
+            // console.log(res);
+            if(res.status == 200) {
+              this.notifyService.showSuccess('This lead has been created successfully');
+              this.dialogRef.close();
+            }
+            //this.getPageData();
+          },
+          error: err => {
+            console.log(err)
+            this.notifyService.showError(err.error.error);
+          } 
+        })
+      }
     }
   }
 
