@@ -6,11 +6,23 @@ frontend:
         - npm install -f
     build:
       commands:
-        - npm run build
+        - ng build
   artifacts:
     baseDirectory: dist/xped8
     files:
       - '**/*'
-  cache:
-    paths:
-      - node_modules/**/*
+  customHeaders:
+    - pattern: '**/*'
+      headers:
+        - key: 'Cache-Control'
+          value: 'max-age=31536000'
+  # Add this section
+  customRules:
+    - pattern: 'assets/**/*'
+      headers:
+        - key: 'Cache-Control'
+          value: 'max-age=31536000'
+      status: 200
+    - pattern: '**/*'
+      target: '/index.html'
+      status: 200
