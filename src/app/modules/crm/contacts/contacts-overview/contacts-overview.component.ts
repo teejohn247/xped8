@@ -9,6 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { CrmService } from 'src/app/shared/services/crm/crm.service';
 import { ContactInfoComponent } from '../contact-info/contact-info.component';
 
 @Component({
@@ -17,6 +18,7 @@ import { ContactInfoComponent } from '../contact-info/contact-info.component';
   styleUrls: ['./contacts-overview.component.scss']
 })
 export class ContactsOverviewComponent implements OnInit {
+  agentsList: any[] = [];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -71,7 +73,7 @@ export class ContactsOverviewComponent implements OnInit {
       sortable: true
     },
     {
-      key: "assignedAgent",
+      key: "assignedAgentName",
       label: "Assigned Agent",
       order: 4,
       columnWidth: "12%",
@@ -153,6 +155,7 @@ export class ContactsOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    private crmService: CrmService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) { }
@@ -197,9 +200,12 @@ export class ContactsOverviewComponent implements OnInit {
   }
 
   getPageData = async () => {
+    this.agentsList = await this.crmService.getAgents().toPromise();
+    this.contactsList = await this.crmService.getContacts().toPromise();
+
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
-    this.dataSource = new MatTableDataSource(this.tableData);
+    this.dataSource = new MatTableDataSource(this.contactsList['data']);
     // console.log(this.contactsList);
   }
 
@@ -224,14 +230,40 @@ export class ContactsOverviewComponent implements OnInit {
       width: '35%',
       height: 'auto',
       data: {
-        // departmentList: this.departmentList['data'],
-        // designationList: this.designationList['data'],
+        agentsList: this.agentsList['data'],
         isExisting: false
       },
     });
     dialogRef.afterClosed().subscribe(() => {
       this.getPageData();
     }); 
+  }
+
+  //Delete a contact
+  deleteContact(info: any) {
+    console.log(info);
+    this.notifyService.confirmAction({
+      title: 'Remove Contact',
+      message: 'Are you sure you want to remove this contact?',
+      confirmText: 'Remove Contact',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        // this.hrService.deleteEmployee(info._id).subscribe({
+        //   next: res => {
+        //     // console.log(res);
+        //     if(res.status == 200) {
+        //       this.notifyService.showInfo('This employee has been removed as an agent successfully');
+        //     }
+        //     this.getPageData();
+        //   },
+        //   error: err => {
+        //     console.log(err)
+        //     this.notifyService.showError(err.error.error);
+        //   } 
+        // })
+      }
+    });
   }
 
 }

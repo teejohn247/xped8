@@ -109,7 +109,7 @@
                             </th>
                             <td style="width:1%; white-space: nowrap; cursor: pointer;" mat-cell *matCellDef="let element">
                                 <span (click)="viewDetails(element.id)" class="table-icon edit"><i class="bi bi-pen-fill"></i></span>
-                                <span class="table-icon delete ms-lg-3"><i class="bi bi-trash3-fill"></i></span>
+                                <span (click)="deleteContact(element)" class="table-icon delete ms-lg-3"><i class="bi bi-trash3-fill"></i></span>
                                 <span [matMenuTriggerFor]="moreOptions" class="table-icon more ms-lg-2"><i class="bi bi-three-dots-vertical"></i></span>
                                 <mat-menu #moreOptions="matMenu" class="more">
                                     <div class="menu-item" mat-menu-item><i class="bi bi-telephone-fill pe-2"></i> Call</div>
@@ -122,7 +122,7 @@
                         <ng-container *ngIf="column.key == 'activeStatus'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
                             <td style="white-space: nowrap;" mat-cell *matCellDef="let row">
-                                <span class="status approved" *ngIf="row[column.key] == 'active'">Active</span>
+                                <span class="status approved" *ngIf="row[column.key] == 'active' || !row[column.key]">Active</span>
                                 <span class="status pending" *ngIf="row[column.key] == 'dormant'">Dormant</span>
                                 <span class="status warning" *ngIf="row[column.key] == 'inactive'">Inactive</span>
                             </td>
