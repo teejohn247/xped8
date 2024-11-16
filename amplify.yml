@@ -6,7 +6,7 @@ frontend:
         - npm install -f
     build:
       commands:
-        - ng build
+        - npm run build
   artifacts:
     baseDirectory: dist/xped8
     files:
