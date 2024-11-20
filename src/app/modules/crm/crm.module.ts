@@ -33,6 +33,14 @@ import { NotesComponent } from './shared/notes/notes.component';
 import { NotesInfoComponent } from './shared/notes-info/notes-info.component';
 import { SalesOrdersComponent } from './shared/sales-orders/sales-orders.component';
 import { ActivityInfoComponent } from './shared/activity-info/activity-info.component';
+import { CommunicationPortalComponent } from './communication/communication-portal/communication-portal.component';
+import { CommunicationOverviewComponent } from './communication/communication-overview/communication-overview.component';
+import { EmailInfoComponent } from './communication/email-info/email-info.component';
+import { SmsInfoComponent } from './communication/sms-info/sms-info.component';
+import { NewsletterInfoComponent } from './communication/newsletter-info/newsletter-info.component';
+import { EmailHistoryComponent } from './communication/email-history/email-history.component';
+import { SmsHistoryComponent } from './communication/sms-history/sms-history.component';
+import { NewsletterHistoryComponent } from './communication/newsletter-history/newsletter-history.component';
 
 
 @NgModule({
@@ -64,7 +72,15 @@ import { ActivityInfoComponent } from './shared/activity-info/activity-info.comp
     NotesComponent,
     NotesInfoComponent,
     SalesOrdersComponent,
-    ActivityInfoComponent
+    ActivityInfoComponent,
+    CommunicationPortalComponent,
+    CommunicationOverviewComponent,
+    EmailInfoComponent,
+    SmsInfoComponent,
+    NewsletterInfoComponent,
+    EmailHistoryComponent,
+    SmsHistoryComponent,
+    NewsletterHistoryComponent
   ],
   imports: [
     CommonModule,

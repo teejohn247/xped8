@@ -17,6 +17,14 @@ import { SalesOverviewComponent } from './sales/sales-overview/sales-overview.co
 import { SalesDetailsComponent } from './sales/sales-details/sales-details.component';
 import { NotesComponent } from './shared/notes/notes.component';
 import { SalesOrdersComponent } from './shared/sales-orders/sales-orders.component';
+import { CommunicationPortalComponent } from './communication/communication-portal/communication-portal.component';
+import { CommunicationOverviewComponent } from './communication/communication-overview/communication-overview.component';
+import { EmailInfoComponent } from './communication/email-info/email-info.component';
+import { SmsInfoComponent } from './communication/sms-info/sms-info.component';
+import { NewsletterInfoComponent } from './communication/newsletter-info/newsletter-info.component';
+import { EmailHistoryComponent } from './communication/email-history/email-history.component';
+import { SmsHistoryComponent } from './communication/sms-history/sms-history.component';
+import { NewsletterHistoryComponent } from './communication/newsletter-history/newsletter-history.component';
 
 const routes: Routes = [
   {
@@ -131,7 +139,34 @@ const routes: Routes = [
   {
     path: 'sales/:id',
     component: SalesDetailsComponent
-  }
+  },
+  {
+    path: 'communication',
+    component: CommunicationPortalComponent,
+    children:[
+      {
+        path: '',
+        redirectTo: 'overview',
+        pathMatch: 'full'
+      },
+      {
+        path : 'overview',
+        component: CommunicationOverviewComponent
+      },
+      {
+        path : 'email',
+        component: EmailHistoryComponent
+      },
+      {
+        path : 'sms',
+        component: SmsHistoryComponent
+      },
+      {
+        path: 'newsletter',
+        component: NewsletterHistoryComponent
+      },
+    ]
+  },
 ];
 
 @NgModule({

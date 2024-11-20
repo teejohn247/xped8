@@ -19,6 +19,10 @@ export class HeaderComponent implements OnInit {
       this.userName = this.userDetails.data.companyName + ' Company';
       this.userRole = 'Super Admin';
     }
+    else if(this.userDetails.data.email == 'siloerp@silo-inc.com') {
+      this.userName = this.userDetails.data.companyName;
+      this.userRole = 'Silo Admin';
+    }
     else {
       this.userName = this.userDetails.data.fullName;
       this.userRole = this.userDetails.data.companyRole;
