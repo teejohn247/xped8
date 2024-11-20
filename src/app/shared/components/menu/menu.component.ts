@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { navbarData, navbarDataReg, navbarDataManager } from 'src/app/core/constants/nav-data';
+import { navbarData, navbarDataReg, navbarDataManager, navbarDataSilo } from 'src/app/core/constants/nav-data';
 import { AuthenticationService } from '../../services/utils/authentication.service';
 import { NotificationService } from '../../services/utils/notification.service';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ export class MenuComponent implements OnInit {
   adminMenuData = navbarData;
   regMenuData = navbarDataReg;
   managerMenuData = navbarDataManager;
+  siloMenuData = navbarDataSilo;
 
   currentLink = 'Human Resources';
 
@@ -36,6 +37,10 @@ export class MenuComponent implements OnInit {
     if(urlsplit[2] == 'human-resources') this.currentLink = 'Human Resources';
     if(urlsplit[2] == 'crm') this.currentLink = 'CRM';
     if(urlsplit[2] == 'settings') this.currentLink = 'Settings';
+    if(this.userDetails.data.email == 'siloerp@silo-inc.com') {
+      this.collapsed = false;
+      this.currentLink = 'Silo Admin'
+    }
   }
 
 

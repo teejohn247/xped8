@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { SharedService } from 'src/app/shared/services/utils/shared.service';
+import { CrmService } from 'src/app/shared/services/crm/crm.service';
 import { TicketInfoComponent } from '../../support/ticket-info/ticket-info.component';
 
 
@@ -23,6 +24,7 @@ export class DashboardOverviewComponent implements OnInit {
 
   crmSummary: any[] = [];
   supportTickets: any[] = [];
+  contactsList: any[] = [];
 
   displayedColumns: any[];
   dataSource: MatTableDataSource<any>;
@@ -376,6 +378,7 @@ export class DashboardOverviewComponent implements OnInit {
     public dialog: MatDialog,
     private route: Router,
     private datePipe: DatePipe,
+    private crmService: CrmService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
   ) {
@@ -389,6 +392,8 @@ export class DashboardOverviewComponent implements OnInit {
     this.tableColumns.sort((a,b) => (a.order - b.order));
     this.displayedColumns = this.tableColumns.map(column => column.label);
     this.dataSource = new MatTableDataSource(this.tableData);
+
+    this.contactsList = await this.crmService.getContacts().toPromise();
 
     this.crmSummary = [
       {
@@ -460,6 +465,7 @@ export class DashboardOverviewComponent implements OnInit {
       height: 'auto',
       data: {
         isExisting: false,
+        contactsList: this.contactsList['data']
       },
     });
   }

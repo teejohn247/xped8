@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
+import { QuillModule } from 'ngx-quill'
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -27,6 +28,7 @@ import { LeaveReviewComponent } from './components/leave-review/leave-review.com
 import { PaymentInfoComponent } from './components/payment-info/payment-info.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import { QuillEditorComponent } from './components/quill-editor/quill-editor.component';
 
 const SHARED_COMP = [
   MatIconModule,
@@ -46,17 +48,19 @@ const SHARED_COMP = [
 ];
 
 @NgModule({
-  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent, LeaveReviewComponent, PaymentInfoComponent, DashboardComponent, LandingPageComponent],
+  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent, LeaveReviewComponent, PaymentInfoComponent, DashboardComponent, LandingPageComponent, QuillEditorComponent],
 
   exports: [
     ...SHARED_COMP,
     FormsModule,
     ReactiveFormsModule,
+    QuillEditorComponent
   ],
 
   imports: [
     ...SHARED_COMP,
     CommonModule,
+    QuillModule.forRoot(),
     ReactiveFormsModule,
     FormsModule,
     NgChartsModule,

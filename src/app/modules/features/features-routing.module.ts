@@ -30,7 +30,11 @@ const routes: Routes = [
         // data: {
         //   role: 'HrAdmin'
         // }
-      }
+      },
+      {
+        path: 'silo',
+        loadChildren: () => import('../silo/silo.module').then(m => m.SiloModule),
+      },
     ]    
   }
 ];

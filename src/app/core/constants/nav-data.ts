@@ -98,6 +98,11 @@ export const navbarData = [
                 label: 'Leads',
             },
             {
+                routeLink: 'crm/communication',
+                icon: 'bi bi-envelope-fill',
+                label: 'Communication',
+            },
+            {
                 routeLink: 'crm/support',
                 icon: 'bi bi-headset',
                 label: 'Support',
@@ -270,6 +275,48 @@ export const navbarDataManager = [
     //     icon: 'bi bi-person-workspace',
     //     label: 'Induction'
     // }
+]
+
+
+//Silo Admin Menu Items
+export const navbarDataSilo = [
+    {
+        routeLink: '/silo',
+        icon: 'bi bi-buildings-fill',
+        label: 'Silo Admin',
+        subMenu: [
+            {
+                routeLink: 'silo/dashboard',
+                icon: 'bi bi-grid-fill',
+                label: 'Dashboard'
+            },
+            {
+                routeLink: 'silo/companies',
+                icon: 'bi bi-building-fill',
+                label: 'Companies'
+            },
+            {
+                routeLink: 'silo/modules',
+                icon: 'bi bi-box-fill',
+                label: 'SiloErp Modules'
+            },
+            {
+                routeLink: 'silo/subscriptions',
+                icon: 'bi bi-people-fill',
+                label: 'Subscriptions'
+            },
+            {
+                routeLink: 'silo/invoices',
+                icon: 'bi bi-receipt',
+                label: 'Invoices'
+            },
+            {
+                routeLink: 'silo/reports',
+                icon: 'bi bi-clipboard-data-fill',
+                label: 'Reports'
+            },
+        ]
+    },
 ]
 
 export interface INavbarData {
