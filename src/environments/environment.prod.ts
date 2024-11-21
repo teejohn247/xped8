@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  baseUrl: "https://main.dv3qs412pu5vf.amplifyapp.com/",
+  baseUrl: "https://main.dv3qs412pu5vf.amplifyapp.com",
   siloBaseUrl: "https://erp-bk.onrender.com/api/v1",
   //baseUrl: "http://silo-env-1.eba-agppeqvm.eu-west-1.elasticbeanstalk.com",
   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ODMzZWE5Mjg0NzY4ZDU1MmJhMmEyYSIsImlzQWRtaW4iOiJ0b2x1Sm9obnNvbjI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQyNTc0MSwiZXhwIjoxNjg3Mjg5NzQxfQ.oEtxj3QSHPfpJk1Q1s5FUjM5wSnw4VDscq5VVOMKESw",
