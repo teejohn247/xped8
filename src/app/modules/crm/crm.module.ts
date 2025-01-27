@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { CrmRoutingModule } from './crm-routing.module';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { DashboardOverviewComponent } from './dashboard/dashboard-overview/dashboard-overview.component';
@@ -41,6 +43,8 @@ import { NewsletterInfoComponent } from './communication/newsletter-info/newslet
 import { EmailHistoryComponent } from './communication/email-history/email-history.component';
 import { SmsHistoryComponent } from './communication/sms-history/sms-history.component';
 import { NewsletterHistoryComponent } from './communication/newsletter-history/newsletter-history.component';
+import { CalendarScheduleComponent } from './calendar/calendar-schedule/calendar-schedule.component';
+import { SocialsHistoryComponent } from './communication/socials-history/socials-history.component';
 
 
 @NgModule({
@@ -80,7 +84,9 @@ import { NewsletterHistoryComponent } from './communication/newsletter-history/n
     NewsletterInfoComponent,
     EmailHistoryComponent,
     SmsHistoryComponent,
-    NewsletterHistoryComponent
+    NewsletterHistoryComponent,
+    CalendarScheduleComponent,
+    SocialsHistoryComponent
   ],
   imports: [
     CommonModule,
@@ -88,7 +94,11 @@ import { NewsletterHistoryComponent } from './communication/newsletter-history/n
     SharedModule,
     NgxChartsModule,
     NgxMaterialTimepickerModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
   ]
 })
 export class CrmModule { }

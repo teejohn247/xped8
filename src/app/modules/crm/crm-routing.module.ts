@@ -25,6 +25,8 @@ import { NewsletterInfoComponent } from './communication/newsletter-info/newslet
 import { EmailHistoryComponent } from './communication/email-history/email-history.component';
 import { SmsHistoryComponent } from './communication/sms-history/sms-history.component';
 import { NewsletterHistoryComponent } from './communication/newsletter-history/newsletter-history.component';
+import { CalendarScheduleComponent } from './calendar/calendar-schedule/calendar-schedule.component';
+import { SocialsHistoryComponent } from './communication/socials-history/socials-history.component';
 
 const routes: Routes = [
   {
@@ -165,7 +167,15 @@ const routes: Routes = [
         path: 'newsletter',
         component: NewsletterHistoryComponent
       },
+      {
+        path: 'socials',
+        component: SocialsHistoryComponent
+      },
     ]
+  },
+  {
+    path: 'calendar',
+    component: CalendarScheduleComponent,
   },
 ];
 

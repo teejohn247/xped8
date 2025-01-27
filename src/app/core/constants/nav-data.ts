@@ -103,6 +103,11 @@ export const navbarData = [
                 label: 'Communication',
             },
             {
+                routeLink: 'crm/calendar',
+                icon: 'bi bi-calendar2-week-fill',
+                label: 'Calendar',
+            },
+            {
                 routeLink: 'crm/support',
                 icon: 'bi bi-headset',
                 label: 'Support',

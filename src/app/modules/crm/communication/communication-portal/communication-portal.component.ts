@@ -20,9 +20,13 @@ export class CommunicationPortalComponent implements OnInit {
       routeLink: 'sms',
       label: 'SMS Messages',
     },
+    // {
+    //   routeLink: 'newsletter',
+    //   label: 'Newsletter',
+    // },
     {
-      routeLink: 'newsletter',
-      label: 'Newsletter',
+      routeLink: 'socials',
+      label: 'Social Media Posts',
     },
   ]
 

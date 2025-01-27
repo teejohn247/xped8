@@ -1,1 +1,58 @@
-<p>email-history works!</p>
+<div class="content-wrap d-flex">
+    <div class="col-section">
+        <div class="row-section">
+            <div class="page-header">Email Inbox</div>
+            <div class="main-actions mt-lg-3 mt-3">
+                <div class="search-bar">
+                    <span class="icon"><i class="bi bi-search"></i></span>
+                    <input type="text" placeholder="Search for an email">
+                </div>
+            </div>
+        </div>
+
+        <div class="row-section mt-lg-4">
+            <div class="message-wrap">
+                <div class="message-hld">
+                    <div class="avatar">
+                        <img src="https://res.cloudinary.com/dtb2cdr2q/image/upload/v1723277696/zqku3d43o2xbsuga4dkf.jpg" alt="">
+                    </div>
+                    <div class="info">
+                        <div class="hdr d-flex justify-content-between">
+                            <div class="name">Jessica Rhodes</div>
+                            <div class="extras">
+                                <span class="attachment me-lg-1"><i class="bi bi-paperclip"></i></span>
+                                <span class="date">Jan 24, 3:45PM</span>
+                            </div>
+                        </div>
+                        <div class="details mt-lg-2">
+                            <div class="subject">Your free consultation with the doctor living</div>
+                            <div class="message mt-lg-1">{{truncateText('Also, we have provided completed Hi-fi design. Do you have any feedbacks or comments more? If not, then we can make up. and finish everything. Let us know as soon as possible.', 100)}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message-hld">
+                    <div *ngIf class="avatar">
+                        <img src="https://res.cloudinary.com/dtb2cdr2q/image/upload/v1723277696/zqku3d43o2xbsuga4dkf.jpg" alt=""> 
+                    </div>
+                    <div class="initials d-flex justify-content-center align-items-center">JR</div>
+                    <div class="info">
+                        <div class="hdr d-flex justify-content-between">
+                            <div class="name">Derrick Flauters</div>
+                            <div class="extras">
+                                <!-- <span class="attachment me-lg-1"><i class="bi bi-paperclip"></i></span> -->
+                                <span class="date">Jan 5, 5:15PM</span>
+                            </div>
+                        </div>
+                        <div class="details mt-lg-2">
+                            <div class="subject">Technical Documentation</div>
+                            <div class="message mt-lg-1">{{truncateText('Let us know as soon as possible. Also, we have provided completed Hi-fi design. Do you have any feedbacks or comments more? If not, then we can make up. and finish everything.', 100)}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-section"></div>
+</div>

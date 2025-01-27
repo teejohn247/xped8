@@ -12,4 +12,8 @@ export class EmailHistoryComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  truncateText(text:string, n:number) {
+    return text.substring(0, n) + "\u2026"
+  }
+
 }
