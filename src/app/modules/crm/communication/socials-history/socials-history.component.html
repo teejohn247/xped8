@@ -1,1 +1,46 @@
-<p>socials-history works!</p>
+<div class="content-wrap with-tabs">
+    <div class="row-section d-flex justify-content-between align-items-center">
+        <div class="page-header">Social Media Posts</div>
+        <div class="main-actions d-flex justify-content-start align-items-center">
+            <div class="cta trans-bkg filter-trigger"><i class="bi bi-filter"></i> Filter</div>
+            <div (click)="schedulePost()" class="cta primary-bkg icon md"><i class="bi bi-megaphone-fill"></i> Schedule New Post</div>
+        </div>
+    </div>
+
+    <div class="legend d-flex justify-content-start align-items-center mt-lg-4">
+        <span class="desc">Media Accounts:</span>
+        <div class="status-hld">
+            <span class="status fb light">Facebook</span>
+            <span class="status ig light">Instagram</span>
+            <span class="status in light">Linkedin</span>
+        </div>
+    </div>
+
+    <div class="row-section mt-lg-4">
+        <div class="posts-wrap pb-5">
+            <div *ngFor="let post of mediaPosts; let i = index" class="post-hld">
+                <div class="hdr d-flex justify-content-between align-items-start">
+                    <div class="det">
+                        <div class="accounts">
+                            <span *ngFor="let account of post.accounts" class="{{account}}"><i class="bi bi-{{account}}"></i></span>
+                        </div>
+                        <div class="date mt-lg-1">{{post.timestamp | date : 'd MMM, y'}} {{post.timestamp | date : 'h:mm a'}}</div>
+                    </div>
+                    <div class="publish">
+                        <input type="checkbox" [(checked)]="post.published" value="1" class="switch success" />
+                    </div>
+                </div>
+                <div class="image" style="background-image: url('{{post.photo}}');"></div>
+                <div class="info">{{truncateText(post.content, 90)}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div [class.opened]="sideModalOpened" class="sidenav-container"> 
+    <div (click)="sideModalOpened = !sideModalOpened" class="sidenav-bkg"></div> 
+    <div [class.opened]="sideModalOpened" class="sidenav-content">
+        <!-- <app-quill-editor></app-quill-editor> -->
+    </div>
+</div>

@@ -56,3 +56,11 @@
 
     <div class="col-section"></div>
 </div>
+
+
+<div [class.opened]="sideModalOpened" class="sidenav-container"> 
+    <div (click)="sideModalOpened = !sideModalOpened" class="sidenav-bkg"></div> 
+    <div [class.opened]="sideModalOpened" class="sidenav-content">
+        <!-- <app-quill-editor></app-quill-editor> -->
+    </div>
+</div>

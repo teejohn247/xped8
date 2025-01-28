@@ -60,10 +60,8 @@
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'image'">
-                            <th style="width:5%" mat-header-cell *matHeaderCellDef>
-                            </th>
-                            <td style="width:1%; white-space: nowrap;" mat-cell 
-                                *matCellDef="let row">
+                            <th style="width:5%" mat-header-cell *matHeaderCellDef></th>
+                            <td style="width:1%; white-space: nowrap;" mat-cell *matCellDef="let row">
                                 <span *ngIf="!row.profilePic" class="initials">{{row.firstName[0] + row.lastName[0]}}</span>
                                 <span *ngIf="row.profilePic" class="table-img bkg-standard" style="background-image: url('{{row.profilePic}}');"></span>
                             </td>

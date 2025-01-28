@@ -1,0 +1,102 @@
+.cta {
+
+    &.filter-trigger {
+        border-radius: var(--radius-md);
+        margin-right: 1.2rem;
+        padding: 0.3rem 1rem;
+
+        i {
+            margin-right: 0.5rem;
+        }
+    }
+}
+
+
+.legend {
+
+    .desc {
+        font-size: 0.85rem;
+        letter-spacing: 0.03rem;
+    }
+
+    .status-hld {
+        display: flex;
+        margin-left: 1rem;
+        gap: 10px;
+
+        span {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.03rem;
+            padding: 0.1rem 0.7rem;
+            color: var(--white);
+
+            &.fb {
+                color: var(--facebook-bkg);
+                border: 2px dashed var(--facebook-bkg);
+            }
+
+            &.in {
+                color: var(--linkedin-bkg);
+                border: 2px dashed var(--linkedin-bkg);
+            }
+
+            &.ig {
+                color: var(--pending);
+                border: 2px dashed var(--pending);
+            }
+        }
+    }
+}
+
+.posts-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem 0;
+
+    .post-hld {
+        width: 32%;
+        height: 20rem;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0.25rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--black-tint-sm);
+
+        .hdr {
+            height: 23%;
+            padding: 0.8rem 5%;
+
+            .det {
+
+                .accounts {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+
+                .date {
+                    font-size: 0.75rem;
+                    letter-spacing: 0.03rem;
+                    color: var(--black-tint);
+                }
+            }
+        }
+
+        .image {
+            width: 100%;
+            height: 55%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .info {
+            font-size: 0.85rem;
+            letter-spacing: 0.02rem;
+            padding: 1rem 5%;
+            color: rgba($color: #000000, $alpha: 0.6);
+        }
+    }
+}

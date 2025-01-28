@@ -45,6 +45,7 @@ import { SmsHistoryComponent } from './communication/sms-history/sms-history.com
 import { NewsletterHistoryComponent } from './communication/newsletter-history/newsletter-history.component';
 import { CalendarScheduleComponent } from './calendar/calendar-schedule/calendar-schedule.component';
 import { SocialsHistoryComponent } from './communication/socials-history/socials-history.component';
+import { SocialsInfoComponent } from './communication/socials-info/socials-info.component';
 
 
 @NgModule({
@@ -86,7 +87,8 @@ import { SocialsHistoryComponent } from './communication/socials-history/socials
     SmsHistoryComponent,
     NewsletterHistoryComponent,
     CalendarScheduleComponent,
-    SocialsHistoryComponent
+    SocialsHistoryComponent,
+    SocialsInfoComponent
   ],
   imports: [
     CommonModule,

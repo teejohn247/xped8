@@ -12,6 +12,8 @@ import { HumanResourcesService } from 'src/app/shared/services/hr/human-resource
 import { DatePipe } from '@angular/common';
 import { PublicHolidayInfoComponent } from 'src/app/modules/settings/human-resources/public-holiday-info/public-holiday-info.component';
 import { MeetingInfoComponent } from 'src/app/modules/hr/calendar/meeting-info/meeting-info.component';
+import { SocialsInfoComponent } from '../../communication/socials-info/socials-info.component';
+
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -382,6 +384,19 @@ export class CalendarScheduleComponent implements OnInit {
         // })
       }
     });
+  }
+
+  schedulePost() {
+    let dialogRef = this.dialog.open(SocialsInfoComponent, {
+      width: '35%',
+      height: 'auto',
+      data: {
+        isExisting: false
+      },
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      this.getPageData();
+    }); 
   }
 
 }

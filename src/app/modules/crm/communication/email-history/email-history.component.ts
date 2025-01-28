@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EmailHistoryComponent implements OnInit {
 
+  sideModalOpened: boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
