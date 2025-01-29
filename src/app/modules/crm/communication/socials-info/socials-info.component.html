@@ -90,7 +90,7 @@
                                 <mat-error *ngIf="postForm.get(field.controlName)?.hasError('required')">{{field.controlLabel}} is required</mat-error>                                
                             </mat-form-field>
 
-                            <ng-container *ngSwitchCase="'file'">
+                            <!-- <ng-container *ngSwitchCase="'file'">
                                 <div (click)="fileUpload.click()" class="upload-wrap mt-lg-2">
                                     <input 
                                         type="file" 
@@ -102,6 +102,22 @@
                                     <div class="info">Click to upload an image</div>
                                     <span class="file-name">{{fileName ? fileName : 'No image uploaded'}}</span>
                                 </div>
+                            </ng-container> -->
+
+                            <ng-container *ngSwitchCase="'file'">
+                                <div (click)="fileUpload.click()" class="upload-wrap mt-lg-2">
+                                    <input 
+                                        type="file" 
+                                        class="file-upload"
+                                        (change)="ImgFileUpload($event)" 
+                                        #fileUpload
+                                    />
+                                    <span *ngIf="!imgPic" class="icon"><i class="bi bi-file-earmark-arrow-up-fill"></i></span>
+                                    <div *ngIf="!imgPic" class="info">Click to upload an image</div>
+                                    <img class="photo" *ngIf="!imgUploadError && imgPic" [src]="imgPic" alt="">
+                                    <span class="file-name">{{imgFileName ? imgFileName : 'No image uploaded'}}</span>
+                                </div>
+                                <mat-error style="font-size: 0.7rem;" *ngIf="imgUploadError">{{imgUploadError}}</mat-error>
                             </ng-container>
 
                             <ng-container *ngSwitchCase="'editor'">

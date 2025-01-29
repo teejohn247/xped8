@@ -1,5 +1,6 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { SafeUrl, DomSanitizer } from "@angular/platform-browser";
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
@@ -15,10 +16,13 @@ export class SocialsInfoComponent implements OnInit {
   postFieldData: any[];
   postForm!: FormGroup;
 
-  fileName: string;
   imgFile: File;
+  imgFileName: string;
+  imgPic: string | SafeUrl;
+  imgUploadError:string;
 
   constructor(
+    private sanitizer: DomSanitizer,
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
     public dialogRef: MatDialogRef<SocialsInfoComponent>,
     private fb: FormBuilder,
@@ -115,9 +119,27 @@ export class SocialsInfoComponent implements OnInit {
     }
   }
 
-  imgFileUpload(event) {
+  ImgFileUpload(event) {
     this.imgFile = event.target.files[0];
-    this.fileName = this.imgFile.name;
+    const img = new Image();
+    let imgWidth;
+    let imgHeight;
+    let imgRatio;
+    img.src = window.URL.createObjectURL(event.target.files[0]);
+    img.onload = () => {
+      if (this.imgFile.size > 1000000) {
+        this.imgUploadError = 'Please check that your image size is not more than 1MB';
+        this.imgFileName = '';
+        this.imgFile = null
+      }
+      else {
+        this.imgUploadError = '';
+        this.imgFileName = this.imgFile.name;
+        this.imgPic = this.sanitizer.bypassSecurityTrustUrl(
+          window.URL.createObjectURL(this.imgFile)
+        );
+      }
+    }
   }
 
   onSubmit() {
