@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SmsHistoryComponent implements OnInit {
 
+  smsModalOpened: boolean = true;
+
   constructor() { }
 
   ngOnInit(): void {

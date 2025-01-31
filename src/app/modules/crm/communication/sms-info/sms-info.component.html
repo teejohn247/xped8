@@ -1,1 +1,36 @@
-<p>sms-info works!</p>
+<div class="mail-container">
+    <div class="hdr d-flex justify-content-between align-items-center">New Message <span>&times;</span></div>
+
+    <div class="form-wrap">
+        <form [formGroup]="messageForm">
+            <div class="field-wrap">
+                <label>To:</label>
+                <div class="input-wrap">
+                    <!-- <div class="email-list">
+                        <div *ngFor="let email of emailRecipients; let i = index" class="item">
+                            <span>{{email}}</span>
+                            <span (click)="removeEmail(email)">&times;</span>
+                        </div>
+                    </div> -->
+                    <input 
+                        [class.error]="contactError" 
+                        formControlName="contact" 
+                        type="text"
+                        (blur)="addContact()"
+                        (keyup.enter)="addContact()"
+                        placeholder="Enter Contact Name"
+                    >
+                </div>
+            </div>
+
+            <div class="field-wrap">
+                <!-- <label>Message</label> -->
+                <app-quill-editor class="w-100" [quillToolbar]="false"></app-quill-editor>
+            </div>
+        </form>
+    </div>
+
+    <div *ngIf="opened" class="btn-hld d-flex justify-content-start mt-lg-2" style="width: 100%">
+        <div class="cta primary-bkg mmd text-uppercase" type="submit">Send Message</div>
+    </div>
+</div>

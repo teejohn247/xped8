@@ -10,6 +10,7 @@ import Quill from 'quill';
 export class QuillEditorComponent implements OnInit {
 
   html = '';
+  @Input() minHeight:string = 'auto';
   @Input() quillToolbar:any = [
     ['bold', 'italic', 'underline'],        // toggled buttons
     // ['blockquote', 'code-block'],

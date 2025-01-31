@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-sms-info',
@@ -7,9 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SmsInfoComponent implements OnInit {
 
+  @Input() opened:boolean = false;
+  messageForm!:FormGroup;
+  contactError:boolean = false;
+
   constructor() { }
 
   ngOnInit(): void {
+    this.messageForm = new FormGroup({
+      contact: new FormControl('', Validators.email),
+      message: new FormControl('')
+    })
+  }
+
+  addContact() {
+    
   }
 
 }

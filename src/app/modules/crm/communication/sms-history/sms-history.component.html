@@ -1,7 +1,7 @@
 <div class="content-wrap d-flex">
     <div class="col-section">
         <div class="row-section">
-            <div class="page-header">SMS Inbox</div>
+            <div class="page-header d-flex align-items-center justify-content-between">SMS Inbox <span (click)="smsModalOpened = !smsModalOpened" class="s-icon"><i class="bi bi-pencil-square"></i></span></div>
             <div class="main-actions mt-lg-3 mt-3">
                 <div class="search-bar">
                     <span class="icon"><i class="bi bi-search"></i></span>
@@ -50,5 +50,15 @@
         </div>
     </div>
 
-    <div class="col-section"></div>
+    <div class="col-section">
+        <div (click)="smsModalOpened = false" class="mails-container">
+            <div class="mails-wrap">
+
+            </div>
+        </div>
+
+        <div [class.show]="smsModalOpened" class="editor-container">
+            <app-sms-info [opened]="smsModalOpened"></app-sms-info>
+        </div>
+    </div>
 </div>
