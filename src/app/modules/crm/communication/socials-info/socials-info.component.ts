@@ -21,6 +21,8 @@ export class SocialsInfoComponent implements OnInit {
   imgPic: string | SafeUrl;
   imgUploadError:string;
 
+  apiLoading:boolean = false;
+
   constructor(
     private sanitizer: DomSanitizer,
     @Inject(MAT_DIALOG_DATA) public dialogData: any,
@@ -143,7 +145,48 @@ export class SocialsInfoComponent implements OnInit {
   }
 
   onSubmit() {
+    this.apiLoading = true;
+    const formData = new FormData();
+    formData.append('mediaAccounts', JSON.stringify(this.postForm.value.mediaAccounts));
+    formData.append('scheduledDate', this.postForm.value.scheduleDate);
+    formData.append('scheduledTime', this.postForm.value.scheduledTime);
+    formData.append('image', this.imgFile);
+    formData.append('caption', this.postForm.value.caption);
 
+    if(this.dialogData.isExisting) {
+      // this.hrService.updateEmployeeByAdmin(formData, this.employeeDetails._id).subscribe({
+      //   next: res => {
+      //     // console.log(res);
+      //     if(res.status == 200) {
+      //       this.notifyService.showSuccess('This employee has been updated successfully');
+      //       this.dialogRef.close();
+      //     }
+      //     //this.getPageData();
+      //   },
+      //   error: err => {
+      //     console.log(err)
+      //     this.notifyService.showError(err.error.error);
+      //   } 
+      // })
+    }
+    else {
+      this.crmService.createMediaPost(formData).subscribe({
+        next: res => {
+          // console.log(res);
+          if(res.success) {
+            this.notifyService.showSuccess('This post has been scheduled successfully');
+            this.apiLoading = false
+            this.dialogRef.close();
+          }
+          //this.getPageData();
+        },
+        error: err => {
+          console.log(err)
+          this.apiLoading = false;
+          this.notifyService.showError(err.error.error);
+        } 
+      })
+    }
   }
 
 }

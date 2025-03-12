@@ -1,9 +1,10 @@
-<quill-editor 
-  [(ngModel)]="html" 
-  placeholder= "Insert text here ..."
-  [modules]="tools"
-  minLength=10 
-  [style.min-height]="minHeight"
-
->
-</quill-editor>
+<form [formGroup]="quillForm">
+  <quill-editor 
+    formControlName="content"
+    placeholder= "Insert text here ..."
+    [modules]="tools"
+    minLength=10 
+    [style.min-height]="minHeight"
+  >
+  </quill-editor>
+</form>

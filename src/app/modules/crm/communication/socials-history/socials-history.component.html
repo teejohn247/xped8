@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="image" style="background-image: url('{{post.photo}}');"></div>
-                <div class="info">{{truncateText(post.content, 90)}}</div>
+                <div [innerHTML]="truncateText(post.content, 90)" class="info"></div>
             </div>
         </div>
     </div>

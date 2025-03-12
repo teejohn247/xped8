@@ -1,15 +1,24 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from '@angular/forms';
 import hljs from 'highlight.js'
 import Quill from 'quill';
 
 @Component({
   selector: 'app-quill-editor',
   templateUrl: './quill-editor.component.html',
-  styleUrls: ['./quill-editor.component.scss']
+  styleUrls: ['./quill-editor.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => QuillEditorComponent),
+      multi: true
+    }
+  ]
 })
-export class QuillEditorComponent implements OnInit {
+export class QuillEditorComponent implements OnInit, ControlValueAccessor {
 
-  html = '';
+  quillForm!:FormGroup
+
   @Input() minHeight:string = 'auto';
   @Input() quillToolbar:any = [
     ['bold', 'italic', 'underline'],        // toggled buttons
@@ -33,7 +42,23 @@ export class QuillEditorComponent implements OnInit {
 
   tools:any = {}
 
+  /*****************************************************/
+  writeValue(key: any):void {}
+  propagateChange = (val:any | null) => {};
+  touched = () => {};
+  registerOnChange(fn: any): void {
+    this.propagateChange = fn
+  }
+  registerOnTouched(fn: any): void {}
+  setDisabledState(isDisabled: boolean): void {}
+  /*****************************************************/
+
+
   ngOnInit(): void {
+
+    this.quillForm = new FormGroup({
+      content: new FormControl('')
+    })
 
     this.tools = {
       // imageResize: {},
@@ -42,6 +67,10 @@ export class QuillEditorComponent implements OnInit {
       },
       toolbar: this.quillToolbar
     }
+
+    this.quillForm.valueChanges.subscribe(val => {
+      this.propagateChange(val)
+    })
   }
 
 }

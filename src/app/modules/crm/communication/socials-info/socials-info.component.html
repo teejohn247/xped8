@@ -124,6 +124,7 @@
                                 <div class="editor-wrap w-100 mt-lg-3">
                                     <mat-label class="pb-lg-1">{{field.controlLabel}}</mat-label>
                                     <app-quill-editor
+                                        [formControlName]="field.controlName"
                                         [quillToolbar]="false"
                                         class="w-100 h-auto"
                                     >
@@ -136,7 +137,7 @@
                     </ng-container>
 
                     <div class="btn-hld d-flex justify-content-end mt-lg-4" style="width: 100%">
-                        <div (click)="onSubmit()" class="cta primary-bkg mmd text-uppercase" style="min-width: 30%" type="submit">Submit</div>
+                        <div (click)="onSubmit()" class="cta primary-bkg mmd text-uppercase" style="min-width: 30%" type="submit">Submit <span *ngIf="apiLoading" class="apiLoader"></span></div>
                     </div>
 
                 </form>

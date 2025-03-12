@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SocialsInfoComponent } from '../socials-info/socials-info.component';
+import { CrmService } from 'src/app/shared/services/crm/crm.service';
 
 @Component({
   selector: 'app-socials-history',
@@ -48,13 +49,17 @@ export class SocialsHistoryComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
+    private crmService: CrmService,     
   ) { }
 
   ngOnInit(): void {
+    //this.deletePost()
+    this.getPageData()
   }
 
-  getPageData() {
-
+  getPageData= async () => {
+    // this.mediaPosts = await this.crmService.getMediaPosts().toPromise();
+    // this.mediaPosts = this.mediaPosts['data']
   }
 
   truncateText(text:string, n:number) {
@@ -72,5 +77,11 @@ export class SocialsHistoryComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.getPageData();
     }); 
+  }
+
+  deletePost() {
+    this.crmService.deleteMediapost('679d1c3c0df57483fa6c57c4').subscribe(() => {
+
+    })
   }
 }

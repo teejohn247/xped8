@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { NotificationService } from 'src/app/shared/services/utils/notification.service';
 import { HumanResourcesService } from 'src/app/shared/services/hr/human-resources.service';
+import { SharedService } from 'src/app/shared/services/utils/shared.service';
 import { DesignationInfoComponent } from '../designation-info/designation-info.component';
 import { LeaveTypeInfoComponent } from '../leave-type-info/leave-type-info.component';
 import { DepartmentInfoComponent } from '../department-info/department-info.component';
@@ -35,10 +36,38 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   hrSettingsForm: FormGroup;
 
+  tabMenu = [
+    {
+      routeLink: 'departments',
+      label: 'Departments',
+    },
+    {
+      routeLink: 'absence',
+      label: 'Leave & Holidays',
+    },
+    {
+      routeLink: 'designations',
+      label: 'Designations',
+    },
+    {
+      routeLink: 'payroll',
+      label: 'Payroll',
+    },
+    // {
+    //   routeLink: 'expenses',
+    //   label: 'Expenses',
+    // },
+    // {
+    //   routeLink: 'appraisal',
+    //   label: 'Appraisal',
+    // }
+  ]
+
   constructor(
     public dialog: MatDialog,
-    private hrService: HumanResourcesService,     
-    private notifyService: NotificationService,
+    @Inject(HumanResourcesService) private hrService: HumanResourcesService, 
+    @Inject(SharedService) private sharedService: SharedService,     
+    @Inject(NotificationService) private notifyService: NotificationService,
     private fb: FormBuilder
   ) {
     this.hrSettingsForm = this.fb.group({
@@ -55,114 +84,86 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPageData();
-  }
-
-  getPageData = async () => {
-    this.payrollCreditList = await this.hrService.getPayrollCredits().toPromise();
-    this.payrollDebitList = await this.hrService.getPayrollDebits().toPromise();
-
-    this.departmentList = await this.hrService.getDepartments().toPromise();
-    this.employees = await this.hrService.getEmployees().toPromise();
-    this.designationList = await this.hrService.getDesignations().toPromise();
-    this.leaveTypeList = await this.hrService.getLeaveTypes().toPromise();
-    this.publicHolidayList = await this.hrService.getPublicHolidays().toPromise();
-    this.expenseTypeList = await this.hrService.getExpenseTypes().toPromise();
     this.accordionItems = [
       {
         label: "Departments",
         key: "departments",
-        list: this.departmentList['data']
+        list: []
       },
       {
         label: "Designations",
         key: "designations",
-        list: this.designationList['data']
+        list: []
       },
-      // {
-      //   label: "Company Roles",
-      //   key: "companyRoles",
-      //   list: this.companyRoles['data']
-      // },
       {
         label: "Leave Types",
         key: "leaveTypes",
-        list: this.leaveTypeList['data']
+        list: []
       },
       {
         label: "Holidays",
         key: "holidayTypes",
-        list: this.publicHolidayList['data']
+        list: []
       },
       {
         label: "Expense Types",
         key: "expenseTypes",
-        list: this.expenseTypeList['data']
-      },
+        list: []
+      }
     ]
 
     this.payrollAccordionItems = [
       {
         label: "Payroll Credits",
         key: "payrollCredits",
-        list: this.payrollCreditList['data']
+        list: []
       },
       {
         label: "Payroll Debits",
         key: "payrollDebits",
-        list: this.payrollDebitList['data']
+        list: []
       }
     ]
+  }
 
-    console.log(this.expenseTypeList);
+  getPageData() {
+
+    const employees$ = this.hrService.getEmployees().subscribe((res:any) => this.employees = res.data);
+    // this.getDepartments();
+    // this.getDesignations();
+    // this.getLeaveTypes();
+    // this.getExpenseTypes();
+    // this.getPublicHolidays();
+    // this.getPayrollCredits();
+    // this.getPayrollDebits();
   }
 
   /*************** DEPARTMENT RELATED ACTIONS ***************/
+
+  //Get all Departments
+  getDepartments() {
+    this.hrService.getDepartments().subscribe((res:any) => {
+      this.departmentList = res.data;
+      this.accordionItems.find(x => {
+        if(x.key == 'departments') x.list = this.departmentList;
+      })
+    });
+  }
   
   //Create a new department
   createDepartment() {
-    let data = {
-      departmentName: this.hrSettingsForm.value.department ? this.hrSettingsForm.value.department : ""
-    }
-    if(this.hrSettingsForm.value.department) {
-      this.hrService.createDepartment(data).subscribe({
-        next: res => {
-          // console.log(res);
-          if(res.status == 200) {
-            this.dialog.open(DepartmentInfoComponent, {
-              width: '30%',
-              height: 'auto',
-              data: {
-                name: data.departmentName,
-                id: res.data._id,
-                isExisting: false,
-                staff: this.employees['data']
-              },
-            }).afterClosed().subscribe(() => {
-              this.hrSettingsForm.reset();
-              this.getPageData();
-            });
-            // this.notifyService.showSuccess('This designation has been created successfully');
-          }
-        },
-        error: err => {
-          console.log(err)
-          this.notifyService.showError(err.error.error);
-        } 
-      })
-    }
-    else {
-      this.dialog.open(DepartmentInfoComponent, {
-        width: '30%',
-        height: 'auto',
-        data: {
-          name: data.departmentName,
-          isExisting: false,
-          staff: this.employees['data']
-        },
-      }).afterClosed().subscribe(() => {
-        this.getPageData();
-      });
-    }
+    this.dialog.open(DepartmentInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: this.hrSettingsForm.value.department ? this.hrSettingsForm.value.department : '',
+        staff: this.employees,
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getDepartments();
+      this.hrSettingsForm.controls['department'].reset()
+    });
   }
 
   //Edit a department
@@ -175,10 +176,10 @@ export class HumanResourcesSettingsComponent implements OnInit {
         id: details._id,
         isExisting: true,
         modalInfo: details,
-        staff: this.employees['data']
+        staff: this.employees
       },
     }).afterClosed().subscribe(() => {
-      this.getPageData();
+      this.getDepartments();
     });
   }
 
@@ -197,7 +198,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
             if(res.status == 200) {
               this.notifyService.showInfo('The department has been deleted successfully');
             }
-            this.getPageData();
+            this.getDepartments();
           },
           error: err => {
             console.log(err)
@@ -210,74 +211,46 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   /*************** DESIGNATION RELATED ACTIONS ***************/
 
+  //Get all Designations
+  getDesignations() {
+    this.hrService.getDesignations().subscribe((res:any) => {
+      this.designationList = res.data;
+      this.accordionItems.find(x => {
+        if(x.key == 'designations') x.list = this.designationList;
+      })
+    });
+  }
+
   //Create a new designation
   createDesignation() {
-    let data = {
-      "designationName": this.hrSettingsForm.value.designation ? this.hrSettingsForm.value.designation : ""
-    }
-    if(this.hrSettingsForm.value.designation) {
-      this.hrService.createDesignation(data).subscribe({
-        next: res => {
-          console.log(res);
-          if(res.status == 200) {
-            this.dialog.open(DesignationInfoComponent, {
-              width: '32%',
-              height: 'auto',
-              data: {
-                name: data.designationName,
-                id: res.data._id,
-                leaveTypes: this.leaveTypeList['data'],
-                isExisting: false
-              },
-            }).afterClosed().subscribe(() => {
-              this.hrSettingsForm.reset();
-              this.getPageData();
-            });
-            // this.notifyService.showSuccess('This designation has been created successfully');
-          }
-        },
-        error: err => {
-          console.log(err)
-          this.notifyService.showError(err.error.error);
-        } 
-      })
-    }
-    else {
-      this.dialog.open(DesignationInfoComponent, {
-        width: '32%',
-        height: 'auto',
-        data: {
-          name: data.designationName,
-          leaveTypes: this.leaveTypeList['data'],
-          isExisting: false
-        },
-      }).afterClosed().subscribe(() => {
-        this.getPageData();
-      });
-    }
-    
-    // console.log(data);
-    // this.hrService.createDesignation(data).subscribe(res => {
-    //   if(res.status == 200) {
-    //     location.reload();
-    //   }
-    // })
+    this.dialog.open(DesignationInfoComponent, {
+      width: '40%',
+      height: 'auto',
+      data: {
+        name: this.hrSettingsForm.value.designation,
+        leaveTypes: this.leaveTypeList,
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getDesignations();
+      this.hrSettingsForm.controls['designation'].reset()
+    });
   }
 
   //Edit a designation
   editDesignation(details: any) {
     this.dialog.open(DesignationInfoComponent, {
-      width: '32%',
+      width: '40%',
       height: 'auto',
       data: {
         name: details.designationName,
         id: details._id,
-        leaveTypes: this.leaveTypeList['data'],
+        leaveTypes: this.leaveTypeList,
         isExisting: true,
         modalInfo: details
       },
     }).afterClosed().subscribe(() => {
-      this.getPageData();
+      this.getDesignations();
     });;
   }
 
@@ -296,7 +269,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
             if(res.status == 200) {
               this.notifyService.showInfo('The designation has been deleted successfully');
             }
-            this.getPageData();
+            this.getDesignations();
           },
           error: err => {
             console.log(err)
@@ -309,55 +282,29 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   /*************** LEAVE TYPES RELATED ACTIONS ***************/
 
+  //Get all leave types
+  getLeaveTypes() {
+    this.hrService.getLeaveTypes().subscribe((res:any) => {
+      this.leaveTypeList = res.data;
+      this.accordionItems.find(x => {
+        if(x.key == 'leaveTypes') x.list = this.leaveTypeList;
+      })
+    });
+  }
+
   //Create a new leave type
   createLeaveType() {
-    let data = {
-      leaveName: this.hrSettingsForm.value.leaveType ? this.hrSettingsForm.value.leaveType : ""
-    }
-    if(this.hrSettingsForm.value.leaveType) {
-      this.hrService.createLeaveType(data).subscribe({
-        next: res => {
-          console.log(res);
-          if(res.status == 200) {
-            this.getPageData();
-            // this.notifyService.showSuccess('This leave type has been created successfully');
-            this.dialog.open(LeaveTypeInfoComponent, {
-              width: '30%',
-              height: 'auto',
-              data: {
-                name: data.leaveName,
-                isExisting: false
-              },
-            }).afterClosed().subscribe(() => {
-              this.getPageData();
-            });
-          }
-        },
-        error: err => {
-          console.log(err)
-          this.notifyService.showError(err.error.error);
-        } 
-      })
-    }
-    else {
-      this.dialog.open(LeaveTypeInfoComponent, {
-        width: '30%',
-        height: 'auto',
-        data: {
-          name: data.leaveName,
-          isExisting: false
-        },
-      }).afterClosed().subscribe(() => {
-        this.getPageData();
-      });
-    }
-    
-    // console.log(data);
-    // this.hrService.createDesignation(data).subscribe(res => {
-    //   if(res.status == 200) {
-    //     location.reload();
-    //   }
-    // })
+    this.dialog.open(LeaveTypeInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: this.hrSettingsForm.value.leaveType,
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getLeaveTypes();
+      this.hrSettingsForm.controls['leaveType'].reset()
+    });
   }
 
   //Edit a leave type
@@ -372,7 +319,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
         modalInfo: details
       },
     }).afterClosed().subscribe(() => {
-      this.getPageData();
+      this.getLeaveTypes();
     });;
   }
 
@@ -391,7 +338,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
             if(res.status == 200) {
               this.notifyService.showInfo('The leave type has been deleted successfully');
             }
-            this.getPageData();
+            this.getLeaveTypes();
           },
           error: err => {
             console.log(err)
@@ -404,61 +351,35 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   /*************** PUBLIC HOLIDAYS RELATED ACTIONS ***************/
 
+  //Get all holidays
+  getPublicHolidays() {
+    this.hrService.getPublicHolidays().subscribe((res:any) => {
+      this.publicHolidayList = res.data;
+      this.accordionItems.find(x => {
+        if(x.key == 'holidayTypes') x.list = this.publicHolidayList;
+      })
+    });
+  }
+
   //Create a new public holiday
   createPublicHoliday() {
-    let data = {
-      holidayName: this.hrSettingsForm.value.holidayName ? this.hrSettingsForm.value.holidayName : ""
-    }
-    if(this.hrSettingsForm.value.holidayName) {
-      this.hrService.createPublicHoliday(data).subscribe({
-        next: res => {
-          console.log(res);
-          if(res.status == 200) {
-            this.getPageData();
-            // this.notifyService.showSuccess('This leave type has been created successfully');
-            this.dialog.open(PublicHolidayInfoComponent, {
-              width: '30%',
-              height: 'auto',
-              data: {
-                name: data.holidayName,
-                isExisting: false
-              },
-            }).afterClosed().subscribe(() => {
-              this.getPageData();
-            });
-          }
-        },
-        error: err => {
-          console.log(err)
-          this.notifyService.showError(err.error.error);
-        } 
-      })
-    }
-    else {
-      this.dialog.open(PublicHolidayInfoComponent, {
-        width: '30%',
-        height: 'auto',
-        data: {
-          name: data.holidayName,
-          isExisting: false
-        },
-      }).afterClosed().subscribe(() => {
-        this.getPageData();
-      });
-    }
-    
-    // console.log(data);
-    // this.hrService.createDesignation(data).subscribe(res => {
-    //   if(res.status == 200) {
-    //     location.reload();
-    //   }
-    // })
+    this.dialog.open(PublicHolidayInfoComponent, {
+      width: '40%',
+      height: 'auto',
+      data: {
+        name: this.hrSettingsForm.value.holidayName,
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPublicHolidays();
+      this.hrSettingsForm.controls['holidayName'].reset()
+    });
   }
 
   //Edit a public holiday
   editPublicHoliday(details: any) {
     this.dialog.open(PublicHolidayInfoComponent, {
-      width: '30%',
+      width: '40%',
       height: 'auto',
       data: {
         name: details.holidayName,
@@ -467,7 +388,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
         modalInfo: details
       },
     }).afterClosed().subscribe(() => {
-      this.getPageData();
+      this.getPublicHolidays();
     });;
   }
 
@@ -486,7 +407,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
             if(res.status == 200) {
               this.notifyService.showInfo('The public holiday has been deleted successfully');
             }
-            this.getPageData();
+            this.getPublicHolidays();
           },
           error: err => {
             console.log(err)
@@ -499,55 +420,29 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   /*************** EXPENSE TYPES RELATED ACTIONS ***************/
 
+  //Get all expense types
+  getExpenseTypes() {
+    this.hrService.getExpenseTypes().subscribe((res:any) => {
+      this.expenseTypeList = res.data;
+      this.accordionItems.find(x => {
+        if(x.key == 'expenseTypes') x.list = this.expenseTypeList;
+      })
+    });
+  }
+
   //Create a new expense type
   createExpenseType() {
-    let data = {
-      expenseName: this.hrSettingsForm.value.expenseType ? this.hrSettingsForm.value.expenseType : ""
-    }
-    if(this.hrSettingsForm.value.expenseType) {
-      this.hrService.createExpenseType(data).subscribe({
-        next: res => {
-          console.log(res);
-          if(res.status == 200) {
-            this.getPageData();
-            // this.notifyService.showSuccess('This leave type has been created successfully');
-            this.dialog.open(ExpenseTypeInfoComponent, {
-              width: '30%',
-              height: 'auto',
-              data: {
-                name: data.expenseName,
-                isExisting: false
-              },
-            }).afterClosed().subscribe(() => {
-              this.getPageData();
-            });
-          }
-        },
-        error: err => {
-          console.log(err)
-          this.notifyService.showError(err.error.error);
-        } 
-      })
-    }
-    else {
-      this.dialog.open(ExpenseTypeInfoComponent, {
-        width: '30%',
-        height: 'auto',
-        data: {
-          name: data.expenseName,
-          isExisting: false
-        },
-      }).afterClosed().subscribe(() => {
-        this.getPageData();
-      });
-    }
-    
-    // console.log(data);
-    // this.hrService.createDesignation(data).subscribe(res => {
-    //   if(res.status == 200) {
-    //     location.reload();
-    //   }
-    // })
+    this.dialog.open(ExpenseTypeInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: this.hrSettingsForm.value.expenseType,
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getExpenseTypes();
+      this.hrSettingsForm.controls['expenseType'].reset()
+    });
   }
 
   //Edit an expense type
@@ -562,7 +457,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
         modalInfo: details
       },
     }).afterClosed().subscribe(() => {
-      this.getPageData();
+      this.getExpenseTypes();
     });;
   }
 
@@ -581,7 +476,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
             if(res.status == 200) {
               this.notifyService.showInfo('The expense type has been deleted successfully');
             }
-            this.getPageData();
+            this.getExpenseTypes();
           },
           error: err => {
             console.log(err)
@@ -594,55 +489,29 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   /*************** PAYROLL CREDIT TYPES RELATED ACTIONS ***************/
 
+  //Get all payroll credit types
+  getPayrollCredits() {
+    this.hrService.getPayrollCredits().subscribe((res:any) => {
+      this.payrollCreditList = res.data;
+      this.payrollAccordionItems.find(x => {
+        if(x.key == 'payrollCredits') x.list = this.payrollCreditList;
+      })
+    });
+  }
+
   //Create a new payroll credit type
   createPayrollCredit() {
-    let data = {
-      name: this.hrSettingsForm.value.payrollCredit ? this.hrSettingsForm.value.payrollCredit : ""
-    }
-    if(this.hrSettingsForm.value.leaveType) {
-      this.hrService.createPayrollCredit(data).subscribe({
-        next: res => {
-          console.log(res);
-          if(res.status == 200) {
-            this.getPageData();
-            // this.notifyService.showSuccess('This leave type has been created successfully');
-            this.dialog.open(PayrollCreditInfoComponent, {
-              width: '30%',
-              height: 'auto',
-              data: {
-                name: data.name,
-                isExisting: false
-              },
-            }).afterClosed().subscribe(() => {
-              this.getPageData();
-            });
-          }
-        },
-        error: err => {
-          console.log(err)
-          this.notifyService.showError(err.error.error);
-        } 
-      })
-    }
-    else {
-      this.dialog.open(PayrollCreditInfoComponent, {
-        width: '30%',
-        height: 'auto',
-        data: {
-          name: data.name,
-          isExisting: false
-        },
-      }).afterClosed().subscribe(() => {
-        this.getPageData();
-      });
-    }
-    
-    // console.log(data);
-    // this.hrService.createDesignation(data).subscribe(res => {
-    //   if(res.status == 200) {
-    //     location.reload();
-    //   }
-    // })
+    this.dialog.open(PayrollCreditInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: this.hrSettingsForm.value.payrollCredit,
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPayrollCredits();
+      this.hrSettingsForm.controls['payrollCredit'].reset()
+    });
   }
 
   //Edit a payroll credit type
@@ -657,7 +526,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
         modalInfo: details
       },
     }).afterClosed().subscribe(() => {
-      this.getPageData();
+      this.getPayrollCredits();
     });
   }
 
@@ -676,7 +545,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
             if(res.status == 200) {
               this.notifyService.showInfo('The payroll credit type has been deleted successfully');
             }
-            this.getPageData();
+            this.getPayrollCredits();
           },
           error: err => {
             console.log(err)
@@ -689,55 +558,29 @@ export class HumanResourcesSettingsComponent implements OnInit {
 
   /*************** PAYROLL DEBIT TYPES RELATED ACTIONS ***************/
 
+  //Get all payroll debit types
+  getPayrollDebits() {
+    this.hrService.getPayrollDebits().subscribe((res:any) => {
+      this.payrollDebitList = res.data;
+      this.payrollAccordionItems.find(x => {
+        if(x.key == 'payrollDebits') x.list = this.payrollDebitList;
+      })
+    });
+  }
+
   //Create a new payroll debit type
   createPayrollDebit() {
-    let data = {
-      name: this.hrSettingsForm.value.payrollDebit ? this.hrSettingsForm.value.payrollDebit : ""
-    }
-    if(this.hrSettingsForm.value.leaveType) {
-      this.hrService.createPayrollDebit(data).subscribe({
-        next: res => {
-          console.log(res);
-          if(res.status == 200) {
-            this.getPageData();
-            // this.notifyService.showSuccess('This leave type has been created successfully');
-            this.dialog.open(PayrollDebitInfoComponent, {
-              width: '30%',
-              height: 'auto',
-              data: {
-                name: data.name,
-                isExisting: false
-              },
-            }).afterClosed().subscribe(() => {
-              this.getPageData();
-            });
-          }
-        },
-        error: err => {
-          console.log(err)
-          this.notifyService.showError(err.error.error);
-        } 
-      })
-    }
-    else {
-      this.dialog.open(PayrollDebitInfoComponent, {
-        width: '30%',
-        height: 'auto',
-        data: {
-          name: data.name,
-          isExisting: false
-        },
-      }).afterClosed().subscribe(() => {
-        this.getPageData();
-      });
-    }
-    
-    // console.log(data);
-    // this.hrService.createDesignation(data).subscribe(res => {
-    //   if(res.status == 200) {
-    //     location.reload();
-    //   }
-    // })
+    this.dialog.open(PayrollDebitInfoComponent, {
+      width: '30%',
+      height: 'auto',
+      data: {
+        name: this.hrSettingsForm.value.payrollDebit,
+        isExisting: false
+      },
+    }).afterClosed().subscribe(() => {
+      this.getPayrollDebits();
+      this.hrSettingsForm.controls['payrollDebit'].reset()
+    });
   }
 
   //Edit a payroll debit type
@@ -752,7 +595,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
         modalInfo: details
       },
     }).afterClosed().subscribe(() => {
-      this.getPageData();
+      this.getPayrollDebits();
     });;
   }
 
@@ -771,7 +614,7 @@ export class HumanResourcesSettingsComponent implements OnInit {
             if(res.status == 200) {
               this.notifyService.showInfo('This payroll debit type has been deleted successfully');
             }
-            this.getPageData();
+            this.getPayrollDebits();
           },
           error: err => {
             console.log(err)

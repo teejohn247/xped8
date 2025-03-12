@@ -32,7 +32,6 @@ export class CrmService {
   public getAgents(): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchAgents`, this.requestOptions);
   }
-  
 
   /*************** LEAD RELATED ACTIONS ***************/
 
@@ -68,6 +67,23 @@ export class CrmService {
   //Get the list of all Contacts
   public getTickets(): Observable<any> {
     return this.http.get<any>(`${this.path}/fetchTickets`, this.requestOptions);
+  }
+
+  /*************** SOCIAL MEDIA RELATED ACTIONS ***************/
+
+  //Create a new media post
+  public createMediaPost(info: any): Observable<any> {
+    return this.http.post<any>(`${this.path}/socialMedia/post`, info, this.requestOptions);
+  }
+
+  //Get the list of all Media Posts
+  public getMediaPosts(): Observable<any> {
+    return this.http.get<any>(`${this.path}/socialMedia`, this.requestOptions);
+  }
+
+  //Delete media post
+  public deleteMediapost(postId: any): Observable<any> {
+    return this.http.delete<any>(`${this.path}/socialMedia/${postId}`, this.requestOptions);
   }
 
 }
