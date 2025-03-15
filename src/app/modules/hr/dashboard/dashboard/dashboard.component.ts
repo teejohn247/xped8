@@ -35,6 +35,8 @@ export class DashboardComponent implements OnInit {
   leaveRecords: any[] = [];
   Leavecharts: typeof Highcharts;
   leaveChartOptions: Options;
+
+  isMobile:boolean;
   
   AreaHighcharts: typeof Highcharts = Highcharts;
   areaChartOptions: Highcharts.Options = {
@@ -46,13 +48,16 @@ export class DashboardComponent implements OnInit {
     },
     xAxis:{
       categories:["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      //labels: {enabled:false}
+      labels: {
+        enabled: !this.sharedService.isMobile
+      }
     },
     yAxis: {          
       title:{
         text:""
       },
       labels: {
+        enabled: !this.sharedService.isMobile,
         formatter: function () {
           return '£' + this.axis.defaultLabelFormatter.call(this) + 'K';
         }            
@@ -133,7 +138,7 @@ export class DashboardComponent implements OnInit {
     private authService: AuthenticationService,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
-    private sharedService: SharedService,
+    public sharedService: SharedService,
   ) {
     setInterval(() => {
       this.dateTime = new Date()
@@ -141,6 +146,7 @@ export class DashboardComponent implements OnInit {
 
     this.userDetails = this.authService.loggedInUser.data;
     this.currency = this.authService.currency ? this.authService.currency : '';
+    this.isMobile = sharedService.isMobile;
 
     this.userDetails.isSuperAdmin ? this.getPageData() : this.getEmployeeData();
   }

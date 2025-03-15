@@ -19,6 +19,10 @@ export class SharedService {
     return this.dataSubject.asObservable();
   }
 
+  get isMobile() {
+    return JSON.parse(sessionStorage.getItem('isMobile'));
+  }
+
   // getPosition(): Promise<any> {
   //   return new Promise((resolve, reject) => {
   //     navigator.geolocation.getCurrentPosition(resp => {
