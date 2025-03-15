@@ -42,6 +42,13 @@
                 <div class="row-card card-xmd card-yxl">
                     <div class="cont" style="min-height: 20rem;">
                         <div class="card-title clr">Upcoming Events</div>
+                        <app-no-data 
+                            *ngIf="upcomingEvents.length == 0"
+                            [height]="'15rem'"
+                            [icon]="'bi bi-calendar-x'"
+                            [message]="'There are no upcoming meetings'"
+                        >
+                        </app-no-data>
                         <div class="listed-items mt-lg-3">
                             <div *ngFor="let item of upcomingEvents | slice:0:5;" class="item">
                                 <div *ngIf="item.type == 'holiday'" class="content">

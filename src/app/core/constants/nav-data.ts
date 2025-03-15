@@ -9,6 +9,7 @@ export const navbarData = [
         routeLink: 'human-resources/dashboard',
         icon: 'bi bi-person-vcard-fill',
         label: 'Human Resources',
+        mobileLabel: 'HR Module',
         subMenu: [
             {
                 routeLink: 'human-resources/dashboard',
@@ -81,6 +82,7 @@ export const navbarData = [
         routeLink: 'crm',
         icon: 'bi bi-microsoft-teams',
         label: 'CRM',
+        mobileLabel: 'CRM',
         subMenu: [
             {
                 routeLink: 'crm/dashboard',
@@ -138,6 +140,7 @@ export const navbarData = [
         routeLink: 'settings',
         icon: 'bi bi-gear-fill',
         label: 'Settings',
+        mobileLabel: 'Settings',
         subMenu: [
             {
                 routeLink: 'settings/general-settings',

@@ -11,7 +11,13 @@ import { WorkLocationComponent } from 'src/app/modules/hr/attendance/work-locati
 })
 export class NotificationService {
 
-  constructor(private _toastr: ToastrService, private dialog: MatDialog) { }
+  isMobile:boolean = false;
+
+  constructor(private _toastr: ToastrService, private dialog: MatDialog) {
+    if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+      this.isMobile = true;
+    }
+  }
 
   showSuccess(message: string = "Successful") {
     this._toastr.success(message, "Success")
@@ -55,7 +61,7 @@ export class NotificationService {
       ConfirmationDialogComponent, 
       {
         data,
-        width: '40%',
+        width: this.isMobile ? '95%' : '40%',
         height: 'auto',
         disableClose: true,
       }

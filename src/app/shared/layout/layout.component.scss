@@ -1,8 +1,21 @@
+@import 'src/assets/styles/base/mixins';
+
 .page-wrap {
     width: 100%;
     height: 100vh;
     display: flex;
     overflow: hidden;
+
+    .menu-sec {
+        width: 100%;
+        position: fixed;
+        z-index: 1000;
+
+        @include screen-media-min(md) {
+            width: unset;
+            position: relative;
+        }
+    }
 
     .main-page {
         height: calc(100vh - var(--hdr-height));

@@ -29,6 +29,7 @@ import { PaymentInfoComponent } from './components/payment-info/payment-info.com
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { QuillEditorComponent } from './components/quill-editor/quill-editor.component';
+import { NoDataComponent } from './components/no-data/no-data.component';
 
 const SHARED_COMP = [
   MatIconModule,
@@ -48,11 +49,12 @@ const SHARED_COMP = [
 ];
 
 @NgModule({
-  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent, LeaveReviewComponent, PaymentInfoComponent, DashboardComponent, LandingPageComponent, QuillEditorComponent],
+  declarations: [DeleteConfirmationComponent, CreateSingleInfoComponent, RegisterGuestComponent, LoginComponent, ConfirmationDialogComponent, LeaveReviewComponent, PaymentInfoComponent, DashboardComponent, LandingPageComponent, QuillEditorComponent, NoDataComponent],
 
   exports: [
     ...SHARED_COMP,
     FormsModule,
+    NoDataComponent,
     ReactiveFormsModule,
     QuillEditorComponent
   ],
