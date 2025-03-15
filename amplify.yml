@@ -1,0 +1,28 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm install -f
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: dist/xped8
+    files:
+      - '*/'
+  customHeaders:
+    - pattern: '*/'
+      headers:
+        - key: 'Cache-Control'
+          value: 'max-age=31536000'
+  # Add this section
+  customRules:
+    - pattern: 'assets/*/'
+      headers:
+        - key: 'Cache-Control'
+          value: 'max-age=31536000'
+      status: 200
+    - pattern: '*/'
+      target: '/index.html'
+      status: 200

@@ -7,19 +7,19 @@
     </div> -->
 
     <div class="row-section">
-        <div class="inner-row-hld d-flex align-items-start justify-content-between">
-            <div class="col-card card-xxl card-yxl d-flex justify-content-between align-items-start">
-                <div class="row-card d-flex justify-content-between card-xmlg card-yxl">
+        <div class="inner-row-hld d-lg-flex align-items-start justify-content-between">
+            <div class="col-card card-xxl card-yxl d-lg-flex justify-content-between align-items-start">
+                <div class="row-card d-lg-flex justify-content-between card-xmlg card-yxl">
                     
                     <div class="cont card-xmmd slides" style="background-image: url('./assets/images/illustrations/fragment.png');">
                         <div class="top">
-                            <div class="major">Welcome <img class="pb-2" src="https://silo-inc.com/wp-content/themes/wp-silo/dist/img/waving_hand.gif" alt=""></div>
+                            <div class="major">Welcome <img class="pb-lg-2" src="https://silo-inc.com/wp-content/themes/wp-silo/dist/img/waving_hand.gif" alt=""></div>
                             <div class="minor">{{userDetails.companyName}}</div>
                         </div>
                         <div class="btm">
                             <div class="date">
                                 <span>{{dateTime | date: 'hh:mm a'}}</span>
-                                <span>{{dateTime | date: 'EEEE, MMM d'}}</span>
+                                <span>{{dateTime | date: 'EEE, MMMM d'}}</span>
                             </div>
 
                             <div class="image">
@@ -28,12 +28,24 @@
                         </div>
                     </div>
 
-                    <div class="inner-col card-xmmd card-yxl d-flex flex-column justify-content-between">
+                    <div class="inner-col card-xmmd card-yxl only-desktop-flex flex-column justify-content-between mt-md-0 mt-4">
                         <div *ngFor="let item of cardsSummary" class="cont status-card d-flex flex-column justify-content-center card-ymmd">
                             <div class="card-det d-flex align-items-center">
                                 <div class="icon lg" [ngStyle]="{'color': item.colorDark}"><i class="{{item.icon}}"></i></div>
                                 <div class="card-title thin">{{item.name}}</div>
                                 <div class="fraction"><span class="lg">{{item.count}}</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="inner-col card-xxl only-mobile my-lg-0 my-3" style="overflow-x: hidden;">
+                        <div class="mob-scroll-wrap">
+                            <div *ngFor="let item of cardsSummary; let i = index" [class.ml]="i > 0" class="cont status-card d-inline-block flex-column justify-content-center card-ymmd px-3 py-2">
+                                <div class="card-det d-flex flex-wrap align-items-center" style="width: 50vw;">
+                                    <div class="icon lg w-100 justify-content-start mb-2" [ngStyle]="{'color': item.colorDark}"><i class="{{item.icon}}"></i></div>
+                                    <div class="card-title thin">{{item.name}}</div>
+                                    <div class="fraction"><span class="lg">{{item.count}}</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -46,7 +58,7 @@
                             *ngIf="upcomingEvents.length == 0"
                             [height]="'15rem'"
                             [icon]="'bi bi-calendar-x'"
-                            [message]="'There are no upcoming meetings'"
+                            [message]="'There are no upcoming events'"
                         >
                         </app-no-data>
                         <div class="listed-items mt-lg-3">
@@ -83,7 +95,7 @@
         </div>
     </div>
 
-    <div class="row-section mt-lg-4">
+    <div class="row-section mt-4">
         <div class="inner-row-hld d-flex justify-content-between">
 
             <div class="row-card card-xmlg card-yxl">
@@ -140,13 +152,13 @@
         </div>
     </div>
 
-    <div class="row-section mt-lg-4">
+    <div class="row-section mt-4">
         <div class="inner-row-hld d-flex justify-content-between">
 
-            <div class="row-card card-xmd card-yxl">
+            <div class="row-card card-xmd card-yxl mt-lg-0 mt-3">
                 <div class="cont">
                     <div class="card-title">Recent Approval Requests</div>
-                    <div class="listed-items mt-lg-3">
+                    <div class="listed-items mt-3">
                         <div class="item">
                             <div class="icon"><i class="bi bi-rocket-takeoff"></i></div>
                             <div class="content">
