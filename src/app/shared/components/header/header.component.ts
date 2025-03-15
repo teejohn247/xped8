@@ -1,4 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { navbarData, navbarDataReg, navbarDataManager, navbarDataSilo } from 'src/app/core/constants/nav-data';
+import { AuthenticationService } from '../../services/utils/authentication.service';
+import { NotificationService } from '../../services/utils/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -11,8 +15,19 @@ export class HeaderComponent implements OnInit {
   userName:string;
   userRole:string;
   profilePhoto: string;
+  sideModalOpened:boolean = false;
+  currentLink = 'Human Resources';
 
-  constructor() { }
+  adminMenuData = navbarData;
+  regMenuData = navbarDataReg;
+  managerMenuData = navbarDataManager;
+  siloMenuData = navbarDataSilo;
+
+  constructor(
+    private route: Router,
+    private authService: AuthenticationService, 
+    private notifyService: NotificationService,
+  ) { }
 
   ngOnInit(): void {
     if(this.userDetails.data.isSuperAdmin) {
@@ -28,5 +43,40 @@ export class HeaderComponent implements OnInit {
       this.userRole = this.userDetails.data.companyRole;
       this.profilePhoto = this.userDetails.data.profilePic;
     }
+  }
+
+  openMenu() {
+    let urlsplit = this.route.url?.split("/");
+    console.log('LoginUrl', urlsplit);
+
+    switch (urlsplit[2]) {
+      case "human-resources":
+        this.currentLink = 'Human Resources';
+        break;
+      case "crm":
+        this.currentLink = 'CRM';
+        break;
+      case "settings":
+        this.currentLink = 'Settings';
+        break;
+      default :
+        break;
+    }
+
+    this.sideModalOpened = true
+  }
+
+  //Logout function
+  logout() {
+    this.notifyService.confirmAction({
+      title: 'Logout',
+      message: 'Are you sure you want to logout?',
+      confirmText: 'Logout',
+      cancelText: 'Cancel',
+    }).subscribe((confirmed) => {
+      if (confirmed) {
+        this.authService.logout();
+      }
+    });
   }
 }

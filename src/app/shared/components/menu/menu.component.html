@@ -9,8 +9,8 @@
                 <a (click)="currentLink = item.label" [routerLink]="[item.routeLink]" [ngClass]="currentLink == item.label ? 'active' : '' ">
                     <i class="{{item.icon}}"></i>
                     <!-- <mat-icon class="material-icons-round">{{item.icon}}</mat-icon> -->
-                    <!-- <span>{{item.label}}</span> -->
                 </a>
+                <span class="module-name only-mobile">{{item.mobileLabel}}</span>
             </li>
 
             <li>

@@ -95,8 +95,8 @@
                             <i class="bi bi-person-bounding-box"></i>{{existingUser ? 'Login' : 'Create Account'}}
                             <span *ngIf="apiLoading" class="apiLoader"></span>
                         </button>
-                        <p *ngIf="existingUser" class="accountcheck mt-lg-2">Don't have an account? <span (click)="existingUser = !existingUser">Create Account</span></p>
-                        <p *ngIf="!existingUser" class="accountcheck mt-lg-2">Have an account? <span (click)="existingUser = !existingUser">Login</span></p>
+                        <p *ngIf="existingUser" class="accountcheck mt-lg-2 mt-2">Don't have an account? <span (click)="existingUser = !existingUser">Create Account</span></p>
+                        <p *ngIf="!existingUser" class="accountcheck mt-lg-2 mt-2">Have an account? <span (click)="existingUser = !existingUser">Login</span></p>
                     </div>
     
                     <div class="disclaimer"><i class="bi bi-check-circle-fill"></i> By creating an account and signing in, it means you agree to our <a href="#">Terms and Condition</a> and <a href="#">Privacy Policy</a></div>

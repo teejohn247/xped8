@@ -1,13 +1,21 @@
+@import 'src/assets/styles/base/mixins';
+
 .remove-card {
-    width: 75%;
+    width: 100%;
     height: auto;
     margin: auto;
-    padding: 4vh 5%;
-    border-radius: var(--radius-sm);
+    padding: 1.5rem;
+    border-radius: var(--radius-xs);
     box-sizing: border-box;
     //border: 1px solid #dadee2;
     //box-shadow: 0 0 4px 4px rgb(224 224 224 / 30%);
     background: var(--darker);
+
+    @include screen-media-min(md) {
+        width: 75%;
+        padding: 4vh 5%;
+        border-radius: var(--radius-sm);
+    }
   
     .card-title {
         font-size: 1rem;

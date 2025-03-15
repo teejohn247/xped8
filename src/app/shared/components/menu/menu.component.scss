@@ -1,3 +1,5 @@
+@import 'src/assets/styles/base/mixins';
+
 .menu-nav {
     display: flex;
 
@@ -14,12 +16,21 @@
     }
 
     .super-nav {
-        width: 4rem;
-        height: 100vh;
+        width: 100%;
+        height: auto;
+        position: fixed;
         opacity: 1;
         padding: 0 0.7rem;
         transition: var(--transition-norm);
         background-color: var(--darkest);
+        bottom: 0;
+
+        @include screen-media-min(md) {
+            width: 4rem;
+            height: 100vh;
+            position: relative;
+            bottom: unset;
+        }
 
         .menu-trigger-close {
             height: var(--hdr-height);
@@ -27,6 +38,11 @@
             color: var(--white-tint);
             position: relative;
             cursor: pointer;
+            display: none;
+
+            @include screen-media-min(md) {
+                display: flex;
+            }
 
             span {
 
@@ -48,13 +64,31 @@
 
         .menu-items {
             display: flex;
-            flex-direction: column;
-            margin-top: 1.2rem;
+            flex-direction: row;
+            margin-top: 0;
+            padding: 0.7rem 0;
+            justify-content: center;
+
+            @include screen-media-min(md) {
+                flex-direction: column;
+                justify-content: unset;
+                margin-top: 1.2rem;
+                padding: unset;
+            }
 
             li {
+                width: 30%;
                 display: inline-flex;
+                flex-direction: column;
                 align-items: center;
                 justify-content: center;
+                gap: 0.4rem;
+
+                @include screen-media-min(md) {
+                    width: unset;
+                    justify-content: unset;
+                    gap: unset;
+                }
 
                 a {
                     font-size: 1.375rem;
@@ -74,8 +108,27 @@
                     }
                 }
 
+                .module-name {
+                    font-size: 0.6rem;
+                    line-height: 1;
+                    letter-spacing: 0.04rem;
+                    color: white;
+                }
+
                 &:nth-child(n+2) {
-                    margin-top: 1.75rem;
+                    margin-top: 0;
+
+                    @include screen-media-min(md) {
+                        margin-top: 1.75rem;
+                    }
+                }
+
+                &:last-child {
+
+                    @include screen-media-max(md) {
+                        display: none;
+                    }
+
                 }
             }
         }
@@ -85,8 +138,14 @@
     .sub-nav {
         width: 15rem;
         height: 100vh;
+        display: none;
         border-right: 1px solid var(--border-black-lightest);
         background-color: var(--grey-lighter-tint);
+
+        @include screen-media-min(md) {
+            display: block;
+            font-size: 2rem;
+        }
 
         .logo-container {
             width: 100%;
