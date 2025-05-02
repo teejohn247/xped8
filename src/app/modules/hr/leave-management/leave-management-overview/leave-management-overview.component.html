@@ -36,7 +36,7 @@
             </div>
 
             <div class="row-card card-xsm card-yxl">
-                <div class="cont">
+                <div class="cont" style="min-height: 22rem;">
                     <div class="card-title clr">Upcoming Approved Leave Requests</div>
                     <div class="listed-items mt-lg-3">
                         <div *ngFor="let request of approvedRequests | slice:0:5;" class="item">
@@ -46,7 +46,7 @@
                                     <div class="minor">{{request.department}}</div>
                                 </div>
                                 <div class="det right">
-                                    <div class="major">{{ strToDate(request.leaveStartDate, 'summary') }} - {{ strToDate(request.leaveEndDate, 'summary') }}</div>
+                                    <div class="major">{{ strToDate(request.leaveStartDate) | date : 'd MMM, y' }} - {{ strToDate(request.leaveEndDate) | date : 'd MMM, y'}}</div>
                                     <!-- <div class="minor sm">Apr 20 -28</div> -->
                                 </div>
                             </div>
@@ -132,7 +132,7 @@
 
                         <ng-container *ngIf="column.key == 'leaveStartDate' || column.key == 'leaveEndDate' || column.key == 'requestDate'">
                             <th [style.width]="column.columnWidth" mat-header-cell *matHeaderCellDef>{{ column.label }}</th>
-                            <td mat-cell *matCellDef="let row">{{ strToDate(row[column.key], column.key) }}</td>
+                            <td mat-cell *matCellDef="let row">{{ strToDate(row[column.key]) | date : 'd MMM, y' }}</td>
                         </ng-container>
 
                         <ng-container *ngIf="column.key == 'status'">

@@ -3,15 +3,23 @@
 .header {
     align-items: center;
     padding: 0 4%;
+    position: relative;
     height: var(--hdr-height);
     border-bottom: 1px solid var(--border-black-lightest);
+    top: unset;
+    left: unset;
 
     @include screen-media-max(md) {
         width: 100%;
         height: auto;
-        padding: 0.7rem 0;
+        position: fixed;
+        padding: 0.9rem 0;
+        background: white;
         border-bottom: 1px solid var(--black-tint-sm);
         box-shadow: 0 3px 6px -3px rgba(0, 0, 0, 0.2);
+        left: 0;
+        top: 0;
+        z-index: 10;
     }
 
     &.only-desktop {
@@ -144,8 +152,6 @@
                 height: 1.6rem;
             }
         }
-
-        
 
         .user-actions {
             margin: 0;
@@ -349,12 +355,12 @@
     
         &.account-wrap {
             width: fit-content;
-            min-width: 9rem;
+            min-width: 10rem;
     
             .mat-menu-content {
     
                 .items-wrap {
-                    padding: 0.7rem;
+                    padding: 0.85rem;
 
                     .info {
                         display: flex;
@@ -367,13 +373,14 @@
                             white-space: nowrap;
         
                             &:first-child {
-                                font-size: 0.7435rem;
+                                font-size: 0.85rem;
                                 font-weight: 500;
                                 letter-spacing: 0.03rem;
                                 color: var(--darkest);
                             }
+
                             &:last-child {
-                                font-size: 0.6435rem;
+                                font-size: 0.75rem;
                                 letter-spacing: 0.04rem;
                                 color: var(--black-tint);
                             }
@@ -382,7 +389,7 @@
         
                     .item {
                         display: flex;
-                        font-size: 0.8rem;
+                        font-size: 0.9rem;
                         font-weight: 500;
                         justify-content: center;
                         letter-spacing: 0.03rem;
@@ -394,7 +401,7 @@
                         gap: 0.5rem;
 
                         i {
-                            font-size: 0.95rem;
+                            font-size: 1rem;
                         }
                     }
                 }

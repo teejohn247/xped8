@@ -175,6 +175,10 @@ a {
 
     &-xsm {
         width: var(--card-xsm);
+
+        @include screen-media-max(md) {
+            width: 100%;
+        } 
     }
     &-xmmd {
         width: var(--card-xmmd);
@@ -212,6 +216,10 @@ a {
     }
     &-ymmd {
         height: var(--card-ymmd) !important;
+
+        @include screen-media-max(md) {
+            height: auto;
+        } 
     }
     &-ymd {
         height: var(--card-ymd);

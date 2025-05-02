@@ -21,7 +21,7 @@
             width: 100%;
             display: inline-flex;
             align-items: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 600;
             letter-spacing: 0.04rem;
             text-shadow: var(--card-shadow);
@@ -43,7 +43,7 @@
 
         .major {
             @include screen-media-max(md) {
-                font-size: 1rem;
+                font-size: 1.1rem;
             }
         }
 
@@ -72,8 +72,8 @@
                 color: white;
 
                 @include screen-media-max(md) {
-                    font-size: 0.8rem;
-                    line-height: 1.1;
+                    font-size: 0.9rem;
+                    line-height: 1.3;
                 }
 
                 &:first-child {
@@ -82,7 +82,7 @@
                     margin-bottom: 0.2rem;
 
                     @include screen-media-max(md) {
-                        font-size: 0.8rem;
+                        font-size: 0.9rem;
                     }
                 }
             }
@@ -115,7 +115,7 @@
 
             img {
                 width: auto;
-                height: 3.2rem;
+                height: 4rem;
 
                 @include screen-media-min(md) {
                     height: 4.5rem;
@@ -144,6 +144,16 @@
                 transform: translate(-50%, -50%);
                 position: absolute;
                 height: 14rem;
+                width: unset;
+
+                @include screen-media-max(md) {
+                    width: 100%;
+                    height: 15rem;
+                    position: relative;
+                    top: unset;
+                    left: unset;
+                    transform: none;
+                }
             }
         }
 
