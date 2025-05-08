@@ -63,10 +63,11 @@ export class SelfServiceOverviewComponent implements OnInit {
 
   getPageData = async () => {
     this.employeeDetails = await this.hrService.getEmployeeDetails(this.employeeId).toPromise();
-    this.employeeDetails = this.employeeDetails['data'][0];
+    this.employeeDetails = this.employeeDetails['data'];
     this.departmentList = await this.hrService.getDepartments().toPromise();
     this.designationList = await this.hrService.getDesignations().toPromise();
 
+    console.log(this.employeeDetails)
     this.leaveSummary = this.employeeDetails.leaveAssignment;
     this.totalLeaveDays = this.leaveSummary.reduce((n, {noOfLeaveDays}) => n + noOfLeaveDays, 0);
     this.leaveDaysUsed = this.leaveSummary.reduce((n, {daysUsed}) => n + daysUsed, 0);
