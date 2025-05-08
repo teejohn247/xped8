@@ -192,19 +192,31 @@ export class EmployeeDetailsComponent implements OnInit {
 
   }
 
-
-  strToDate(dateVal: string, isDate:boolean) {
-    if(isDate) {
-      let newFormat = new Date(dateVal);
-      return this.datePipe.transform(newFormat, 'd MMMM, y')
+  strToDate(dateVal: string) {
+    if(dateVal != 'undefined') {
+      let reqDate:any = new Date(dateVal)
+      if(reqDate == 'Invalid Date' && dateVal != 'undefined') {
+        const [day, month, year] = dateVal.split('-');
+        let newFormat = new Date(+year, +month - 1, +day);
+        reqDate = newFormat;
+      }
+      return reqDate;
     }
-    else {
-      const [day, month, year] = dateVal.split('-');
-      let newFormat = new Date(+year, +month - 1, +day);
-      // console.log(newFormat.toDateString());
-      return this.datePipe.transform(newFormat, 'd MMMM, y')
-    }    
-  } 
+  }
+
+
+  // strToDate(dateVal: string, isDate:boolean) {
+  //   if(isDate) {
+  //     let newFormat = new Date(dateVal);
+  //     return this.datePipe.transform(newFormat, 'd MMMM, y')
+  //   }
+  //   else {
+  //     const [day, month, year] = dateVal.split('-');
+  //     let newFormat = new Date(+year, +month - 1, +day);
+  //     // console.log(newFormat.toDateString());
+  //     return this.datePipe.transform(newFormat, 'd MMMM, y')
+  //   }    
+  // } 
 
   editEmployeeInfo() {
     let dialogRef = this.dialog.open(EditEmployeeComponent, {

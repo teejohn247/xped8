@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="info duo">
                                     <span class="label">Date Joined:</span>
-                                    <span class="text">{{strToDate(employeeDetails?.employmentStartDate, false)}}</span>
+                                    <span class="text">{{strToDate(employeeDetails?.employmentStartDate) | date : 'd MMM, yyyy'}}</span>
                                 </div>
                                 <div class="info duo">
                                     <span class="label">Designation:</span>
@@ -52,7 +52,7 @@
                             <div class="info-list space">
                                 <div class="info tri">
                                     <span class="label">Birthday:</span>
-                                    <span class="text">{{strToDate(employeeDetails?.dateOfBirth, false)}}</span>
+                                    <span class="text">{{strToDate(employeeDetails?.dateOfBirth) | date : 'd MMM, yyyy'}}</span>
                                 </div>
                                 
                                 <!-- <div class="info">
