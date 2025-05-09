@@ -112,7 +112,7 @@ export class EmployeeDetailsComponent implements OnInit {
 
   getPageData = async () => {
     this.employeeDetails = await this.hrService.getEmployeeDetails(this.employeeId).toPromise();
-    this.employeeDetails = this.employeeDetails['data'][0];
+    this.employeeDetails = this.employeeDetails['data'];
     this.departmentList = await this.hrService.getDepartments().toPromise();
     this.designationList = await this.hrService.getDesignations().toPromise();
 
