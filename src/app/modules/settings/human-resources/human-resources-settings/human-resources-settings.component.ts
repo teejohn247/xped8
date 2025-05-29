@@ -129,13 +129,13 @@ export class HumanResourcesSettingsComponent implements OnInit {
   getPageData() {
 
     const employees$ = this.hrService.getEmployees().subscribe((res:any) => this.employees = res.data);
-    // this.getDepartments();
-    // this.getDesignations();
-    // this.getLeaveTypes();
-    // this.getExpenseTypes();
-    // this.getPublicHolidays();
-    // this.getPayrollCredits();
-    // this.getPayrollDebits();
+    this.getDepartments();
+    this.getDesignations();
+    this.getLeaveTypes();
+    this.getExpenseTypes();
+    this.getPublicHolidays();
+    this.getPayrollCredits();
+    this.getPayrollDebits();
   }
 
   /*************** DEPARTMENT RELATED ACTIONS ***************/

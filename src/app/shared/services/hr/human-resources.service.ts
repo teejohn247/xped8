@@ -34,8 +34,12 @@ export class HumanResourcesService {
   }
 
   //Get the list of all employees
-  public getEmployees(): Observable<any> {
-    return this.http.get<any>(`${this.path}/fetchEmployees?page=1&limit=100`, this.requestOptions);
+  public getEmployees(pageNo?:number, pageSize?:number, searchParam?:string, filter?:string): Observable<any> {
+    if(!pageNo) pageNo = 1;
+    if(!pageSize) pageSize = 10;
+    if(!searchParam) searchParam = '';
+    if(!filter) filter = '';
+    return this.http.get<any>(`${this.path}/fetchEmployees?page=${pageNo}&limit=${pageSize}&search=${searchParam}&filter=${filter}`, this.requestOptions);
   }
 
   //Get an employee details

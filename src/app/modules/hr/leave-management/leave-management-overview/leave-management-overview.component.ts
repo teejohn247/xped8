@@ -303,25 +303,35 @@ export class LeaveManagementOverviewComponent implements OnInit {
     console.log(this.approvedRequests);
   }
 
-  strToDate(dateVal: string, key:string) {
-    if(key == 'requestDate') {
-      let newFormat = new Date(dateVal);
-      // console.log(newFormat.toDateString());
-      return this.datePipe.transform(newFormat, 'd MMMM, y')
-    }
-    else if(key = 'summary') {
+  strToDate(dateVal: string) {
+    let reqDate:any = new Date(dateVal)
+    if(reqDate == 'Invalid Date') {
       const [day, month, year] = dateVal.split('-');
       let newFormat = new Date(+year, +month - 1, +day);
-      // console.log(newFormat.toDateString());
-      return this.datePipe.transform(newFormat, 'MMM d')
+      reqDate = newFormat;
     }
-    else {
-      const [day, month, year] = dateVal.split('-');
-      let newFormat = new Date(+year, +month - 1, +day);
-      // console.log(newFormat.toDateString());
-      return this.datePipe.transform(newFormat, 'd MMMM, y')
-    }    
+    return reqDate;
   }
+
+  // strToDate(dateVal: string, key:string) {
+  //   if(key == 'requestDate') {
+  //     let newFormat = new Date(dateVal);
+  //     // console.log(newFormat.toDateString());
+  //     return this.datePipe.transform(newFormat, 'd MMMM, y')
+  //   }
+  //   else if(key = 'summary') {
+  //     const [day, month, year] = dateVal.split('-');
+  //     let newFormat = new Date(+year, +month - 1, +day);
+  //     // console.log(newFormat.toDateString());
+  //     return this.datePipe.transform(newFormat, 'MMM d')
+  //   }
+  //   else {
+  //     const [day, month, year] = dateVal.split('-');
+  //     let newFormat = new Date(+year, +month - 1, +day);
+  //     // console.log(newFormat.toDateString());
+  //     return this.datePipe.transform(newFormat, 'd MMMM, y')
+  //   }    
+  // }
 
   actionRequest(details: any) {
     this.dialog.open(LeaveReviewComponent, {

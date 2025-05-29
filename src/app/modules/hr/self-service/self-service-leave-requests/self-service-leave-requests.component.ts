@@ -414,18 +414,29 @@ export class SelfServiceLeaveRequestsComponent implements OnInit {
     });
   }
 
-  strToDate(dateVal: string, key:string) {
-    if(key == 'requestDate') {
-      let newFormat = new Date(dateVal);
-      // console.log(newFormat.toDateString());
-      return this.datePipe.transform(newFormat, 'd MMMM, y')
-    }
-    else {
+
+  strToDate(dateVal: string) {
+    let reqDate:any = new Date(dateVal)
+    if(reqDate == 'Invalid Date') {
       const [day, month, year] = dateVal.split('-');
       let newFormat = new Date(+year, +month - 1, +day);
-      // console.log(newFormat.toDateString());
-      return this.datePipe.transform(newFormat, 'd MMMM, y')
-    }    
+      reqDate = newFormat;
+    }
+    return reqDate;
   }
+
+  // strToDate(dateVal: string, key:string) {
+  //   if(key == 'requestDate') {
+  //     let newFormat = new Date(dateVal);
+  //     // console.log(newFormat.toDateString());
+  //     return this.datePipe.transform(newFormat, 'd MMMM, y')
+  //   }
+  //   else {
+  //     const [day, month, year] = dateVal.split('-');
+  //     let newFormat = new Date(+year, +month - 1, +day);
+  //     // console.log(newFormat.toDateString());
+  //     return this.datePipe.transform(newFormat, 'd MMMM, y')
+  //   }    
+  // }
 
 }

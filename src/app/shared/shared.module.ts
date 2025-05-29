@@ -30,6 +30,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { QuillEditorComponent } from './components/quill-editor/quill-editor.component';
 import { NoDataComponent } from './components/no-data/no-data.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 const SHARED_COMP = [
   MatIconModule,
@@ -37,6 +38,7 @@ const SHARED_COMP = [
   MatCheckboxModule,
   MatChipsModule,
   MatSortModule,
+  MatPaginatorModule,
   MatDialogModule,
   MatFormFieldModule,
   MatInputModule,

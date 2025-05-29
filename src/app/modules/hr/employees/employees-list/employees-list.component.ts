@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { SelectionModel } from '@angular/cdk/collections';
 import { EmployeeData, EmployeeTable } from 'src/app/shared/models/employee-data';
@@ -12,6 +12,8 @@ import { DeleteConfirmationComponent } from 'src/app/shared/components/delete-co
 import { CreateSingleInfoComponent } from 'src/app/shared/components/create-single-info/create-single-info.component';
 import { BulkUploadComponent } from '../bulk-upload/bulk-upload.component';
 import { AssignManagerApproversComponent } from '../assign-manager-approvers/assign-manager-approvers.component';
+import { BehaviorSubject, combineLatest, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, startWith, switchMap, tap } from 'rxjs/operators';
 
 
 @Component({
@@ -22,6 +24,9 @@ import { AssignManagerApproversComponent } from '../assign-manager-approvers/ass
 })
 export class EmployeesListComponent implements OnInit {
 
+  pageSize:number;
+  filterCriteria:string;
+  filterValue:any
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -29,9 +34,10 @@ export class EmployeesListComponent implements OnInit {
   dataSource: MatTableDataSource<EmployeeData>;
   selection = new SelectionModel<EmployeeData>(true, []);
 
-  employeeList: any[] = [];
+  employeeList: any[];
   departmentList: any[] = [];
   designationList: any[] = [];
+  isLoadingRow = (index: number, row: any) => row?.isLoading === true;
 
   //Employee Table Column Names
   tableColumns: EmployeeTable[] = [
@@ -118,71 +124,63 @@ export class EmployeesListComponent implements OnInit {
 
   ]
 
-  employeeData : any = [
-    // {
-    //   id: 1,
-    //   "Employee ID": "EMP-2021-MB45",
-    //   "Image": "staff1.jpg",
-    //   "First Name": "Mellie",
-    //   "Last Name": "Gabbott",
-    //   "Email Address": "mellie.gabbott@silo.com",
-    //   "Phone Number": "+234 845 2345 566",
-    //   "Department": "Marketing",
-    //   "Role": "Marketing Manager"
-    // },
-    // {
-    //   id: 2,
-    //   "Employee ID": "EMP-2021-YA65",
-    //   "Image": "staff2.jpg",
-    //   "First Name": "Yehudi",
-    //   "Last Name": "Ainsby",
-    //   "Email Address": "yehudi.ainsby@silo.com",
-    //   "Phone Number": "+234 355 2445 586",
-    //   "Department": "Technical",
-    //   "Role": "Support Analyst"
-    // },
-    // {
-    //   id: 3,
-    //   "Employee ID": "EMP-2020-NP50",
-    //   "Image": "profile-img.jpg",
-    //   "First Name": "Noellyn",
-    //   "Last Name": "Primett",
-    //   "Email Address": "noellyn.primett@silo.com",
-    //   "Phone Number": "+234 355 2445 586",
-    //   "Department": "Sales",
-    //   "Role": "Business Analyst"
-    // },
-    // {
-    //   id: 4,
-    //   "Employee ID": "EMP-2020-YS30",
-    //   "Image": "staff3.jpg",
-    //   "First Name": "Yurenin",
-    //   "Last Name": "Stefanieg",
-    //   "Email Address": "yurenin.staefanieg@silo.com",
-    //   "Phone Number": "+234 355 2445 586",
-    //   "Department": "Technical",
-    //   "Role": "Senior Officer"
-    // },
-  ]
+  employeeData : any = [];
+  public search$ = new BehaviorSubject<string>('');
+  public filter$ = new BehaviorSubject<string>('');
+  public page$ = new BehaviorSubject<number>(1);
+  public size$ = new BehaviorSubject<number>(10);
+
+  totalItems = 0;
+  apiLoading = false;
 
   constructor(
     public dialog: MatDialog,
     private router: Router,
     private hrService: HumanResourcesService,     
     private notifyService: NotificationService,
+    private cdr: ChangeDetectorRef
   ) {
     this.getPageData();
   }
 
   ngOnInit(): void {
-    console.log(this.employeeList);
+    //console.log(this.employeeList);
     this.displayedColumns = this.tableColumns.map(column => column.label);
-    console.log(this.employeeList);
+    //console.log(this.employeeList);    
   }
 
-  // ngAfterViewInit() {
-    
-  // }
+  ngAfterViewInit() {
+
+    const search$ = this.search$.pipe(startWith(''), debounceTime(300), distinctUntilChanged());
+    const filter$ = this.filter$.pipe(startWith(''));
+    const page$ = this.paginator.page.pipe(startWith({ pageIndex: 0, pageSize: 10 }));
+
+    this.size$.subscribe(val => this.pageSize = val)
+    this.filter$.subscribe(val => this.filterValue = val)
+
+    combineLatest([search$, filter$, page$]).pipe(
+      filter(([search, filter, page]) => search !== undefined && filter !== undefined && page !== undefined),
+      tap(() => {
+        this.apiLoading = true;
+      }),
+      switchMap(([search, filter, page]) => {
+        console.log(search, filter, page)
+        return this.hrService.getEmployees(page.pageIndex + 1, page.pageSize, search, filter).pipe(
+          catchError(() => of({ items: [], total: 0 })), // Fallback on error
+          tap(() => {
+            this.apiLoading = false;
+          })
+        )
+      })
+    ).subscribe((res: any) => {
+      //console.log(res)
+      this.totalItems = res.totalItems;
+      this.employeeList = res.data;
+      //console.log(res);
+      this.dataSource = new MatTableDataSource(this.employeeList);
+      this.dataSource.sort = this.sort;
+    });
+  }
 
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -202,8 +200,8 @@ export class EmployeesListComponent implements OnInit {
       width: '35%',
       height: 'auto',
       data: {
-        departmentList: this.departmentList['data'],
-        designationList: this.designationList['data'],
+        departmentList: this.departmentList,
+        designationList: this.designationList,
         isExisting: false
       },
     });
@@ -217,8 +215,8 @@ export class EmployeesListComponent implements OnInit {
       width: '35%',
       height: 'auto',
       data: {
-        departmentList: this.departmentList['data'],
-        designationList: this.designationList['data'],
+        departmentList: this.departmentList,
+        designationList: this.designationList,
         isExisting: false
       },
     });
@@ -259,13 +257,8 @@ export class EmployeesListComponent implements OnInit {
   }
 
   getPageData = async () => {
-    this.employeeList = await this.hrService.getEmployees().toPromise();
-    this.departmentList = await this.hrService.getDepartments().toPromise();
-    this.designationList = await this.hrService.getDesignations().toPromise();
-
-    console.log(this.employeeList);
-    this.dataSource = new MatTableDataSource(this.employeeList['data']);
-    this.dataSource.sort = this.sort;
+    const departments$ = this.hrService.getDepartments().subscribe(res => this.departmentList = res.data)
+    const designations$ = this.hrService.getDesignations().subscribe(res => this.designationList = res.data)
   }
 
   assignManager(assignType: string, count: string, row?: any) {
@@ -276,7 +269,7 @@ export class EmployeesListComponent implements OnInit {
       height: 'auto',
       data: {
         assignmentType: assignType,
-        employeeList: this.employeeList['data'],
+        employeeList: this.employeeList,
         selections: this.selection['selected'],
         isExisting: false
       },
@@ -287,6 +280,21 @@ export class EmployeesListComponent implements OnInit {
     }); 
   }
 
+  updateSearch(term: string) {
+    this.search$.next(term);
+  }
 
+  updateFilter(term: string) {
+    this.filter$.next(term);
+  }
+
+  updateSize(size: number) {
+    this.size$.next(size);
+  }
+
+  setFilterCriteria(criteria:string) {
+    !this.filterCriteria || this.filterCriteria != criteria ? this.filterCriteria = criteria : this.filterCriteria = '';
+    if(!this.filterCriteria) this.updateFilter('')
+  }
 
 }
