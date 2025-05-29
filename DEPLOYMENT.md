@@ -105,8 +105,82 @@ The repository includes configuration for automated deployment:
 
 ### Google Cloud Platform
 1. Create a Google Cloud project
-2. Enable Cloud Run
-3. Deploy using Cloud Build and Cloud Run
+2. Enable required APIs:
+   ```bash
+   gcloud services enable cloudbuild.googleapis.com
+   gcloud services enable run.googleapis.com
+   ```
+
+3. Create a Cloud Storage bucket for build logs:
+   ```bash
+   gsutil mb gs://YOUR_PROJECT_ID-cloudbuild-logs
+   ```
+
+4. Create a cloudbuild.yaml file in your project root:
+   ```yaml
+   steps:
+     # Build the container image
+     - name: 'gcr.io/cloud-builders/docker'
+       args: ['build', '-t', 'gcr.io/$PROJECT_ID/xped8', '.']
+     
+     # Push the container image to Container Registry
+     - name: 'gcr.io/cloud-builders/docker'
+       args: ['push', 'gcr.io/$PROJECT_ID/xped8']
+     
+     # Deploy container image to Cloud Run
+     - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+       entrypoint: gcloud
+       args:
+         - 'run'
+         - 'deploy'
+         - 'xped8'
+         - '--image'
+         - 'gcr.io/$PROJECT_ID/xped8'
+         - '--region'
+         - 'us-central1'
+         - '--platform'
+         - 'managed'
+         - '--allow-unauthenticated'
+
+   options:
+     logging: CLOUD_LOGGING_ONLY
+   ```
+
+5. Deploy to Cloud Run:
+   ```bash
+   gcloud builds submit --config cloudbuild.yaml
+   ```
+
+6. Configure service account permissions:
+   ```bash
+   # Get your project number
+   PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format='value(projectNumber)')
+   
+   # Grant the Cloud Run Admin role
+   gcloud projects add-iam-policy-binding $PROJECT_ID \
+     --member=serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com \
+     --role=roles/run.admin
+
+   # Grant the IAM Service Account User role
+   gcloud projects add-iam-policy-binding $PROJECT_ID \
+     --member=serviceAccount:$PROJECT_NUMBER@cloudbuild.gserviceaccount.com \
+     --role=roles/iam.serviceAccountUser
+   ```
+
+7. Environment Variables (optional):
+   ```bash
+   gcloud run services update xped8 \
+     --update-env-vars KEY1=VALUE1,KEY2=VALUE2
+   ```
+
+8. Monitoring and Logs:
+   - View logs in Cloud Console under Cloud Run > Services > xped8 > Logs
+   - Set up Cloud Monitoring for metrics and alerts
+
+Common Cloud Run Issues:
+- If build fails with service account errors, verify steps 3 and 6
+- For memory issues, adjust resources in deployment command
+- For timeout issues, configure appropriate timeouts in nginx.conf
 
 ## SSL Configuration
 
