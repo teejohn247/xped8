@@ -39,6 +39,7 @@ frontend:
   artifacts:
     baseDirectory: dist/xped8
     files:
+      - '*/'
       - '**/*'
   cache:
     paths:
@@ -48,14 +49,12 @@ frontend:
       headers:
         - key: 'Cache-Control'
           value: 'max-age=31536000'
-        - key: 'Strict-Transport-Security'
-          value: 'max-age=31536000; includeSubDomains'
   customRules:
-    - pattern: '/assets/**/*'
+    - pattern: 'assets/**/*'
       headers:
         - key: 'Cache-Control'
           value: 'max-age=31536000'
       status: 200
-    - pattern: '/<*>'
+    - pattern: '**/*'
       target: '/index.html'
       status: 200
