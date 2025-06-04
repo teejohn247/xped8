@@ -31,8 +31,8 @@ frontend:
   phases:
     preBuild:
       commands:
-        # Remove -f flag and add cache clearing
-        - npm ci --cache /tmp/.npm
+        # Use legacy peer deps to handle dependency conflicts
+        - npm install --legacy-peer-deps
     build:
       commands:
         - npm run build --prod
