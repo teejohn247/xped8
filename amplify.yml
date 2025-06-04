@@ -1,27 +1,61 @@
+# version: 1
+# frontend:
+#   phases:
+#     preBuild:
+#       commands:
+#         - npm install -f
+#     build:
+#       commands:
+#         - npm run build
+#   artifacts:
+#     baseDirectory: dist/xped8
+#     files:
+#       - '**/*'
+#   customHeaders:
+#     - pattern: '**/*'
+#       headers:
+#         - key: 'Cache-Control'
+#           value: 'max-age=31536000'
+#   customRules:
+#     - pattern: 'assets/**/*'
+#       headers:
+#         - key: 'Cache-Control'
+#           value: 'max-age=31536000'
+#       status: 200
+#     - pattern: '**/*'
+#       target: '/index.html'
+#       status: 200
+
 version: 1
 frontend:
   phases:
     preBuild:
       commands:
-        - npm install -f
+        # Remove -f flag and add cache clearing
+        - npm ci --cache /tmp/.npm
     build:
       commands:
-        - npm run build
+        - npm run build --prod
   artifacts:
     baseDirectory: dist/xped8
     files:
       - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
   customHeaders:
     - pattern: '**/*'
       headers:
         - key: 'Cache-Control'
           value: 'max-age=31536000'
+        - key: 'Strict-Transport-Security'
+          value: 'max-age=31536000; includeSubDomains'
   customRules:
-    - pattern: 'assets/**/*'
+    - pattern: '/assets/**/*'
       headers:
         - key: 'Cache-Control'
           value: 'max-age=31536000'
       status: 200
-    - pattern: '**/*'
+    - pattern: '/<*>'
       target: '/index.html'
       status: 200
