@@ -12,6 +12,9 @@ RUN npm install -g @angular/cli@14.2.7
 # Install dependencies with legacy peer deps
 RUN npm install --legacy-peer-deps
 
+# Install compiler-cli explicitly
+RUN npm install --save-dev @angular/compiler-cli@14.2.7 --legacy-peer-deps
+
 # Copy source code
 COPY . .
 
