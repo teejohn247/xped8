@@ -21,6 +21,11 @@ steps:
       - '--platform'
       - $_PLATFORM
     entrypoint: gcloud
+
+# Add logging configuration to fix the error
+options:
+  logging: CLOUD_LOGGING_ONLY
+
 timeout: 1200s
 images:
   - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
