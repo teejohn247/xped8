@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js",
-    "build": "ng build",
+    "build": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint",
     "heroku-postbuild": "ng build",
@@ -78,6 +78,8 @@
     "@angular-devkit/build-angular": "^14.3.0",
     "@angular/cdk": "^14.3.0",
     "@angular/material": "^14.3.0",
+    "@angular/cli": "^14.2.13",
+    "@angular-devkit/build-angular": "^14.2.13",
     "@types/googlemaps": "^3.43.3",
     "codelyzer": "^0.0.28",
     "jasmine-core": "~3.6.0",

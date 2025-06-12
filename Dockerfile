@@ -1,13 +1,37 @@
 FROM node:16-alpine3.16 as build
+
 WORKDIR /app
-COPY ./package*.json ./
 
-RUN npm install --legacy-peer-deps
+# Copy package files first for better caching
+COPY package*.json ./
 
-COPY ./ ./
-RUN npm run build
+# Clean npm cache and install Angular CLI globally
+RUN npm cache clean --force
+RUN npm install -g @angular/cli@14.2.13
 
+# Install dependencies without legacy peer deps first to see if it works
+RUN npm install
+
+# If the above fails, you can uncomment the line below instead
+# RUN npm install --legacy-peer-deps --force
+
+# Copy source code
+COPY . .
+
+# Build the Angular app
+RUN ng build --configuration production
+
+# Production stage
 FROM nginx:1.23.0-alpine
-EXPOSE 8080
+
+# Expose port 80
+EXPOSE 80
+
+# Copy custom nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copy built Angular app
 COPY --from=build /app/dist/xped8 /usr/share/nginx/html
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]

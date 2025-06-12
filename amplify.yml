@@ -10,36 +10,40 @@
 #   artifacts:
 #     baseDirectory: dist/xped8
 #     files:
-#       - '*/'
+#       - '**/*'
 #   customHeaders:
-#     - pattern: '*/'
+#     - pattern: '**/*'
 #       headers:
 #         - key: 'Cache-Control'
 #           value: 'max-age=31536000'
 #   customRules:
-#     - pattern: 'assets/*/'
+#     - pattern: 'assets/**/*'
 #       headers:
 #         - key: 'Cache-Control'
 #           value: 'max-age=31536000'
 #       status: 200
-#     - pattern: '*/'
+#     - pattern: '**/*'
 #       target: '/index.html'
 #       status: 200
-
 
 version: 1
 frontend:
   phases:
     preBuild:
       commands:
-        # Remove -f flag and add cache clearing
-        - npm ci --cache /tmp/.npm
+        # Install missing Angular CLI and build tools
+        - npm install @angular/cli@^14.3.0 --save-dev --legacy-peer-deps
+        - npm install @angular-devkit/build-angular@^14.3.0 --save-dev --legacy-peer-deps
+        # Install all dependencies
+        - npm install --legacy-peer-deps
     build:
       commands:
-        - npm run build --prod
+        # Use the build script from package.json
+        - npm run build
   artifacts:
     baseDirectory: dist/xped8
     files:
+      - '*/'
       - '**/*'
   cache:
     paths:
@@ -49,14 +53,12 @@ frontend:
       headers:
         - key: 'Cache-Control'
           value: 'max-age=31536000'
-        - key: 'Strict-Transport-Security'
-          value: 'max-age=31536000; includeSubDomains'
   customRules:
-    - pattern: '/assets/**/*'
+    - pattern: 'assets/**/*'
       headers:
         - key: 'Cache-Control'
           value: 'max-age=31536000'
       status: 200
-    - pattern: '/<*>'
+    - pattern: '**/*'
       target: '/index.html'
       status: 200
