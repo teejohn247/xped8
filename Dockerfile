@@ -5,22 +5,29 @@ WORKDIR /app
 # Copy package files first for better caching
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --legacy-peer-deps
+# Clean npm cache and install Angular CLI globally
+RUN npm cache clean --force
+RUN npm install -g @angular/cli@14.2.13
+
+# Install dependencies without legacy peer deps first to see if it works
+RUN npm install
+
+# If the above fails, you can uncomment the line below instead
+# RUN npm install --legacy-peer-deps --force
 
 # Copy source code
 COPY . .
 
-# Build the Angular app using npx (doesn't require global CLI installation)
-RUN npx ng build --configuration production
+# Build the Angular app
+RUN ng build --configuration production
 
 # Production stage
 FROM nginx:1.23.0-alpine
 
-# Expose port 80 (nginx default) instead of 8080
+# Expose port 80
 EXPOSE 80
 
-# Copy custom nginx config if it exists
+# Copy custom nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy built Angular app
