@@ -6,13 +6,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --legacy-peer-deps --production=false
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
 
-# Build the Angular app
-RUN npm run build --prod
+# Build the Angular app using npx (doesn't require global CLI installation)
+RUN npx ng build --configuration production
 
 # Production stage
 FROM nginx:1.23.0-alpine
