@@ -1,9 +1,19 @@
 steps:
+  # Debug step to check files
+  - name: 'alpine'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - 'ls -la && echo "=== Checking Dockerfile ===" && cat Dockerfile && echo "=== Checking package.json ===" && cat package.json'
+  
+  # Docker build step with more verbose output
   - name: gcr.io/cloud-builders/docker
     args:
       - build
       - '-t'
       - '$_GCR_HOSTNAME/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
+      - '--progress=plain'
+      - '--no-cache'
       - .
   - name: gcr.io/cloud-builders/docker
     args:
