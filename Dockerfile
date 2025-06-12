@@ -7,13 +7,10 @@ COPY package*.json ./
 
 # Clean npm cache and install Angular CLI globally
 RUN npm cache clean --force
-RUN npm install -g @angular/cli@14.2.13
+RUN npm install -g @angular/cli@14.2.7
 
-# Install dependencies without legacy peer deps first to see if it works
-RUN npm install
-
-# If the above fails, you can uncomment the line below instead
-# RUN npm install --legacy-peer-deps --force
+# Install dependencies with legacy peer deps
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
