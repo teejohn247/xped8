@@ -1,13 +1,30 @@
 FROM node:16-alpine3.16 as build
+
 WORKDIR /app
-COPY ./package*.json ./
 
-RUN npm install --legacy-peer-deps
+# Copy package files first for better caching
+COPY package*.json ./
 
-COPY ./ ./
-RUN npm run build
+# Install dependencies
+RUN npm install --legacy-peer-deps --production=false
 
+# Copy source code
+COPY . .
+
+# Build the Angular app
+RUN npm run build --prod
+
+# Production stage
 FROM nginx:1.23.0-alpine
-EXPOSE 8080
+
+# Expose port 80 (nginx default) instead of 8080
+EXPOSE 80
+
+# Copy custom nginx config if it exists
 COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copy built Angular app
 COPY --from=build /app/dist/xped8 /usr/share/nginx/html
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
